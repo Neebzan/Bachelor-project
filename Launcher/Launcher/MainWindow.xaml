@@ -1,0 +1,86 @@
+﻿<Window x:Class="Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Launcher"
+        mc:Ignorable="d"
+        Title="Swaggy Netty" Style="{StaticResource BaseWindowStyle}" WindowStartupLocation="CenterScreen">
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFF0F0F0" Offset="1"/>
+            <GradientStop Color="White"/>
+        </LinearGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Popup x:Name="Error_Popup" IsOpen="True" PlacementTarget="{Binding ElementName=username, Mode=OneWay}" PopupAnimation="Fade" VerticalOffset="0" HorizontalOffset="400" AllowsTransparency="True" StaysOpen="False" Grid.Column="1" Grid.Row="1" ClipToBounds="True" UseLayoutRounding="True" HorizontalAlignment="Stretch" VerticalAlignment="Top" Placement="Relative">
+            <TextBlock x:Name="Error_Popup_Label" Background="#FF404040" Text="Username already exists" TextAlignment="Left" Padding="5"  TextWrapping="Wrap" Foreground="White" Width="400" LineHeight="6" FontStyle="Italic"/>
+        </Popup>
+
+        <Label Content="Swaggy Netty" Margin="20,5" Grid.Row="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" UseLayoutRounding="True" Grid.ColumnSpan="1" FontSize="30" FontFamily="Segoe UI Historic" d:IsLocked="True">
+            <Label.Effect>
+                <DropShadowEffect Opacity="0.25"/>
+            </Label.Effect>
+        </Label>
+
+        <Frame x:Name="frame" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Image Margin="20" Grid.Column="1" Grid.Row="1" Source="Content/deusvulttransparent.png" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image.Effect>
+                <DropShadowEffect Opacity="0.25"/>
+            </Image.Effect>
+        </Image>
+        <StackPanel Grid.ColumnSpan="2" Grid.Row="2">
+            <Label x:Name="files_remaining_label" Content="" Margin="20,0" FontSize="10" Opacity=".6"/>
+            <Label x:Name="file_label" Content="" Margin="20,0" FontSize="10" Opacity=".6"/>
+            <Label x:Name="patch_status_label" Content="" FontWeight="Bold" Margin="20,0" FontSize="10" Opacity=".6"/>
+        </StackPanel>
+
+
+        <Grid Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="patchpercentage_label" Grid.Column="0" Content="0%" FontSize="10" Margin="20,22,0,25" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            <Rectangle Fill="Black" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Width="582" Height="16"/>
+            <local:BaseProgressBar x:Name="progress_bar" Grid.Column="1" Value="0" VerticalAlignment="Center" Width="580" Height="14" HorizontalAlignment="Center" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="5,23"/>
+        </Grid>
+
+        <Button x:Name="play_button" Content="Play" Margin="20,5" BorderThickness="2" BorderBrush="Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" FontWeight="Bold" FontSize="22" HorizontalAlignment="Right" Width="117" Opacity="1" Grid.Row="3" Click="Play_button_Click">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#FFBD2222"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFF11212"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</Window>
