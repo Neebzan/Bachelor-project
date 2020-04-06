@@ -4,4 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>H:\Skole\Bachelor-project\Libraries\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>H:\Skole\Bachelor-project\Libraries\</OutputPath>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
+  </PropertyGroup>
+
 </Project>
