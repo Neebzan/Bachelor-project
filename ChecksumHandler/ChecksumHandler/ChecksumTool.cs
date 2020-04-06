@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 
-namespace ChecksumHandler
+namespace ChecksumHandlerLib
 {
     public class GetFilesDictionaryProgressEventArgs : EventArgs
     {
@@ -92,19 +92,25 @@ namespace ChecksumHandler
             else
                 currentDirectory = path;
 
-
-            string[] files = Directory.GetFiles(currentDirectory, "*.*", SearchOption.AllDirectories);
-            args.FilesFound = files.Length;
-            args.ChecksumsGenerated = 0;
-            OnGetFilesDictionaryProgress(args);
-            Dictionary<string, string> validFilesDictionary = new Dictionary<string, string>();
-            for (int i = 0; i < files.Length; i++)
+            try
             {
-                validFilesDictionary.Add(GetRelativePath(files[i], currentDirectory), GetChecksum(files[i]));
-                args.ChecksumsGenerated++;
+                string[] files = Directory.GetFiles(currentDirectory, "*.*", SearchOption.AllDirectories);
+                args.FilesFound = files.Length;
+                args.ChecksumsGenerated = 0;
                 OnGetFilesDictionaryProgress(args);
+                Dictionary<string, string> validFilesDictionary = new Dictionary<string, string>();
+                for (int i = 0; i < files.Length; i++)
+                {
+                    validFilesDictionary.Add(GetRelativePath(files[i], currentDirectory), GetChecksum(files[i]));
+                    args.ChecksumsGenerated++;
+                    OnGetFilesDictionaryProgress(args);
+                }
+                result = validFilesDictionary;
             }
-            result = validFilesDictionary;
+            catch
+            {
+                Console.WriteLine("Not a valid path / Path not found");
+            }
         }
 
         /// <summary>
