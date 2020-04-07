@@ -26,7 +26,7 @@ namespace PatchManager
                 RequestType = PatchNetworkRequest.AvailableVersions
             };
             //byte[] data = ConnectionHandler
-            client.GetStream().Write()
+            //client.GetStream().Write()
         }
     }
 }
