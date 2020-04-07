@@ -1,9 +1,11 @@
 ﻿using ChecksumHandlerLib;
+using ConnectionHandlerLib;
 using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +30,15 @@ namespace ConsoleForTesting
 
             Console.WriteLine("Yeet");
             ChecksumTool.HelloWorld();
-            //Console.ReadKey();
+            TcpClient client = new TcpClient("127.0.0.1", 10000);
+            PatchDataModel model = new PatchDataModel()
+            {
+                RequestType = PatchNetworkRequest.AvailableVersions
+            };
+
+            ConnectionHandler.SendObject(model, client);
+
+            Console.ReadKey();
         }
     }
 }

@@ -61,6 +61,7 @@ namespace PatchManager
 
                 lock (clients)
                 {
+                    Console.WriteLine("New connection added!");
                     clients.Add(client);
                     Task.Run(() => HandleClientConnection(client));
                 }
