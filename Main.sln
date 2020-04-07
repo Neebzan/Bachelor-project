@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleForTesting", "Consol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatchManager", "PatchManager\PatchManager.csproj", "{E1BCE2B5-B79B-44B6-9113-30368D4C40F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectionHandler", "ConnectionHandler\ConnectionHandler.csproj", "{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionHandler", "ConnectionHandler\ConnectionHandler.csproj", "{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{E517A71C-71C3-42ED-8553-4B9547E91033}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E517A71C-71C3-42ED-8553-4B9547E91033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E517A71C-71C3-42ED-8553-4B9547E91033}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E517A71C-71C3-42ED-8553-4B9547E91033}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E517A71C-71C3-42ED-8553-4B9547E91033}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
