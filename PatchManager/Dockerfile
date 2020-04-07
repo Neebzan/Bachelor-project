@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 # Setting working directory to "app"
 WORKDIR /app
 
+# TODO: Add restore
+
 # Copies all files from solution
 COPY . ./
 # Publishes PatchManager project as release, into app/patchmanager/out
