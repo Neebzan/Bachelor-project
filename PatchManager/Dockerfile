@@ -1,30 +1,19 @@
-# FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS base
-# WORKDIR /app
-
-# FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-# WORKDIR /src
-# COPY . ./
-# RUN dotnet restore *.csproj
-# COPY . .
-# WORKDIR "/src/."
-# RUN dotnet build "PatchManager.csproj" -c Release -o /app/build
-
-# FROM build AS publish
-# RUN dotnet publish "PatchManager.csproj" -c Release -o /app/publish
-
-# FROM base AS final
-# WORKDIR /app
-# COPY --from=publish /app/publish .
-# ENTRYPOINT ["dotnet", "PatchManager.dll"]
-
+# Define base image to use for building application
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+# Setting working directory to "app"
 WORKDIR /app
 
+# Copies all files from solution
 COPY . ./
+# Publishes PatchManager project as release, into app/patchmanager/out
 RUN dotnet publish PatchManager -c Release -o patchmanager/out
 
+# Defines new base image to run application
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+# Sets the working directory to "app"
 WORKDIR /app
+# Copies all files from the release build
 COPY --from=build-env /app/patchmanager/out/ .
 
+# Runs the application with dotnet, with PatchManager.dll as parameter
 ENTRYPOINT [ "dotnet", "PatchManager.dll" ]
