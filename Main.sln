@@ -10,10 +10,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatchManager", "PatchManager\PatchManager.csproj", "{E1BCE2B5-B79B-44B6-9113-30368D4C40F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionHandler", "ConnectionHandler\ConnectionHandler.csproj", "{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}"
+<<<<<<< HEAD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalConfigs", "GlobalConfigs\GlobalConfigs.csproj", "{EEEFCA4C-D9F8-4256-8ADC-CA16F5100811}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{9FB4F256-FDCE-4538-B86C-ADEE6576A502}"
+=======
+>>>>>>> 0c65003a4138ae210b1da01762b7dcec531e2cb7
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
