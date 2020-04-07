@@ -6,7 +6,9 @@ namespace PatchManager
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            PatchServer t = new PatchServer();
+            t.Start();
+            t.Stop();
         }
     }
 }

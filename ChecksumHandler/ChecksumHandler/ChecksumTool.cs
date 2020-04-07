@@ -77,31 +77,32 @@ namespace ChecksumHandlerLib
         {
             GetFilesDictionaryProgressEventArgs args = new GetFilesDictionaryProgressEventArgs();
             result = null;
-            string currentDirectory;
-            if (!Path.IsPathRooted(path))
-            {
-                currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                if (path != "")
-                {
-                    if (currentDirectory[currentDirectory.Length - 1] != '\\')
-                        currentDirectory += "\\";
+            path = RootedPathCheck(path);
+            //string currentDirectory;
+            //if (!Path.IsPathRooted(path))
+            //{
+            //    currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            //    if (path != "")
+            //    {
+            //        if (currentDirectory[currentDirectory.Length - 1] != '\\')
+            //            currentDirectory += "\\";
 
-                    currentDirectory += path;
-                }
-            }
-            else
-                currentDirectory = path;
+            //        currentDirectory += path;
+            //    }
+            //}
+            //else
+            //    currentDirectory = path;
 
             try
             {
-                string[] files = Directory.GetFiles(currentDirectory, "*.*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
                 args.FilesFound = files.Length;
                 args.ChecksumsGenerated = 0;
                 OnGetFilesDictionaryProgress(args);
                 Dictionary<string, string> validFilesDictionary = new Dictionary<string, string>();
                 for (int i = 0; i < files.Length; i++)
                 {
-                    validFilesDictionary.Add(GetRelativePath(files[i], currentDirectory), GetChecksum(files[i]));
+                    validFilesDictionary.Add(GetRelativePath(files[i], path), GetChecksum(files[i]));
                     args.ChecksumsGenerated++;
                     OnGetFilesDictionaryProgress(args);
                 }
@@ -129,6 +130,18 @@ namespace ChecksumHandlerLib
             }
 
             return validFiles;
+        }
+
+        public static string[] GetAvailableFolders(string path = "")
+        {
+            path = RootedPathCheck(path);
+            string[] result = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = GetRelativePath(result[i], path);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -181,6 +194,25 @@ namespace ChecksumHandlerLib
                 byte[] checksum = sha.ComputeHash(stream);
                 return BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
+        }
+
+        private static string RootedPathCheck(string path)
+        {
+            if (!Path.IsPathRooted(path))
+            {
+                string currentDirectory;
+                currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                if (path != "")
+                {
+                    if (currentDirectory[currentDirectory.Length - 1] != '\\')
+                        currentDirectory += "\\";
+
+                    currentDirectory += path;
+                }
+                return currentDirectory;
+            }
+            else
+                return path;
         }
     }
 }

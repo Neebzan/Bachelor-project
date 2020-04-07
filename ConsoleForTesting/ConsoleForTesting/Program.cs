@@ -1,4 +1,6 @@
 ﻿using ChecksumHandlerLib;
+using Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +17,14 @@ namespace ConsoleForTesting
             Dictionary<string, string> testDic = new Dictionary<string, string>();
             //ChecksumTool.GetFilesDictionary(out testDic, @"C:\Users\Henrik\Desktop\backups");
             //ChecksumTool.GetFilesDictionary(out testDic, @"TestFolder\TestFolder2");
-            ChecksumTool.GetFilesDictionary(out testDic);
-
+            //ChecksumTool.GetFilesDictionary(out testDic);
+            string[] t = ChecksumTool.GetAvailableFolders();
+            for (int i = 0; i < t.Length; i++)
+            {
+                ChecksumTool.GetFilesDictionary(out testDic, t[i]);
+            }
+            FileDataModel testModel = new FileDataModel();
+            string json = JsonConvert.SerializeObject(testModel);
 
             Console.WriteLine("Yeet");
             ChecksumTool.HelloWorld();
