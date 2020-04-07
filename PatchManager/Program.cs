@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace PatchManager
 {
@@ -9,6 +10,10 @@ namespace PatchManager
             PatchServer t = new PatchServer();
             t.Start();
             //t.Stop();
+            while(true)
+            {
+                Thread.Sleep(1000);
+            }
         }
     }
 }
