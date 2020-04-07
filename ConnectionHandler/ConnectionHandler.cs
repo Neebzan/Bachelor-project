@@ -52,7 +52,11 @@ namespace ConnectionHandlerLib
             return totalPackage;
         }
 
-        //public static void SendMessage<T>(T obj, TcpClient )
+        public static void SendObject<T>(T obj, TcpClient sender)
+        {
+            byte[] data = ConvertToBytes<T>(obj);
+            sender.GetStream().Write(data, 0, data.Length);
+        }
 
         public static bool Connected(TcpClient tcpClient)
         {

@@ -8,7 +8,7 @@ namespace PatchManager
         {
             PatchServer t = new PatchServer();
             t.Start();
-            t.Stop();
+            //t.Stop();
         }
     }
 }
