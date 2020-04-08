@@ -11,7 +11,7 @@ COPY . ./
 RUN dotnet publish PatchManager -c Release -o patchmanager/out
 
 # Add Files to the PatchServer (For testing) - Look into Volumes
-#ADD PatchManager/TestFiles patchmanager/out/TestFiles
+ADD PatchManager/TestFiles patchmanager/out/TestFiles
 
 # Defines new base image to run application
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
