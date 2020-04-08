@@ -233,5 +233,29 @@ namespace ChecksumHandlerLib
                 return path;
             }
         }
+
+        public static Dictionary<string, Dictionary<string, string>> GetInstallationsAtPath(string path)
+        {
+            Dictionary<string, Dictionary<string, string>> result = new Dictionary<string, Dictionary<string, string>>();
+            if (Directory.Exists(path))
+            {
+                string[] foldersFound = GetAvailableFolders(path);
+
+                for (int i = 0; i < foldersFound.Length; i++)
+                {
+                    Console.WriteLine("Find files for: " + foldersFound[i]);
+                    Console.WriteLine("At path: " + path + @"\" + foldersFound[i]);
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    if (path != "")
+                        GetFilesDictionary(out temp, path + @"\" + foldersFound[i]);
+                    else
+                        GetFilesDictionary(out temp, foldersFound[i]);
+                    result.Add(foldersFound[i], temp);
+                }
+            }
+            else
+                Console.WriteLine("Path does not exist!: " + path);
+            return result;
+        }
     }
 }

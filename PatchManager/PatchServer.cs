@@ -32,7 +32,7 @@ namespace PatchManager
         public void UpdateMasterFiles()
         {
             masterFiles = new Dictionary<string, Dictionary<string, string>>();
-            versions = new string[] { "0" };
+            versions = new string[0];
             try
             {
                 versions = ChecksumTool.GetAvailableFolders(masterDirectory);
@@ -121,7 +121,10 @@ namespace PatchManager
             }
 
             lock (clients)
+            {
                 clients.Remove(client);
+                Console.WriteLine("Client disconnected");
+            }
         }
 
         private void SendTestConnectionResponse(TcpClient client)
@@ -145,6 +148,11 @@ namespace PatchManager
             };
             byte[] data = ConnectionHandler.ConvertToBytes<PatchDataModel>(model);
             client.GetStream().Write(data, 0, data.Length);
+        }
+
+        private void SendFileCompareResponse(TcpClient client)
+        {
+
         }
     }
 }
