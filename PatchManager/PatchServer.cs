@@ -16,7 +16,7 @@ namespace PatchManager
     {
         List<TcpClient> clients = new List<TcpClient>();
         Dictionary<string, Dictionary<string, string>> masterFiles;
-        string masterDirectory = "";
+        string masterDirectory = "TestFiles";
         string[] versions;
         bool running;
 
@@ -24,16 +24,30 @@ namespace PatchManager
         {
         }
 
+        ~PatchServer()
+        {
+            running = false;
+        }
+
         public void UpdateMasterFiles()
         {
-            versions = ChecksumTool.GetAvailableFolders(masterDirectory);
             masterFiles = new Dictionary<string, Dictionary<string, string>>();
+            versions = new string[] { "0" };
 
+            versions = ChecksumTool.GetAvailableFolders(masterDirectory);
             for (int i = 0; i < versions.Length; i++)
             {
+                Console.WriteLine("Find files for: " + versions[i]);
+                Console.WriteLine("At path: " + masterDirectory + @"\" + versions[i]);
                 Dictionary<string, string> temp = new Dictionary<string, string>();
-                ChecksumTool.GetFilesDictionary(out temp, versions[i]);
+                ChecksumTool.GetFilesDictionary(out temp, masterDirectory + @"\" + versions[i]);
                 masterFiles.Add(versions[i], temp);
+            }
+
+            Console.WriteLine("Versions was:");
+            for (int i = 0; i < versions.Length; i++)
+            {
+                Console.WriteLine(versions[i]);
             }
         }
 
@@ -77,12 +91,20 @@ namespace PatchManager
                 //Wait for data from client
                 if (client.GetStream().DataAvailable)
                 {
+                    Console.WriteLine("Recieving request");
                     PatchDataModel data = JsonConvert.DeserializeObject<PatchDataModel>(ConnectionHandler.ReadMessage(client.GetStream()));
 
                     switch (data.RequestType)
                     {
                         case PatchNetworkRequest.AvailableVersions:
                             SendAvailableVersions(client);
+                            Console.WriteLine("Versions send to client");
+                            break;
+                        case PatchNetworkRequest.CheckFiles:
+                            break;
+                        case PatchNetworkRequest.TestConnection:
+                            SendTestConnectionResponse(client);
+                            Console.WriteLine("Send test response to client");
                             break;
                     }
                 }
@@ -90,6 +112,18 @@ namespace PatchManager
 
             lock (clients)
                 clients.Remove(client);
+        }
+
+        private void SendTestConnectionResponse(TcpClient client)
+        {
+            PatchDataModel model = new PatchDataModel()
+            {
+                RequestType = PatchNetworkRequest.TestConnection,
+                Connected = true,
+                TestString = "You're in!"
+            };
+            byte[] data = ConnectionHandler.ConvertToBytes<PatchDataModel>(model);
+            client.GetStream().Write(data, 0, data.Length);
         }
 
         private void SendAvailableVersions(TcpClient client)

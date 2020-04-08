@@ -10,13 +10,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatchManager", "PatchManager\PatchManager.csproj", "{E1BCE2B5-B79B-44B6-9113-30368D4C40F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionHandler", "ConnectionHandler\ConnectionHandler.csproj", "{3574E245-C6D6-46F1-9DF9-7AAC97E69CE5}"
-<<<<<<< HEAD
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalConfigs", "GlobalConfigs\GlobalConfigs.csproj", "{EEEFCA4C-D9F8-4256-8ADC-CA16F5100811}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GlobalConfigs", "GlobalConfigs\GlobalConfigs.csproj", "{EEEFCA4C-D9F8-4256-8ADC-CA16F5100811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{9FB4F256-FDCE-4538-B86C-ADEE6576A502}"
-=======
->>>>>>> 0c65003a4138ae210b1da01762b7dcec531e2cb7
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{9FB4F256-FDCE-4538-B86C-ADEE6576A502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatchClientLib", "PatchClientLib\PatchClientLib.csproj", "{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +47,10 @@ Global
 		{9FB4F256-FDCE-4538-B86C-ADEE6576A502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FB4F256-FDCE-4538-B86C-ADEE6576A502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB4F256-FDCE-4538-B86C-ADEE6576A502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -66,6 +66,10 @@
       <Project>{9fb4f256-fdce-4538-b86c-adee6576a502}</Project>
       <Name>Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PatchClientLib\PatchClientLib.csproj">
+      <Project>{40bd5a08-c2d0-4fb7-b8e4-b00914403cde}</Project>
+      <Name>PatchClientLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

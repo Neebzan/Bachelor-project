@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 namespace ChecksumHandlerLib
@@ -108,9 +109,12 @@ namespace ChecksumHandlerLib
                 }
                 result = validFilesDictionary;
             }
-            catch
+            catch (Exception e)
             {
                 Console.WriteLine("Not a valid path / Path not found");
+                Console.WriteLine("Path was: \n" + path);
+                Console.WriteLine(e.Message);
+
             }
         }
 
@@ -132,7 +136,7 @@ namespace ChecksumHandlerLib
             return validFiles;
         }
 
-        public static string[] GetAvailableFolders(string path = "")
+        public static string[] GetAvailableFolders(string path = @"")
         {
             path = RootedPathCheck(path);
             string[] result = Directory.GetDirectories(path, "*", SearchOption.TopDirectoryOnly);
@@ -154,7 +158,11 @@ namespace ChecksumHandlerLib
         {
             System.Uri uri1 = new Uri(filePath);
 
-            System.Uri uri2 = new Uri(directory + "\\");
+            System.Uri uri2;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                uri2 = new Uri(directory + "/");
+            else
+                uri2 = new Uri(directory + "\\");
 
             //return Path.GetFileName(filePath);
             string t = uri2.MakeRelativeUri(uri1).ToString();
@@ -198,10 +206,13 @@ namespace ChecksumHandlerLib
 
         private static string RootedPathCheck(string path)
         {
+            Console.WriteLine("Checking if path is rooted: " + path);
             if (!Path.IsPathRooted(path))
             {
+                Console.WriteLine("Path was NOT rooted");
                 string currentDirectory;
                 currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                Console.WriteLine("Current dir is: " + currentDirectory);
                 if (path != "")
                 {
                     if (currentDirectory[currentDirectory.Length - 1] != '\\')
@@ -209,10 +220,18 @@ namespace ChecksumHandlerLib
 
                     currentDirectory += path;
                 }
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    currentDirectory = currentDirectory.Replace('\\', '/');
+
+                Console.WriteLine("Final dir is: " + currentDirectory);
                 return currentDirectory;
             }
             else
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    path = path.Replace('\\', '/');
                 return path;
+            }
         }
     }
 }
