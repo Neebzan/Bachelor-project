@@ -32,7 +32,7 @@ namespace ConsoleForTesting
             //Console.WriteLine("Yeet");
             //ChecksumTool.HelloWorld();
             //TcpClient client = new TcpClient("127.0.0.1", 10000);
-            TcpClient client = new TcpClient("212.10.51.254", 31000);
+            //TcpClient client = new TcpClient("212.10.51.254", 31000);
             //TcpClient client = new TcpClient("10.108.67.120", 80);
 
             Console.WriteLine("Connected");
@@ -42,11 +42,11 @@ namespace ConsoleForTesting
             //    RequestType = PatchNetworkRequest.AvailableVersions
             //};
 
-            //PatchClient pClient = new PatchClient(10000);
+            PatchClient pClient = new PatchClient(10000);
 
-            //pClient.ConnectToServer();
+            pClient.ConnectToServer();
 
-            //pClient.RequestAvailableVersions();
+            pClient.RequestConnectionTest();
 
             Console.ReadKey();
         }

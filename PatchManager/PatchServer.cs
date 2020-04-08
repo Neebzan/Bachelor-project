@@ -33,21 +33,31 @@ namespace PatchManager
         {
             masterFiles = new Dictionary<string, Dictionary<string, string>>();
             versions = new string[] { "0" };
-
-            versions = ChecksumTool.GetAvailableFolders(masterDirectory);
-            for (int i = 0; i < versions.Length; i++)
+            try
             {
-                Console.WriteLine("Find files for: " + versions[i]);
-                Console.WriteLine("At path: " + masterDirectory + @"\" + versions[i]);
-                Dictionary<string, string> temp = new Dictionary<string, string>();
-                ChecksumTool.GetFilesDictionary(out temp, masterDirectory + @"\" + versions[i]);
-                masterFiles.Add(versions[i], temp);
+                versions = ChecksumTool.GetAvailableFolders(masterDirectory);
+                for (int i = 0; i < versions.Length; i++)
+                {
+                    Console.WriteLine("Find files for: " + versions[i]);
+                    Console.WriteLine("At path: " + masterDirectory + @"\" + versions[i]);
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    if (masterDirectory != "")
+                        ChecksumTool.GetFilesDictionary(out temp, masterDirectory + @"\" + versions[i]);
+                    else
+                        ChecksumTool.GetFilesDictionary(out temp, versions[i]);
+                    masterFiles.Add(versions[i], temp);
+                }
+
+                Console.WriteLine("Versions was:");
+                for (int i = 0; i < versions.Length; i++)
+                {
+                    Console.WriteLine(versions[i]);
+                }
             }
-
-            Console.WriteLine("Versions was:");
-            for (int i = 0; i < versions.Length; i++)
+            catch (Exception e)
             {
-                Console.WriteLine(versions[i]);
+                Console.WriteLine("Updating master files FAILED!");
+                Console.WriteLine(e.Message);
             }
         }
 
