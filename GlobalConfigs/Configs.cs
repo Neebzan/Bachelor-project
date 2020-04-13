@@ -8,6 +8,6 @@ namespace GlobalConfigs
         public const string SERVER_IP = "212.10.51.254";
 
 
-        public const int PATCH_SERVER_PORT = 10000;
+        public const int PATCH_SERVER_PORT = 13000;
     }
 }

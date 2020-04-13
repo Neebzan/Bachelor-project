@@ -62,6 +62,10 @@
       <Project>{3574e245-c6d6-46f1-9df9-7aac97e69ce5}</Project>
       <Name>ConnectionHandler</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GlobalConfigs\GlobalConfigs.csproj">
+      <Project>{EEEFCA4C-D9F8-4256-8ADC-CA16F5100811}</Project>
+      <Name>GlobalConfigs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Models\Models.csproj">
       <Project>{9fb4f256-fdce-4538-b86c-adee6576a502}</Project>
       <Name>Models</Name>

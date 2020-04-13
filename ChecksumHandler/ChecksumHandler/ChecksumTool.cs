@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace ChecksumHandlerLib
 {
@@ -28,6 +31,33 @@ namespace ChecksumHandlerLib
             handler(null, e);
         }
 
+        public static List<InstallationDataModel> GetInstalledVersions(string installPath)
+        {
+            var installs = ChecksumTool.GetInstallationsAtPath(installPath);
+            List<InstallationDataModel> installedVersions = new List<InstallationDataModel>();
+            for (int i = 0; i < installs.Count; i++)
+            {
+                InstallationDataModel tempModel = new InstallationDataModel();
+                var tempVersionInfo = installs.ElementAt(i);
+                tempModel.VersionName = tempVersionInfo.Key;
+
+                foreach (var item in tempVersionInfo.Value)
+                {
+                    tempModel.Files.Add(new FileModel()
+                    {
+                        FileChecksum = item.Value,
+                        FilePath = item.Key
+                    });
+                }
+
+                tempModel.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath + "\\" + tempModel.VersionName));
+                installedVersions.Add(tempModel);
+            }
+
+
+            return installedVersions;
+        }
+
         /// <summary>
         /// Returns a list of paths if there are any different or missing files from the master
         /// </summary>
@@ -40,10 +70,10 @@ namespace ChecksumHandlerLib
 
             foreach (var item in masterFiles)
             {
-                string value;
-                if (filesToCompare.TryGetValue(item.Key, out value))
+                string key;
+                if (filesToCompare.TryGetValue(item.Key, out key))
                 {
-                    if (value != item.Value)
+                    if (key != item.Value)
                         result.Add(item.Key);
                 }
                 else
@@ -56,7 +86,7 @@ namespace ChecksumHandlerLib
         public static void GetFilesDictionary()
         {
             string currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string[] files = Directory.GetFiles(currentDirectory, "*.*", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(currentDirectory, "*", SearchOption.AllDirectories);
 
             Dictionary<string, string> validFiles = new Dictionary<string, string>();
 
@@ -96,14 +126,15 @@ namespace ChecksumHandlerLib
 
             try
             {
-                string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
                 args.FilesFound = files.Length;
                 args.ChecksumsGenerated = 0;
                 OnGetFilesDictionaryProgress(args);
                 Dictionary<string, string> validFilesDictionary = new Dictionary<string, string>();
                 for (int i = 0; i < files.Length; i++)
                 {
-                    validFilesDictionary.Add(GetRelativePath(files[i], path), GetChecksum(files[i]));
+                    string relPath = GetRelativePath(files[i], path);
+                    validFilesDictionary.Add(relPath, GetChecksum(files[i], relPath));
                     args.ChecksumsGenerated++;
                     OnGetFilesDictionaryProgress(args);
                 }
@@ -111,7 +142,7 @@ namespace ChecksumHandlerLib
             }
             catch (Exception e)
             {
-                Console.WriteLine("Not a valid path / Path not found");
+                Console.WriteLine("Not a valid path OR path not found");
                 Console.WriteLine("Path was: \n" + path);
                 Console.WriteLine(e.Message);
 
@@ -130,7 +161,8 @@ namespace ChecksumHandlerLib
 
             for (int i = 0; i < files.Length; i++)
             {
-                validFiles.Add(GetRelativePath(files[i], directory), GetChecksum(files[i]));
+                string relPath = GetRelativePath(files[i], directory);
+                validFiles.Add(relPath, GetChecksum(files[i]));
             }
 
             return validFiles;
@@ -169,6 +201,36 @@ namespace ChecksumHandlerLib
             return Uri.UnescapeDataString(uri2.MakeRelativeUri(uri1).ToString());
         }
 
+        public static string GetCombinedChecksum(string path)
+        {
+            path = RootedPathCheck(path);
+            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).ToList();
+            var sha = new SHA256Managed();
+
+            //If the folder is empty, generate a hash based on a 0 byte
+            if (files.Count == 0)
+            {
+                sha.ComputeHash(new byte[0]);
+            }
+            else
+                for (int i = 0; i < files.Count; i++)
+                {
+                    string relPath = GetRelativePath(files[i], path);
+                    byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+                    using (FileStream stream = File.OpenRead(files[i]))
+                    {
+                        byte[] checksum = sha.ComputeHash(stream);
+
+                        sha.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+                        if (i == files.Count - 1)
+                            sha.TransformFinalBlock(checksum, 0, checksum.Length);
+                        else
+                            sha.TransformBlock(checksum, 0, checksum.Length, checksum, 0);
+                    }
+                }
+            return BitConverter.ToString(sha.Hash).Replace("-", String.Empty);
+        }
+
         /// <summary>
         /// Generate checksums for a collection of file paths
         /// </summary>
@@ -194,25 +256,30 @@ namespace ChecksumHandlerLib
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        private static string GetChecksum(string filePath)
+        private static string GetChecksum(string filePath, string relPath = "")
         {
             using (FileStream stream = File.OpenRead(filePath))
             {
                 var sha = new SHA256Managed();
                 byte[] checksum = sha.ComputeHash(stream);
+                byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+
+                sha.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+                sha.TransformFinalBlock(checksum, 0, checksum.Length);
+
                 return BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
         }
 
-        private static string RootedPathCheck(string path)
+        public static string RootedPathCheck(string path)
         {
-            Console.WriteLine("Checking if path is rooted: " + path);
+            //Console.WriteLine("Checking if path is rooted: " + path);
             if (!Path.IsPathRooted(path))
             {
-                Console.WriteLine("Path was NOT rooted");
+                //Console.WriteLine("Path was NOT rooted");
                 string currentDirectory;
                 currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                Console.WriteLine("Current dir is: " + currentDirectory);
+                //Console.WriteLine("Current dir is: " + currentDirectory);
                 if (path != "")
                 {
                     if (currentDirectory[currentDirectory.Length - 1] != '\\')
@@ -223,7 +290,7 @@ namespace ChecksumHandlerLib
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     currentDirectory = currentDirectory.Replace('\\', '/');
 
-                Console.WriteLine("Final dir is: " + currentDirectory);
+                //Console.WriteLine("Final dir is: " + currentDirectory);
                 return currentDirectory;
             }
             else
@@ -256,6 +323,14 @@ namespace ChecksumHandlerLib
             else
                 Console.WriteLine("Path does not exist!: " + path);
             return result;
+        }
+
+        private static string SanitizePath(string path)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                path = path.Replace('\\', '/');
+
+            return path;
         }
     }
 }

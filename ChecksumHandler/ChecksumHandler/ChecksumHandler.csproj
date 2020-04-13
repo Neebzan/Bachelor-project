@@ -19,5 +19,9 @@
     <MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
     <PreserveCompilationContext>false</PreserveCompilationContext>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+  </ItemGroup>
 
 </Project>

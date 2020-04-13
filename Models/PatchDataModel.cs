@@ -2,12 +2,14 @@
 
 namespace Models
 {
-    public enum PatchNetworkRequest { AvailableVersions, CheckFiles, TestConnection }
+    public enum PatchNetworkRequest { AvailableVersions, VerifyVersion, TestConnection, DownloadFile, MissingFiles }
     public class PatchDataModel
     {
         public PatchNetworkRequest RequestType;
+        public InstallationDataModel InstalledVersion;
         public bool Connected;
-        public string TestString;
+        public FileModel File;
+        public string Message;
         public string[] Versions;
     }
 }
