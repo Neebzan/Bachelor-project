@@ -28,7 +28,7 @@ namespace Launcher {
             InitializeComponent();
 
             loggedInAs = logged_in_as_label;
-            loggedInAs.Content += " " + Backend.LoggedUser.UserID;
+            //loggedInAs.Content += " " + Backend.LoggedUser.UserID;
 
             PatchmanagerClient.DownloadComplete += (object sender, EventArgs e) => {
                 loggedInAs.Dispatcher.Invoke(() => {
@@ -45,7 +45,7 @@ namespace Launcher {
         }
 
         private async void Logout_Button_Clicked (object sender, RoutedEventArgs e) {
-            Backend.Logout();
+            //Backend.Logout();
             (Application.Current.MainWindow as MainWindow).playButton.IsEnabled = false;
             (Application.Current.MainWindow as MainWindow).playButton.Opacity = .5;
             Settings.Default.SessionToken = "";
@@ -59,7 +59,7 @@ namespace Launcher {
         }
 
         private void Play_Button_Click (object sender, RoutedEventArgs e) {
-            Backend.LaunchGame();
+            //Backend.LaunchGame();
         }
     }
 }

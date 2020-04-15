@@ -1,0 +1,27 @@
+﻿<local:BasePage x:Class="GameLauncher.RegisterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:GameLauncher"
+                xmlns:fa="http://schemas.fontawesome.io/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="RegisterPage">
+
+    <StackPanel VerticalAlignment="Center">
+        <Label Name="email_label" Content="Email" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Name="email_textblock" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="username_label" Content="Username ID" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Name="username_textblock" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="password_label" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <PasswordBox Name="password_passwordBox" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="passwordConfirm_label" Content="Confirm Password" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <PasswordBox Name="passwordConfirm_passwordBox" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <StackPanel Margin="20,20" Orientation="Horizontal" Height="46">
+            <Button Name="register_button" Content="Register" Width="100" Height="30" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,0" Click="register_button_Click"/>
+            <Button Name="return_button" Content="or return to login" FontWeight="Light" Style="{StaticResource BaseButtonStyleNoBackground}" Margin="5,10,20,0" Grid.Row="7" Click="return_button_Click"/>
+            <fa:ImageAwesome x:Name="spinner_imageawesome" Opacity=".8" Margin="20,10,20,0"/>
+        </StackPanel>
+    </StackPanel>
+</local:BasePage>

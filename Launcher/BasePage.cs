@@ -1,9 +1,7 @@
 ﻿using Launcher.Animations;
-using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace Launcher {
     public class BasePage : Page {
