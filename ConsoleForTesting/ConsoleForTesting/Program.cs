@@ -1,11 +1,14 @@
 ﻿using ChecksumHandlerLib;
 using ConnectionHandlerLib;
+using DatabaseLib;
 using GlobalConfigs;
 using Models;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using PatchClientLib;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -43,16 +46,114 @@ namespace ConsoleForTesting
             //};
 
             //PatchClient pClient = new PatchClient(31000, "212.10.51.254");
-            PatchClientTest();
+
+            //PatchClientTest();
             //string test = ChecksumTool.GetCombinedChecksum("ClientFiles");
 
-            //Console.ReadKey();
+            //DBConnection.Instance().Password = "password";
+            //DBConnection.Instance().Username = "root";
+            //DBConnection.Instance().ServerIP = "localhost";
+            //DBConnection.Instance().ServerPort = 3306;
+            //DBConnection.Instance().DatabaseName = "intrusive";
+
+
+
+
+
+            //var t = DBConnection.Instance().GetAllPlayerMatches("Bleh3");
+
+            //var b = DBConnection.Instance().GetAllTest("Bleh3");
+
+
+            //DBConnection.Instance().Insert(testModel);
+            //.Instance().Insert(testModel);
+            //DBConnection.Instance().GetAll<AccountModel>();
+            //var testGet = DBConnection.Instance().Get<AccountModel>("Bleh3");
+
+
+            DBTests();
+
+            Console.ReadKey();
+        }
+
+        static void DBTests()
+        {
+            AccountModel testModel = new AccountModel()
+            {
+                account_id = "Bleh3",
+                first_name = "Mr Bleh2",
+                last_name = "Sausage2",
+                email = "yes@no.com2",
+                password_hash = "Very secure PW2"
+            };
+
+            PlayerModel testPlayer = new PlayerModel()
+            {
+                player_id = "Bleh3"
+            };
+
+            MatchModel testMatch = new MatchModel()
+            {
+                map_name = "map1",
+                begun = DateTime.Now,
+                ended = DateTime.Now.AddDays(1),
+                difficulty = 100
+
+            };
+
+            PlayedMatch testPlayedMatch = new PlayedMatch()
+            {
+                deaths = 5,
+                score = 999,
+                kills = 10,
+                match_id = 2,
+                player_id = "Bleh3"
+            };
+
+            ItemColor testColor = new ItemColor()
+            {
+                color_name = "blue",
+                red = 0,
+                green = 0,
+                blue = 255
+            };
+            ItemType typeTest = new ItemType()
+            {
+                type_value = "test"
+            };
+
+            ItemModel testItemModel = new ItemModel()
+            {
+                aquire_date = DateTime.Now,
+                item_color = "blue",
+                item_name = "testItem",
+                item_type = "test",
+                owner_id = "Bleh3",
+                quality = 0.5f
+            };
+
+            ItemModel t = DBConnection.Instance().Get<ItemModel>(1);
+
+            Wears wearTest = new Wears()
+            {
+                player_id = "Bleh3",
+                item_type = t.item_type
+            };
+
+            DBConnection.Instance().Insert(wearTest);
+            //DBConnection.Instance().Insert(testColor);
+            //DBConnection.Instance().Insert(typeTest);
+            //DBConnection.Instance().Insert(testItemModel);
+            //DBConnection.Instance().Insert(testModel);
+            //DBConnection.Instance().Insert(testPlayer);
+            //DBConnection.Instance().Insert(testMatch);
+            //DBConnection.Instance().Insert(testPlayedMatch);
         }
 
         static void PatchClientTest()
         {
             bool running = true;
-            PatchClient pClient = new PatchClient(13000);
+            PatchClient pClient = new PatchClient(30831, "212.10.51.254");
             pClient.ConnectToServer();
             ConsoleKeyInfo key = new ConsoleKeyInfo();
             WriteCommands(pClient);
@@ -139,7 +240,7 @@ namespace ConsoleForTesting
             client.VersionsFromServerReceived += answerRecieved;
             Console.WriteLine("Requesting versions from server!");
             client.RequestAvailableVersions();
-            while(!next)
+            while (!next)
             {
 
             }
