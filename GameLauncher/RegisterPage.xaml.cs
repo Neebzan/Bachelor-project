@@ -23,6 +23,7 @@ namespace GameLauncher {
     public partial class RegisterPage : BasePage {
         public RegisterPage () {
             InitializeComponent();
+            spinner_imageawesome.Visibility = Visibility.Hidden;
         }
 
         private void register_button_Click (object sender, RoutedEventArgs e) {
