@@ -85,7 +85,10 @@ namespace DatabaseLib
                 {
                     connection.Open();
                     var data = connection.Get<T>(key);
-                    Console.WriteLine("{0} retrieved!", data.GetType());
+                    if (data != null)
+                        Console.WriteLine("{0} retrieved!", data.GetType());
+                    else
+                        Console.WriteLine("No object with key: '{0}' was found", key);
                     return data;
                 }
                 catch (Exception e)
@@ -104,7 +107,10 @@ namespace DatabaseLib
                 {
                     connection.Open();
                     var data = connection.Get<T>(key);
-                    Console.WriteLine("{0} retrieved!", data.GetType());
+                    if (data != null)
+                        Console.WriteLine("{0} retrieved!", data.GetType());
+                    else
+                        Console.WriteLine("No object with key: '{0}' was found", key);
                     return data;
                 }
                 catch (Exception e)
@@ -115,17 +121,105 @@ namespace DatabaseLib
             }
         }
 
-        public List<MatchModel> GetAllPlayerMatches(string playerID)
+        public List<MatchModel> GetPlayerMatches(string playerID)
         {
             List<MatchModel> matches = new List<MatchModel>();
 
             using (MySqlConnection connection = CreateConnection())
             {
-                matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                try
+                {
+                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    matches = connection.Query<MatchModel>(
+                        "Get_Player_Matches",
+                        new { PlayerID = playerID },
+                        commandType: CommandType.StoredProcedure
+                        ).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
             }
 
             return matches;
         }
+
+        public List<AbilityModel> GetPlayerAbilities(string playerID)
+        {
+            List<AbilityModel> abilities = new List<AbilityModel>();
+
+            using (MySqlConnection connection = CreateConnection())
+            {
+                try
+                {
+                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<AbilityModel>(
+                        "Get_Player_Abilities",
+                        new { PlayerID = playerID },
+                        commandType: CommandType.StoredProcedure
+                        ).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
+
+            return abilities;
+        }
+
+        public List<ItemModel> GetPlayerItems(string playerID)
+        {
+            List<ItemModel> abilities = new List<ItemModel>();
+
+            using (MySqlConnection connection = CreateConnection())
+            {
+                try
+                {
+                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<ItemModel>(
+                        "Get_Player_Items",
+                        new { PlayerID = playerID },
+                        commandType: CommandType.StoredProcedure
+                        ).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
+
+            return abilities;
+        }
+
+        public List<ItemModel> GetPlayerEquippedItems(string playerID)
+        {
+            List<ItemModel> abilities = new List<ItemModel>();
+
+            using (MySqlConnection connection = CreateConnection())
+            {
+                try
+                {
+                    abilities = connection.Query<ItemModel>(
+                        "Get_Player_Equipped_Items",
+                        new { PlayerID = playerID },
+                        commandType: CommandType.StoredProcedure
+                        ).ToList();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
+
+            return abilities;
+        }
+
 
         public List<TestModel> GetAllTest(string playerID)
         {

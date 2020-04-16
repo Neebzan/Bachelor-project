@@ -11,6 +11,6 @@ namespace Models
     {
         [ExplicitKey]
         public string player_id { get; set; }
-        public int experience { get; set; }
+        public uint experience { get; set; }
     }
 }

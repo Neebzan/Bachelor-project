@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using System.IO;
+using System.Threading;
 
 namespace PatchManager
 {
@@ -134,6 +135,8 @@ namespace PatchManager
                             break;
                     }
                 }
+
+                Thread.Sleep(30);
             }
 
             lock (clients)

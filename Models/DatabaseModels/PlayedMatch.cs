@@ -11,7 +11,7 @@ namespace Models
         [ExplicitKey]
         public string player_id { get; set; }
         [ExplicitKey]
-        public int match_id { get; set; }
+        public uint match_id { get; set; }
         public int score { get; set; }
         public int kills { get; set; }
         public int deaths { get; set; }

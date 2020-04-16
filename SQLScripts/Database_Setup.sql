@@ -13,7 +13,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE players (
 	player_id VARCHAR(255) NOT NULL,
-    experience INT ,
+    experience INT UNSIGNED,
     PRIMARY KEY (player_id),
     FOREIGN KEY (player_id) REFERENCES accounts(account_id)
 );
@@ -24,7 +24,7 @@ CREATE TABLE maps (
 );
 
 CREATE TABLE matches (
-	match_id INT NOT NULL AUTO_INCREMENT,
+	match_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     map_name VARCHAR(255) NOT NULL,
 	begun DATETIME NOT NULL,
     ended DATETIME NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE item_types (
 );
 
 CREATE TABLE items (
-	item_id INT AUTO_INCREMENT NOT NULL,
+	item_id INT UNSIGNED AUTO_INCREMENT NOT NULL,
     item_color VARCHAR(255) NOT NULL,
     item_type VARCHAR(10) NOT NULL,
     owner_id VARCHAR(255) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE items (
 -- https://stackoverflow.com/questions/10982992/is-it-fine-to-have-foreign-key-as-primary-key
 CREATE TABLE played_match (
 	player_id VARCHAR(255) NOT NULL,
-	match_id INT NOT NULL,
+	match_id INT UNSIGNED NOT NULL,
 	score INT,
     kills INT,
     deaths INT,
@@ -91,9 +91,9 @@ CREATE TABLE has_learned(
 
 CREATE TABLE wears(
 	player_id VARCHAR(255) DEFAULT '' NOT NULL,
-    item_type VARCHAR(10) DEFAULT '' NOT NULL,
-    PRIMARY KEY (item_type, player_id),
+    item_id INT UNSIGNED DEFAULT 0 NOT NULL,
+    PRIMARY KEY (item_id, player_id),
     FOREIGN KEY (player_id) REFERENCES players(player_id),
-    FOREIGN KEY (item_type) REFERENCES items(item_type)
+    FOREIGN KEY (item_id) REFERENCES items(item_id)
 );
 

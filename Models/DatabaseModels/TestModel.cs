@@ -6,7 +6,7 @@ namespace Models
 {
     public class TestModel
     {
-        public int match_id { get; set; }
+        public uint match_id { get; set; }
         public string map_name { get; set; }
         public DateTime begun { get; set; }
         public DateTime ended { get; set; }

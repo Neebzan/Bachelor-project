@@ -5,12 +5,11 @@ using System.Text;
 
 namespace Models
 {
-    [Table("wears")]
-    public class Wears
+    [Table("abilities")]
+    public class AbilityModel
     {
         [ExplicitKey]
-        public string player_id { get; set; }
-        [ExplicitKey]
-        public uint item_id { get; set; }
+        public string ability_name { get; set; }
+        public int cost{ get; set; }
     }
 }

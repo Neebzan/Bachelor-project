@@ -10,7 +10,7 @@ namespace Models
     public class ItemModel 
     {
         [Key]
-        public int item_id { get; set; }
+        public uint item_id { get; set; }
         public string item_color { get; set; }
         public string item_type { get; set; }
         public string owner_id { get; set; }

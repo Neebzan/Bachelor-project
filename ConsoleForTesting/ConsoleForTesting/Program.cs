@@ -71,16 +71,26 @@ namespace ConsoleForTesting
             //var testGet = DBConnection.Instance().Get<AccountModel>("Bleh3");
 
 
-            DBTests();
+            //DBTests();
+            PatchClientTest();
 
             Console.ReadKey();
         }
 
         static void DBTests()
         {
-            AccountModel testModel = new AccountModel()
+            AccountModel testAccountModel = new AccountModel()
             {
                 account_id = "Bleh3",
+                first_name = "Mr Bleh2",
+                last_name = "Sausage2",
+                email = "yes@no.com2",
+                password_hash = "Very secure PW2"
+            };
+
+            AccountModel testAccountModel2 = new AccountModel()
+            {
+                account_id = "Bleh1",
                 first_name = "Mr Bleh2",
                 last_name = "Sausage2",
                 email = "yes@no.com2",
@@ -92,13 +102,35 @@ namespace ConsoleForTesting
                 player_id = "Bleh3"
             };
 
+            PlayerModel testPlayer2 = new PlayerModel()
+            {
+                player_id = "Bleh1"
+            };
+
             MatchModel testMatch = new MatchModel()
             {
                 map_name = "map1",
                 begun = DateTime.Now,
                 ended = DateTime.Now.AddDays(1),
                 difficulty = 100
+            };
 
+            MatchModel testMatch2 = new MatchModel()
+            {
+                map_name = "map2",
+                begun = DateTime.Now,
+                ended = DateTime.Now.AddDays(1),
+                difficulty = 100
+            };
+
+            MapModel testMap = new MapModel()
+            {
+                map_name = "map1"
+            };
+
+            MapModel testMap2 = new MapModel()
+            {
+                map_name = "map2"
             };
 
             PlayedMatch testPlayedMatch = new PlayedMatch()
@@ -106,7 +138,7 @@ namespace ConsoleForTesting
                 deaths = 5,
                 score = 999,
                 kills = 10,
-                match_id = 2,
+                match_id = 1,
                 player_id = "Bleh3"
             };
 
@@ -117,7 +149,8 @@ namespace ConsoleForTesting
                 green = 0,
                 blue = 255
             };
-            ItemType typeTest = new ItemType()
+
+            ItemType itemTypeTest = new ItemType()
             {
                 type_value = "test"
             };
@@ -132,28 +165,62 @@ namespace ConsoleForTesting
                 quality = 0.5f
             };
 
-            ItemModel t = DBConnection.Instance().Get<ItemModel>(1);
+            AbilityModel testAbility1 = new AbilityModel()
+            {
+                ability_name = "Test Firebawl",
+                cost = 2
+            };
+
+            AbilityModel testAbility2 = new AbilityModel()
+            {
+                ability_name = "Test FrostBawl",
+                cost = 3
+            };
+
+            UnlockedAbility testUnlockedAbility1 = new UnlockedAbility()
+            {
+                ability_name = "Test Firebawl",
+                player_id = "Bleh3"
+            };
+
+            UnlockedAbility testUnlockedAbility2 = new UnlockedAbility()
+            {
+                ability_name = "Test Frostbawl",
+                player_id = "Bleh3"
+            };
 
             Wears wearTest = new Wears()
             {
                 player_id = "Bleh3",
-                item_type = t.item_type
+                item_id = 2
             };
 
-            DBConnection.Instance().Insert(wearTest);
-            //DBConnection.Instance().Insert(testColor);
-            //DBConnection.Instance().Insert(typeTest);
-            //DBConnection.Instance().Insert(testItemModel);
-            //DBConnection.Instance().Insert(testModel);
+            //ItemModel t = DBConnection.Instance().Get<ItemModel>(1);
+            //DBConnection.Instance().Insert(testAccountModel);
             //DBConnection.Instance().Insert(testPlayer);
+            //DBConnection.Instance().Insert(testAccountModel2);
+            //DBConnection.Instance().Insert(testPlayer2);
+            //DBConnection.Instance().Insert(testColor);
+            //DBConnection.Instance().Insert(testMap);
+            //DBConnection.Instance().Insert(itemTypeTest);
+            //DBConnection.Instance().Insert(testItemModel);
             //DBConnection.Instance().Insert(testMatch);
+            //DBConnection.Instance().Insert(testMatch2);
             //DBConnection.Instance().Insert(testPlayedMatch);
+            //DBConnection.Instance().Insert(wearTest);
+            //DBConnection.Instance().Insert(testAbility1);
+            //DBConnection.Instance().Insert(testAbility2);
+            //DBConnection.Instance().Insert(testUnlockedAbility1);
+            //DBConnection.Instance().Insert(testUnlockedAbility2);
+
+            //var matches = DBConnection.Instance().GetPlayerMatches(testPlayer.player_id);
+
         }
 
         static void PatchClientTest()
         {
             bool running = true;
-            PatchClient pClient = new PatchClient(30831, "212.10.51.254");
+            PatchClient pClient = new PatchClient(13000, "212.10.51.254");
             pClient.ConnectToServer();
             ConsoleKeyInfo key = new ConsoleKeyInfo();
             WriteCommands(pClient);
