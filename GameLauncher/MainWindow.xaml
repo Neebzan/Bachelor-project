@@ -18,7 +18,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height=".2*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".3*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="520"/>
@@ -26,8 +27,15 @@
         </Grid.ColumnDefinitions>
 
         <Frame x:Name="frame" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
-        <Button Name="PlayInstall_Button" Content="Browse" Click="PlayInstallButton_Clicked"  Height="30" Width="100" HorizontalAlignment="Center" Margin="2" Grid.Row="2" Grid.Column="2"/>
-        <local:BaseProgressBar x:Name="progress_bar" Grid.Row="2" Grid.Column="0" Value="0" VerticalAlignment="Center" Width="500" Height="14" HorizontalAlignment="Center" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="5,23"/>
+        <Label Name="Install_label" Content="" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"/>
+        <!--<ComboBox ItemsSource="{Binding AvailableVersions}" Grid.Row="2">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>-->
+        <Button Name="PlayInstall_Button" Content="Browse" Click="PlayInstallButton_Clicked"  Height="30" Width="100" HorizontalAlignment="Center" Margin="2" Grid.Row="3" Grid.Column="2"/>
+        <local:BaseProgressBar x:Name="progress_bar" Grid.Row="3" Grid.Column="0" Value="0" VerticalAlignment="Center" Width="500" Height="14" HorizontalAlignment="Center" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="5,23"/>
     </Grid>
 </Window>

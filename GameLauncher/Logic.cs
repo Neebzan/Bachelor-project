@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
+using PatchClientLib;
 using System.Threading.Tasks;
-using System.Windows;
+using Models;
 
 namespace GameLauncher {
     public static class Logic {
         #region Properties
-
         private static bool pathSelected;
 
         public static bool PathSelected {
@@ -28,7 +27,7 @@ namespace GameLauncher {
             get {
                 return PathSelected;
             }
-            set { gameInstalled = value;}
+            set { gameInstalled = value; }
         }
 
         public static string GamePath {
@@ -43,6 +42,55 @@ namespace GameLauncher {
         #endregion
 
         #region methods
+
+        public static void CheckInstall () {
+            if (PathSelected) {
+                PatchClient.InstallPath = GamePath;
+                PatchClient.UpdateCurrentInstallations();
+                PatchClient.RequestVerifyVersions();
+                PatchClient.VersionVerificationDone += PatchClient_VersionVerificationDone;
+                
+                //Get versions installed
+                //Send for verification
+                //Handle answer (missing files or verified)
+                //If not verified, request files from specific version
+                //Request download of missing files from previous request
+
+            }
+        }
+
+        private static void PatchClient_VersionVerificationDone () {
+            //foreach (InstallationDataModel model in PatchClient.InstalledVersions) {
+            //    if (!model.Verified) {
+
+            //    }
+            //}
+        }
+
+        public static void InstallVersion(string version) {
+            PatchClient.RequestVersionMissingFiles(version);
+            PatchClient.MissingFileListReceived += PatchClient_MissingFileListReceived;
+        }
+
+        private static void PatchClient_MissingFileListReceived (string versionName) {
+            PatchClient.DownloadMissingFiles(versionName);
+        }
+
+
+
+        internal static void NewPath (string filename) {
+            Settings.Default.GamePath = filename;
+            Settings.Default.Save();
+        }
+
+        private static void PatchClient_VersionsFromServerReceived (VersionsFromServerRecievedEventArgs args) {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
         /// <summary>
         /// Checks if two password SecureStrings are the same value
         /// </summary>

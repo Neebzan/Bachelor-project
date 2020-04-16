@@ -35,8 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
     <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -126,6 +132,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChecksumHandler\ChecksumHandler\ChecksumHandler.csproj">
+      <Project>{92cf2fc1-531f-4960-a193-33545bec2b91}</Project>
+      <Name>ChecksumHandler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ConnectionHandler\ConnectionHandler.csproj">
+      <Project>{3574e245-c6d6-46f1-9df9-7aac97e69ce5}</Project>
+      <Name>ConnectionHandler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GlobalConfigs\GlobalConfigs.csproj">
+      <Project>{eeefca4c-d9f8-4256-8adc-ca16f5100811}</Project>
+      <Name>GlobalConfigs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{9fb4f256-fdce-4538-b86c-adee6576a502}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PatchClientLib\PatchClientLib.csproj">
+      <Project>{40bd5a08-c2d0-4fb7-b8e4-b00914403cde}</Project>
+      <Name>PatchClientLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

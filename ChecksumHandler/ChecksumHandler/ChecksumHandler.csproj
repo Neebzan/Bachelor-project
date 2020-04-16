@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\Libraries\</OutputPath>
+    <OutputPath>..\Libraries\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -22,6 +22,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Models.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="ChecksumTool.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

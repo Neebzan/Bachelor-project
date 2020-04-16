@@ -81,5 +81,16 @@ namespace GameLauncher.Properties {
                 this["Username"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection GamePaths {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["GamePaths"]));
+            }
+            set {
+                this["GamePaths"] = value;
+            }
+        }
     }
 }
