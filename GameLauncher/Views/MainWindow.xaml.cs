@@ -81,9 +81,11 @@ namespace GameLauncher.Views {
                         if (folderLocation == System.Windows.Forms.DialogResult.OK) {
                             string path = dialog.SelectedPath;
                             path += "/" + (viewModel as MainViewModel).SelectedInstall.VersionName;
+                            (viewModel as MainViewModel).SelectedInstall.InstallPath = path;
                             (viewModel as MainViewModel).AddPath(path);
+                            (viewModel as MainViewModel).DownloadVersion();
                         }
-                    }      
+                    }
 
                     break;
                 default:

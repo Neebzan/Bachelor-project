@@ -22,12 +22,24 @@ namespace GameLauncher.ViewModels {
 
     public class MainViewModel : Screen {
 
+        public bool IsDownloading { get; private set; }
+
         public static StringCollection GamePaths {
             get {
+                StringCollection collection = Settings.Default.GamePaths;
+                if (collection == null) {
+                    collection = new StringCollection();
+                    Settings.Default.GamePaths = collection;
+                }
+                Settings.Default.Save();
                 return Settings.Default.GamePaths;
             }
         }
 
+        public MainViewModel () {
+            Settings.Default.GamePaths = null;
+            Settings.Default.Save();
+        }
 
         private InstallationDataModel selectedInstall;
         public InstallationDataModel SelectedInstall {
@@ -42,7 +54,7 @@ namespace GameLauncher.ViewModels {
         public BindableCollection<InstallationDataModel> AvailableInstalls {
             get {
                 if (availableInstalls == null)
-                    availableInstalls = GamePaths != null ? GetAvailableInstalls(GamePaths) : GetAvailableInstalls();
+                    availableInstalls = GetAvailableInstalls(GamePaths);
 
                 return availableInstalls;
             }
@@ -83,8 +95,19 @@ namespace GameLauncher.ViewModels {
             return new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
         }
 
-        private BindableCollection<InstallationDataModel> GetAvailableInstalls () {
-            return new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck());
+        public void DownloadVersion () {
+            if (!IsDownloading) {
+                IsDownloading = true;
+
+                //Subscribe file downloaded event
+                PatchClient.DownloadDone += PatchClient_DownloadDone;
+                Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
+            }
+        }
+
+        private void PatchClient_DownloadDone () {
+            
+            IsDownloading = false;
         }
     }
 }
