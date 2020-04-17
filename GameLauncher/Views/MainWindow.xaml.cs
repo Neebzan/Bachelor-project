@@ -88,6 +88,9 @@ namespace GameLauncher.Views {
                     }
 
                     break;
+                case InstallationStatus.UpdateRequired:
+                    (viewModel as MainViewModel).DownloadVersion();
+                    break;
                 default:
                     break;
             }
