@@ -29,7 +29,7 @@ namespace ConsoleForTesting
             
             //var t = PatchClient.InstalledVersions;
 
-            //Test();
+            Test();
 
 
 

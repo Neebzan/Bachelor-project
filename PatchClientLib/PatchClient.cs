@@ -23,9 +23,22 @@ namespace PatchClientLib
         public string[] Versions { get; set; }
     }
 
+    public class DownloadProgressEventArgs : EventArgs
+    {
+        public long TotalSize { get; set; }
+        public long DownloadedTotal { get; set; }
+        public string NextFileName { get; set; }
+    }
 
     public static class PatchClient
     {
+        public static event EventHandler<DownloadProgressEventArgs> GetDownloadProgress = delegate { };
+        private static void OnDownloadProgress(DownloadProgressEventArgs e)
+        {
+            var handler = GetDownloadProgress;
+            handler(null, e);
+        }
+
         static TcpClient _client;
 
         static string _ip;
@@ -371,6 +384,8 @@ namespace PatchClientLib
         public static InstallationDataModel DownloadMissingFiles (InstallationDataModel version)
         {
 
+            DownloadProgressEventArgs args = new DownloadProgressEventArgs();
+
             PatchDataModel model = new PatchDataModel()
             {
                 RequestType = PatchNetworkRequest.DownloadFile,
@@ -380,10 +395,21 @@ namespace PatchClientLib
                 }
             };
 
+            foreach (var item in version.MissingFiles)
+            {
+                args.TotalSize += item.Size;
+            }
+            
+
+
             _downloadingFiles = true;
             //While there's still files missing and there's still an active connection
             while (version.MissingFiles.Count > 0 && ConnectionHandler.Connected(_client))
             {
+                //Raise download progress event
+                args.NextFileName = version.MissingFiles[0].FilePath;
+                OnDownloadProgress(args);
+
                 //Request file
                 model.File = new FileModel()
                 {
@@ -403,6 +429,7 @@ namespace PatchClientLib
                 // await ConnectionHandler.ReadFileAsync(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);                
                 ConnectionHandler.ReadFile(_client, version.MissingFiles[0].FilePath, version.InstallPath);
                 Console.WriteLine(version.MissingFiles[0].FilePath + " downloaded");
+                args.DownloadedTotal += version.MissingFiles[0].Size;
                 lock (version)
                     version.MissingFiles.RemoveAt(0);
             }
