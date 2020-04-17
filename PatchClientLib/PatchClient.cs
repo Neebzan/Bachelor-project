@@ -364,7 +364,7 @@ namespace PatchClientLib
                 return null;
         }        
 
-        public static void DownloadMissingFiles(ref InstallationDataModel version)
+        public static InstallationDataModel DownloadMissingFiles (InstallationDataModel version)
         {
 
             PatchDataModel model = new PatchDataModel()
@@ -375,11 +375,6 @@ namespace PatchClientLib
                     VersionName = version.VersionName
                 }
             };
-            //string dir = "";
-            //if (version.InstallPath.Split(Path.DirectorySeparatorChar).Last() == version.VersionName)
-            //    dir = version.InstallPath;
-            //else
-            //    dir = version.InstallPath + '/' + version.VersionName;
 
             _downloadingFiles = true;
             //While there's still files missing and there's still an active connection
@@ -413,6 +408,7 @@ namespace PatchClientLib
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
             RequestVerifyVersion(version);
             DownloadDone?.Invoke();
+            return version;
             //UpdateCurrentInstallations();
 
 
