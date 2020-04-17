@@ -31,6 +31,29 @@ namespace ChecksumHandlerLib
             handler(null, e);
         }
 
+        public static InstallationDataModel GetInstalledVersion(string installPath)
+        {
+            var install = ChecksumTool.GetInstallationAtPath(installPath);
+            InstallationDataModel installedVersion = new InstallationDataModel();
+            var tempVersionInfo = install.ElementAt(0);
+            installedVersion.VersionName = tempVersionInfo.Key;
+            installedVersion.InstallPath = installPath;
+
+            foreach (var item in tempVersionInfo.Value)
+            {
+                installedVersion.Files.Add(new FileModel()
+                {
+                    FileChecksum = item.Value,
+                    FilePath = item.Key
+                });
+            }
+
+            installedVersion.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath));
+
+
+            return installedVersion;
+        }
+
         public static List<InstallationDataModel> GetInstalledVersions(string installPath)
         {
             var installs = ChecksumTool.GetInstallationsAtPath(installPath);
@@ -322,6 +345,21 @@ namespace ChecksumHandlerLib
             }
             else
                 Console.WriteLine("Path does not exist!: " + path);
+            return result;
+        }
+
+        public static Dictionary<string, Dictionary<string, string>> GetInstallationAtPath(string path)
+        {
+            Dictionary<string, Dictionary<string, string>> result = new Dictionary<string, Dictionary<string, string>>();
+            if (Directory.Exists(path))
+            {
+
+                Dictionary<string, string> temp = new Dictionary<string, string>();
+                GetFilesDictionary(out temp, path);
+
+                result.Add(path.Split(Path.DirectorySeparatorChar).Last(), temp);
+            }
+
             return result;
         }
 

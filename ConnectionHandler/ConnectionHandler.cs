@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace ConnectionHandlerLib
 {
@@ -57,6 +58,62 @@ namespace ConnectionHandlerLib
         {
             byte[] data = ConvertToBytes<T>(obj);
             sender.GetStream().Write(data, 0, data.Length);
+        }
+
+        public static async Task<bool> ReadFileAsync(TcpClient client, string fileName, string saveDirectory = "")
+        {
+            byte[] readBuffer = new byte[4];
+
+            if (saveDirectory != "")
+            {
+                if (saveDirectory[saveDirectory.Length - 1] != '\\')
+                    saveDirectory += "\\";
+            }
+
+            int bytesRead = 0;
+
+            while (bytesRead < 4)
+            {
+                bytesRead += await client.GetStream().ReadAsync(readBuffer, bytesRead, 4 - bytesRead);
+            }
+
+            int totalFileSize = BitConverter.ToInt32(readBuffer, 0);
+
+            Console.WriteLine("Incoming file size: " + totalFileSize);
+
+            //Create subfolders if needed
+            string[] pathSplit = fileName.Split('/');
+            string subfolders = fileName.Replace(pathSplit[pathSplit.Length - 1], "");
+            Directory.CreateDirectory(saveDirectory + subfolders);
+
+            using (var output = File.Create(saveDirectory + fileName))
+            {
+
+                // read the file in chunks of 1KB
+                var buffer = new byte[2048];
+                bytesRead = 0; bytesRead = 0;
+                int totalBytesRead = 0;
+
+                //client.Client.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(FileRead_Callback), null);
+
+                while (totalBytesRead < totalFileSize)
+                {
+                    //bytesRead = client.Client.Receive(buffer, buffer.Length, SocketFlags.None);
+                    bytesRead = await client.GetStream().ReadAsync(buffer, 0, buffer.Length);
+
+                    //bytesRead = client.Client.Receive(buffer, buffer.Length, SocketFlags.None);
+                    output.Write(buffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void FileRead_Callback(IAsyncResult ar)
+        {
+            
         }
 
         public static bool ReadFile(TcpClient client, string fileName, string saveDirectory = "")
@@ -164,6 +221,38 @@ namespace ConnectionHandlerLib
             }
             yield return null;
 
+        }
+
+        /// <summary>
+        /// Reads the stream once for a message. If there is a message, reads first 4 bytes of integer length of message, then reads until the length of message has been read
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static async Task<string> ReadMessageAsync(NetworkStream stream)
+        {
+            string msg = string.Empty;
+
+            byte[] readBuffer = new byte[4];
+
+
+            int bytesRead = 0;
+
+            while (bytesRead < 4)
+            {
+                bytesRead += await stream.ReadAsync(readBuffer, bytesRead, 4 - bytesRead);
+                //bytesRead += stream.Read(readBuffer, bytesRead, 4 - bytesRead);
+            }
+
+            bytesRead = 0;
+            byte[] buffer = new byte[BitConverter.ToInt32(readBuffer, 0)];
+
+            while (bytesRead < buffer.Length)
+            {
+                bytesRead += await stream.ReadAsync(buffer, bytesRead, buffer.Length - bytesRead);
+            }
+            msg = System.Text.Encoding.UTF8.GetString(buffer);
+
+            return msg;
         }
 
         /// <summary>

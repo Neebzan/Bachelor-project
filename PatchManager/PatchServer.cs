@@ -177,13 +177,14 @@ namespace PatchManager
             {
                 if (temp.InstallationChecksum == data.InstalledVersion.InstallationChecksum)
                 {
-                    data.InstalledVersion.Verified = true;
+                    data.InstalledVersion.Status = InstallationStatus.Verified;
                     ConnectionHandler.SendObject(data, client);
                     Console.WriteLine("Installation checksum matched and " + data.InstalledVersion.VersionName + " was VERIFIED");
                     return;
                 }
                 else
                 {
+                    data.InstalledVersion.Status = InstallationStatus.UpdateRequired;
                     Console.WriteLine("Installation checksum did NOT match and " + data.InstalledVersion.VersionName + " was NOT VERIFIED");
                     ConnectionHandler.SendObject(data, client);
                 }

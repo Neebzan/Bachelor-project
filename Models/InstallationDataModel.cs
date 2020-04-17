@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Models
 {
+    public enum InstallationStatus { Verified, NotInstalled, UpdateRequired, NotFoundOnServer }
     public class InstallationDataModel
     {
         public string VersionName { get; set; }
@@ -13,7 +14,7 @@ namespace Models
         public List<FileModel> MissingFiles { get; set; } = new List<FileModel>();
         public long TotalSize { get; set; }
         public long RemainingSize { get; set; }
-        public bool Verified { get; set; }
+        public InstallationStatus Status { get; set; }
         public string InstallPath { get; set; }
 
         [JsonIgnore]

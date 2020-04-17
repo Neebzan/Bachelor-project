@@ -106,7 +106,7 @@
       <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PatchClientLib\PatchClientLib.csproj">
-      <Project>{40bd5a08-c2d0-4fb7-b8e4-b00914403cde}</Project>
+      <Project>{40BD5A08-C2D0-4FB7-B8E4-B00914403CDE}</Project>
       <Name>PatchClientLib</Name>
     </ProjectReference>
   </ItemGroup>
