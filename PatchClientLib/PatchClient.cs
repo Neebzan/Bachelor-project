@@ -67,7 +67,6 @@ namespace PatchClientLib
 
         public static List<InstallationDataModel> CompleteCheck(string[] paths)
         {
-
             //Update local installations
             for (int i = 0; i < paths.Length; i++)
             {
@@ -78,7 +77,7 @@ namespace PatchClientLib
             _client = new TcpClient(_ip, _port);
             if (ConnectionHandler.Connected(_client))
             {
-                CompareLocalVersionsToServerVersions();
+                InstalledVersions = CompareLocalVersionsToServerVersions(InstalledVersions);
             }
 
             return InstalledVersions;
@@ -108,7 +107,7 @@ namespace PatchClientLib
         /// Checks and attemps to verify currently detected local versions with the patch server, and checks for missing files.
         /// Also adds versions that still doesn't exist locally as empty installation models
         /// </summary>
-        private static void CompareLocalVersionsToServerVersions()
+        private static List<InstallationDataModel> CompareLocalVersionsToServerVersions(List<InstallationDataModel> installations)
         {
             //Get versions from server
             serverVersions = RequestAvailableVersions();
@@ -116,18 +115,19 @@ namespace PatchClientLib
             //List of versions that exists both locally and on server
             List<string> matchingVersions = new List<string>();
 
-            foreach (var curVersion in InstalledVersions)
+            for (int i = 0; i < installations.Count; i++)
             {
-                if (serverVersions.Contains(curVersion.VersionName))
+                if (serverVersions.Contains(installations[i].VersionName))
                 {
-                    CompareLocalVersionWithServer(curVersion);
-                    matchingVersions.Add(curVersion.VersionName);
+                    installations[i] = CompareLocalVersionWithServer(installations[i]);
+                    matchingVersions.Add(installations[i].VersionName);
                 }
                 else
                 {
-                    curVersion.Status = InstallationStatus.NotFoundOnServer;
+                    installations[i].Status = InstallationStatus.NotFoundOnServer;
                 }
             }
+                        
 
             //Find server versions that wasen't found locally and create empty installation model for them
             foreach (var version in serverVersions)
@@ -140,11 +140,12 @@ namespace PatchClientLib
                         Status = InstallationStatus.NotInstalled
                     };
 
-                    InstalledVersions.Add(temp);
-                    CompareLocalVersionWithServer(temp);
+                    temp = CompareLocalVersionWithServer(temp);
+                    installations.Add(temp);
                 }
             }
 
+            return installations;
         }
 
         private static async Task CompareLocalVersionsToServerVersionsAsync()
@@ -191,16 +192,19 @@ namespace PatchClientLib
         /// Attempts to verify an installation with the patch server, if it fails, attempt to get missing files
         /// </summary>
         /// <param name="version"></param>
-        public static void CompareLocalVersionWithServer(InstallationDataModel version)
+        public static InstallationDataModel CompareLocalVersionWithServer(InstallationDataModel version)
         {
-            RequestVerifyVersion(version);
+            RequestVerifyVersion(ref version);
             if (version.Status != InstallationStatus.Verified)
-                RequestVersionMissingFiles(version);
+            {
+                RequestVersionMissingFiles(ref version);
+            }
+            return version;
         }
 
         public static async Task CompareLocalVersionWithServerAsync(InstallationDataModel version)
         {
-            RequestVerifyVersion(version);
+            RequestVerifyVersion(ref version);
             if (version.Status != InstallationStatus.Verified)
                 await RequestVersionMissingFilesAsync(version);
         }
@@ -253,15 +257,15 @@ namespace PatchClientLib
 
         }
 
-        public static void RequestVerifyVersions()
-        {
-            foreach (var item in InstalledVersions)
-            {
-                RequestVerifyVersion(item);
-            }
-        }
+        //public static void RequestVerifyVersions()
+        //{
+        //    foreach (var item in InstalledVersions)
+        //    {
+        //        RequestVerifyVersion(ref item);
+        //    }
+        //}
 
-        public static bool RequestVerifyVersion(InstallationDataModel versionData)
+        public static bool RequestVerifyVersion(ref InstallationDataModel versionData)
         {
             PatchDataModel model = new PatchDataModel()
             {
@@ -290,14 +294,14 @@ namespace PatchClientLib
                 return false;
         }
 
-        public static void RequestVerifyVersion(string versionName)
-        {
-            var temp = InstalledVersions.FirstOrDefault(x => x.VersionName == versionName);
-            if (temp != null)
-            {
-                RequestVerifyVersion(temp);
-            }
-        }
+        //public static void RequestVerifyVersion(string versionName)
+        //{
+        //    var temp = InstalledVersions.FirstOrDefault(x => x.VersionName == versionName);
+        //    if (temp != null)
+        //    {
+        //        RequestVerifyVersion(temp);
+        //    }
+        //}
 
         private static void HandleVerifyVersionResponse(PatchDataModel data)
         {
@@ -316,7 +320,7 @@ namespace PatchClientLib
             VersionVerificationDone?.Invoke();
         }
 
-        public static List<FileModel> RequestVersionMissingFiles(InstallationDataModel version)
+        public static List<FileModel> RequestVersionMissingFiles(ref InstallationDataModel version)
         {
             PatchDataModel model = new PatchDataModel()
             {
@@ -406,7 +410,7 @@ namespace PatchClientLib
             _downloadingFiles = false;
             Console.WriteLine("All missing files received!");
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
-            RequestVerifyVersion(version);
+            RequestVerifyVersion(ref version);
             DownloadDone?.Invoke();
             return version;
             //UpdateCurrentInstallations();

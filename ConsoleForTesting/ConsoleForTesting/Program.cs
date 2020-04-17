@@ -20,16 +20,16 @@ namespace ConsoleForTesting
     {
         static void Main(string[] args)
         {
-            PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest12";
+            PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest1";
             //PatchClient.UpdateCurrentInstallations();
 
-            PatchClient.CompleteCheck(new string[] {
+            var h = PatchClient.CompleteCheck(new string[] {
             PatchClient.InstallPath });
 
             
-            var t = PatchClient.InstalledVersions;
+            //var t = PatchClient.InstalledVersions;
 
-            Test();
+            //Test();
 
 
 
@@ -39,9 +39,9 @@ namespace ConsoleForTesting
         public static async void Test()
         {
             var t = PatchClient.InstalledVersions;
-            var p = t[2];
-            p.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest12";
-            PatchClient.DownloadMissingFiles(ref p);
+            var p = t[0];
+            p.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest1";
+            PatchClient.DownloadMissingFiles(p);
             t = PatchClient.InstalledVersions;
         }
 
