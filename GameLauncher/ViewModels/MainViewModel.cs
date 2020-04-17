@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using GameLauncher.Properties;
+using HelperTools;
 using Models;
 using PatchClientLib;
 using System;
@@ -98,7 +99,6 @@ namespace GameLauncher.ViewModels {
         public void DownloadVersion () {
             if (!IsDownloading) {
                 IsDownloading = true;
-
                 //Subscribe file downloaded event
                 PatchClient.DownloadDone += PatchClient_DownloadDone;
                 Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
