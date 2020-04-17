@@ -26,8 +26,8 @@ namespace ConsoleForTesting
             PatchClient.CompleteCheck(new string[] {
             PatchClient.InstallPath });
 
-            var t = PatchClient.InstalledVersions;
             
+            var t = PatchClient.InstalledVersions;
 
             Test();
 
@@ -39,7 +39,9 @@ namespace ConsoleForTesting
         public static async void Test()
         {
             var t = PatchClient.InstalledVersions;
-            PatchClient.DownloadMissingFiles(t[0]);
+            var p = t[0];
+            PatchClient.DownloadMissingFiles(ref p);
+            t = PatchClient.InstalledVersions;
         }
 
         //        static void DBTests()

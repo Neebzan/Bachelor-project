@@ -59,6 +59,11 @@ namespace ConnectionHandlerLib
             byte[] data = ConvertToBytes<T>(obj);
             sender.GetStream().Write(data, 0, data.Length);
         }
+        public static async Task SendObjectAsync<T>(T obj, TcpClient sender)
+        {
+            byte[] data = ConvertToBytes<T>(obj);
+            await sender.GetStream().WriteAsync(data, 0, data.Length);
+        }
 
         public static async Task<bool> ReadFileAsync(TcpClient client, string fileName, string saveDirectory = "")
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Models
 {
-    public enum InstallationStatus { Verified, NotInstalled, UpdateRequired, NotFoundOnServer }
+    public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer }
     public class InstallationDataModel
     {
         public string VersionName { get; set; }
