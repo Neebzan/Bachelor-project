@@ -364,7 +364,7 @@ namespace PatchClientLib
                 return null;
         }        
 
-        public static void DownloadMissingFiles(ref InstallationDataModel version)
+        public static InstallationDataModel DownloadMissingFiles (InstallationDataModel version)
         {
 
             PatchDataModel model = new PatchDataModel()
@@ -375,11 +375,6 @@ namespace PatchClientLib
                     VersionName = version.VersionName
                 }
             };
-            string dir = "";
-            if (version.InstallPath.Split(Path.DirectorySeparatorChar).Last() == version.VersionName)
-                dir = version.InstallPath;
-            else
-                dir = version.InstallPath + '/' + version.VersionName;
 
             _downloadingFiles = true;
             //While there's still files missing and there's still an active connection
@@ -402,7 +397,7 @@ namespace PatchClientLib
 
                 //Handle incoming file
                 // await ConnectionHandler.ReadFileAsync(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);                
-                ConnectionHandler.ReadFile(_client, version.MissingFiles[0].FilePath, dir);
+                ConnectionHandler.ReadFile(_client, version.MissingFiles[0].FilePath, version.InstallPath);
                 Console.WriteLine(version.MissingFiles[0].FilePath + " downloaded");
                 lock (version)
                     version.MissingFiles.RemoveAt(0);
@@ -413,6 +408,7 @@ namespace PatchClientLib
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
             RequestVerifyVersion(version);
             DownloadDone?.Invoke();
+            return version;
             //UpdateCurrentInstallations();
 
 

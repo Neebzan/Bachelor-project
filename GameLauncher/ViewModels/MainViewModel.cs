@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,23 +24,38 @@ namespace GameLauncher.ViewModels {
 
     public class MainViewModel : Screen {
 
+        private Task<InstallationDataModel> downloadTask;
+
+        private InstallationDataModel DownloadingModel;
+
         public bool IsDownloading { get; private set; }
 
         public static StringCollection GamePaths {
             get {
                 StringCollection collection = Settings.Default.GamePaths;
-                if (collection == null) {
+
+                if (collection == null)
                     collection = new StringCollection();
-                    Settings.Default.GamePaths = collection;
+
+                else {
+                    StringCollection newCollection = new StringCollection();
+                    foreach (string path in collection)
+                        if (Directory.Exists(path))
+                            newCollection.Add(path);
+
+                    collection = newCollection;
                 }
+
+                Settings.Default.GamePaths = collection;
                 Settings.Default.Save();
-                return Settings.Default.GamePaths;
+
+                return collection;
             }
         }
 
         public MainViewModel () {
-            Settings.Default.GamePaths = null;
-            Settings.Default.Save();
+            //Settings.Default.GamePaths = null;
+            //Settings.Default.Save();
         }
 
         private InstallationDataModel selectedInstall;
@@ -77,14 +93,11 @@ namespace GameLauncher.ViewModels {
             }
         }
 
-        public bool AddPath (string path) {
+        public void AddPath (string path) {
             StringCollection paths = GamePaths;
-            if (!paths.Contains(path)) {
-                paths.Add(path);
-                return true;
-
-            }
-            return false;
+            paths.Add(path);
+            Settings.Default.GamePaths = paths;
+            Settings.Default.Save();
         }
 
 
@@ -101,12 +114,14 @@ namespace GameLauncher.ViewModels {
                 IsDownloading = true;
                 //Subscribe file downloaded event
                 PatchClient.DownloadDone += PatchClient_DownloadDone;
-                Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
+                DownloadingModel = SelectedInstall;
+                downloadTask = new Task<InstallationDataModel>(() => PatchClient.DownloadMissingFiles(DownloadingModel));
+                downloadTask.Start();
             }
         }
 
         private void PatchClient_DownloadDone () {
-            
+            DownloadingModel = downloadTask.Result;
             IsDownloading = false;
         }
     }
