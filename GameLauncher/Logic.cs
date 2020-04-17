@@ -60,14 +60,14 @@ namespace GameLauncher {
             //}
         }
 
-        public static void InstallVersion(string version) {
-            PatchClient.RequestVersionMissingFiles(version);
-            PatchClient.MissingFileListReceived += PatchClient_MissingFileListReceived;
-        }
+        //public static void InstallVersion(string version) {
+        //    PatchClient.RequestVersionMissingFiles(version);
+        //    PatchClient.MissingFileListReceived += PatchClient_MissingFileListReceived;
+        //}
 
-        private static void PatchClient_MissingFileListReceived (string versionName) {
-            PatchClient.DownloadMissingFiles(versionName);
-        }
+        //private static void PatchClient_MissingFileListReceived (string versionName) {
+        //    PatchClient.DownloadMissingFiles(versionName);
+        //}
 
 
 

@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using GameLauncher.Properties;
 using GameLauncher.ViewModels;
+using Models;
 using PatchClientLib;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace GameLauncher.Views {
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
-            Version_ComboBox.Loaded += Version_ComboBox_Loaded;
+            //Version_ComboBox.Loaded += Version_ComboBox_Loaded;
 
             ContentFrame = frame;
             frame.NavigationService.Navigate(new LoginPage());
@@ -44,21 +45,21 @@ namespace GameLauncher.Views {
             Version_ComboBox.SelectionChanged += Version_ComboBox_SelectionChanged;
         }
 
-        private void Version_ComboBox_Loaded (object sender, RoutedEventArgs e) {
-            ControlTemplate ct = Version_ComboBox.Template;
-            Popup pop = ct.FindName("PART_Popup", this.Version_ComboBox) as Popup;
-            pop.Placement = PlacementMode.Top;
-        }
+        //private void Version_ComboBox_Loaded (object sender, RoutedEventArgs e) {
+        //    ControlTemplate ct = Version_ComboBox.Template;
+        //    Popup pop = ct.FindName("PART_Popup", this.Version_ComboBox) as Popup;
+        //    pop.Placement = PlacementMode.Top;
+        //}
 
         private void Version_ComboBox_SelectionChanged (object sender, SelectionChangedEventArgs e) {
-            switch ((viewModel as MainViewModel).SelectedInstall.InstallType) {
-                case TemporaryInstallType.Installed:
+            switch ((viewModel as MainViewModel).SelectedInstall.Status) {
+                case InstallationStatus.Verified:
                     UpdateButton("Play", Brushes.Green);
                     break;
-                case TemporaryInstallType.NotInstalled:
+                case InstallationStatus.NotInstalled:
                     UpdateButton("Install", Brushes.Red);
                     break;
-                case TemporaryInstallType.UpdateRequired:
+                case InstallationStatus.UpdateRequired:
                     UpdateButton("Update", Brushes.Orange);
                     break;
                 default:
@@ -72,11 +73,8 @@ namespace GameLauncher.Views {
         }
 
         private void PlayInstallButton_Clicked (object sender, RoutedEventArgs e) {
-            switch ((viewModel as MainViewModel).SelectedInstall.InstallType) {
-                case TemporaryInstallType.Installed:
-
-                    break;
-                case TemporaryInstallType.NotInstalled:
+            switch ((viewModel as MainViewModel).SelectedInstall.Status) {
+                case InstallationStatus.NotInstalled:
                     using (var dialog = new winForms.FolderBrowserDialog()) {
                         winForms.DialogResult folderLocation = dialog.ShowDialog();
 
@@ -85,19 +83,12 @@ namespace GameLauncher.Views {
                             path += "/" + (viewModel as MainViewModel).SelectedInstall.VersionName;
                             (viewModel as MainViewModel).AddPath(path);
                         }
-                    }
-
-                    break;
-                case TemporaryInstallType.UpdateRequired:
+                    }      
 
                     break;
                 default:
                     break;
             }
-
-        }
-
-        private void Version_ComboBox_SelectionChanged_1 (object sender, SelectionChangedEventArgs e) {
 
         }
     }

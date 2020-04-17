@@ -1,5 +1,7 @@
 ﻿using Caliburn.Micro;
 using GameLauncher.Properties;
+using Models;
+using PatchClientLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -11,12 +13,12 @@ using System.Threading.Tasks;
 namespace GameLauncher.ViewModels {
     public enum TemporaryInstallType { Installed, NotInstalled, UpdateRequired }
 
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    public class TemporaryInstallModel {
-        public string VersionName { get; set; }
-        public string Path { get; set; }
-        public TemporaryInstallType InstallType { get; set; }
-    }
+    //[SettingsSerializeAs(SettingsSerializeAs.Xml)]
+    //public class TemporaryInstallModel {
+    //    public string VersionName { get; set; }
+    //    public string Path { get; set; }
+    //    public TemporaryInstallType InstallType { get; set; }
+    //}
 
     public class MainViewModel : Screen {
 
@@ -27,8 +29,8 @@ namespace GameLauncher.ViewModels {
         }
 
 
-        private TemporaryInstallModel selectedInstall;
-        public TemporaryInstallModel SelectedInstall {
+        private InstallationDataModel selectedInstall;
+        public InstallationDataModel SelectedInstall {
             get { return selectedInstall; }
             set {
                 selectedInstall = value;
@@ -36,11 +38,11 @@ namespace GameLauncher.ViewModels {
             }
         }
 
-        private BindableCollection<TemporaryInstallModel> availableInstalls = null;
-        public BindableCollection<TemporaryInstallModel> AvailableInstalls {
+        private BindableCollection<InstallationDataModel> availableInstalls = null;
+        public BindableCollection<InstallationDataModel> AvailableInstalls {
             get {
                 if (availableInstalls == null)
-                    availableInstalls = GetAvailableInstalls(GamePaths);
+                    availableInstalls = GamePaths != null ? GetAvailableInstalls(GamePaths) : GetAvailableInstalls();
 
                 return availableInstalls;
             }
@@ -77,13 +79,12 @@ namespace GameLauncher.ViewModels {
         /// Return the available installs, both locally and remotely
         /// </summary>
         /// <returns></returns>
-        private BindableCollection<TemporaryInstallModel> GetAvailableInstalls (StringCollection paths) {
-            return new BindableCollection<TemporaryInstallModel>() {
-                new TemporaryInstallModel { VersionName = "Version one", InstallType = TemporaryInstallType.Installed},
-                new TemporaryInstallModel { VersionName = "Version two", InstallType = TemporaryInstallType.NotInstalled},
-                new TemporaryInstallModel { VersionName = "Version three", InstallType = TemporaryInstallType.UpdateRequired},
-                new TemporaryInstallModel { VersionName = "Version four", InstallType = TemporaryInstallType.Installed}
-            };
+        private BindableCollection<InstallationDataModel> GetAvailableInstalls (StringCollection paths) {
+            return new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
+        }
+
+        private BindableCollection<InstallationDataModel> GetAvailableInstalls () {
+            return new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck());
         }
     }
 }

@@ -92,6 +92,17 @@ namespace PatchClientLib
             return InstalledVersions;
         }
 
+
+        public static List<InstallationDataModel> CompleteCheck () {
+            //Establish connection to server
+            _client = new TcpClient(_ip, _port);
+            if (ConnectionHandler.Connected(_client)) {
+                CompareLocalVersionsToServerVersions();
+            }
+
+            return InstalledVersions;
+        }
+
         /// <summary>
         /// Checks and attemps to verify currently detected local versions with the patch server, and checks for missing files.
         /// Also adds versions that still doesn't exist locally as empty installation models
