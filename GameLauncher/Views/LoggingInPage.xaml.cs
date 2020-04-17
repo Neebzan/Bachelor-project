@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GameLauncher {
+namespace GameLauncher.Views {
     /// <summary>
     /// Interaction logic for LoggingInPage.xaml
     /// </summary>

@@ -1,0 +1,48 @@
+﻿<Window x:Class="GameLauncher.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameLauncher"
+        mc:Ignorable="d"
+        Title="VR Adventuretime" Style="{StaticResource BaseWindowStyle}" WindowStartupLocation="CenterScreen">
+
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFF0F0F0" Offset="1"/>
+            <GradientStop Color="White"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid Height="400" Width="640">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".01*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height=".25*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="520"/>
+            <ColumnDefinition Width="120"/>
+        </Grid.ColumnDefinitions>
+
+        <Frame x:Name="frame" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+        <ComboBox x:Name="Version_ComboBox" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding AvailableInstalls}"  SelectedItem="{Binding SelectedInstall}" BorderThickness="0" HorizontalAlignment="Center" Width="100" Margin="10,2" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Height="24">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding VersionName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!--<Label x:Name="Install_label" Content="{Binding SelectedInstall_VersionName}"  HorizontalAlignment="Center"/>-->
+
+        <StackPanel Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Label Name="DownloadProgress_label" Content="{Binding DownloadProgress}" Margin="20, 0" FontWeight="UltraLight"/>
+            <Label Name="DownloadFile_label" Content="{Binding DownloadFileName}" Margin="20, 0" FontWeight="UltraLight"/>
+        </StackPanel>
+        <Button Name="PlayInstall_Button" Content="Browse" Click="PlayInstallButton_Clicked"  Height="35" Width="100" HorizontalAlignment="Center" Margin="2" Grid.Row="3" Grid.Column="2"/>
+        <local:BaseProgressBar x:Name="progress_bar" Grid.Row="3" Grid.Column="0" Value="0" VerticalAlignment="Center" Width="500" Height="14" HorizontalAlignment="Center" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="20,5"/>
+    </Grid>
+</Window>

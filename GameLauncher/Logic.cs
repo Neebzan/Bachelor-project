@@ -13,51 +13,44 @@ namespace GameLauncher {
         #region Properties
         private static bool pathSelected;
 
-        public static bool PathSelected {
-            get {
-                //Should run checks on wether or not this is a valid path
-                return !String.IsNullOrEmpty(GamePath);
-            }
-            set { pathSelected = value; }
-        }
+        //public static bool PathSelected {
+        //    get {
+        //        //Should run checks on wether or not this is a valid path
+        //        return !String.IsNullOrEmpty(GamePaths);
+        //    }
+        //    set { pathSelected = value; }
+        //}
 
         private static bool gameInstalled;
 
-        public static bool GameInstalled {
-            get {
-                return PathSelected;
-            }
-            set { gameInstalled = value; }
-        }
+        //public static bool GameInstalled {
+        //    get {
+        //        return PathSelected;
+        //    }
+        //    set { gameInstalled = value; }
+        //}
 
-        public static string GamePath {
-            get {
-                return Settings.Default.GamePath;
-            }
-            set {
-                Settings.Default.GamePath = value;
-            }
-        }
+
 
         #endregion
 
         #region methods
 
-        public static void CheckInstall () {
-            if (PathSelected) {
-                PatchClient.InstallPath = GamePath;
-                PatchClient.UpdateCurrentInstallations();
-                PatchClient.RequestVerifyVersions();
-                PatchClient.VersionVerificationDone += PatchClient_VersionVerificationDone;
+        //public static void CheckInstall () {
+        //    if (PathSelected) {
+        //        PatchClient.InstallPath = GamePaths;
+        //        PatchClient.UpdateCurrentInstallations();
+        //        PatchClient.RequestVerifyVersions();
+        //        PatchClient.VersionVerificationDone += PatchClient_VersionVerificationDone;
                 
-                //Get versions installed
-                //Send for verification
-                //Handle answer (missing files or verified)
-                //If not verified, request files from specific version
-                //Request download of missing files from previous request
+        //        //Get versions installed
+        //        //Send for verification
+        //        //Handle answer (missing files or verified)
+        //        //If not verified, request files from specific version
+        //        //Request download of missing files from previous request
 
-            }
-        }
+        //    }
+        //}
 
         private static void PatchClient_VersionVerificationDone () {
             //foreach (InstallationDataModel model in PatchClient.InstalledVersions) {

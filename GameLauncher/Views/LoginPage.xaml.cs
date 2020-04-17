@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace GameLauncher {
+namespace GameLauncher.Views {
     /// <summary>
     /// Interaction logic for LoginPage.xaml
     /// </summary>
