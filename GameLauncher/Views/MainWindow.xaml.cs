@@ -68,7 +68,8 @@ namespace GameLauncher.Views {
         }
 
         private void UpdateButton (string text, SolidColorBrush color) {
-            PlayInstall_Button.Background = color;
+            //PlayInstall_Button.Background = color;
+            //PlayInstall_Button.BorderBrush = Brushes.Red;
             PlayInstall_Button.Content = text;
         }
 
@@ -83,13 +84,13 @@ namespace GameLauncher.Views {
                             path += "\\" + (viewModel as MainViewModel).SelectedInstall.VersionName;
                             (viewModel as MainViewModel).SelectedInstall.InstallPath = path;
                             (viewModel as MainViewModel).AddPath(path);
-                            (viewModel as MainViewModel).DownloadVersion();
+                            (viewModel as MainViewModel).DownloadSelectedVersion();
                         }
                     }
 
                     break;
                 case InstallationStatus.UpdateRequired:
-                    (viewModel as MainViewModel).DownloadVersion();
+                    (viewModel as MainViewModel).DownloadSelectedVersion();
                     break;
                 default:
                     break;

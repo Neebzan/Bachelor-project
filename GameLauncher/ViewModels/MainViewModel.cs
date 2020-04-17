@@ -75,6 +75,11 @@ namespace GameLauncher.ViewModels {
 
                 return availableInstalls;
             }
+
+            private set {
+                availableInstalls = value;
+                NotifyOfPropertyChange(() => availableInstalls);
+            }
         }
 
 
@@ -109,7 +114,7 @@ namespace GameLauncher.ViewModels {
             return new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
         }
 
-        public void DownloadVersion () {
+        public void DownloadSelectedVersion () {
             if (!IsDownloading) {
                 IsDownloading = true;
                 //Subscribe file downloaded event
@@ -122,6 +127,19 @@ namespace GameLauncher.ViewModels {
 
         private void PatchClient_DownloadDone () {
             DownloadingModel = downloadTask.Result;
+            if (AvailableInstalls != null) {
+                int toChange = -1;
+                for (int i = 0; i < availableInstalls.Count; i++) {
+                    if (availableInstalls [ i ].VersionName == DownloadingModel.VersionName) {
+                        toChange = i;
+                        break;
+                    }
+                }
+                if (toChange != -1)
+                    AvailableInstalls [ toChange ] = DownloadingModel;
+                
+            }
+
             IsDownloading = false;
         }
     }

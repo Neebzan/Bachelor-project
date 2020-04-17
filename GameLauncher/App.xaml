@@ -122,6 +122,8 @@
             </Style.Triggers>
         </Style>
 
+        <Color x:Key="DarkBrown">#C4AF8D</Color>
+        
         <Style TargetType="Button">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -142,12 +144,36 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FFD1D1D1"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                    <Setter Property="BorderBrush" Value="Black"/>
-                </Trigger>
+                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Play">
+                    <Setter Property="Background" Value="#1ce81f"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Install">
+                    <Setter Property="Background" Value="#fa4b4b"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Update">
+                    <Setter Property="Background" Value="#f2a21f"></Setter>
+                </DataTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="Content" Value="Play" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#53fc56"/>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="Content" Value="Install" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#ff7d7d"/>
+                </MultiTrigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="Content" Value="Update" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#ffb845"/>
+                </MultiTrigger>
             </Style.Triggers>
         </Style>
     </Application.Resources>
