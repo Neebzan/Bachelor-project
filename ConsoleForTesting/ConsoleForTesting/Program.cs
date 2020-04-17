@@ -29,7 +29,7 @@ namespace ConsoleForTesting
             var t = PatchClient.InstalledVersions;
             
 
-            //Test();
+            Test();
 
 
 
@@ -39,7 +39,7 @@ namespace ConsoleForTesting
         public static async void Test()
         {
             var t = PatchClient.InstalledVersions;
-            PatchClient.DownloadMissingFiles(t[1]);
+            PatchClient.DownloadMissingFiles(t[0]);
         }
 
         //        static void DBTests()

@@ -5,6 +5,7 @@ using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -46,8 +47,8 @@ namespace PatchClientLib
         static PatchClient()
         {
             //ConnectToServer(30831, "212.10.51.254");
-            _ip = "localhost";
-            _port = 13000;
+            _ip = "212.10.51.254";
+            _port = 30831;
         }
 
         public static void SetConnectionInfo(int port, string ip)
@@ -368,7 +369,13 @@ namespace PatchClientLib
                     VersionName = version.VersionName
                 }
             };
-            _downloadingFiles = true;
+            string dir = "";
+            if (version.InstallPath.Split(Path.DirectorySeparatorChar).Last() == version.VersionName)
+                dir = version.InstallPath;
+            else
+                dir = version.InstallPath + '/' + version.VersionName;
+
+                _downloadingFiles = true;
             //While there's still files missing and there's still an active connection
             while (version.MissingFiles.Count > 0 && ConnectionHandler.Connected(_client))
             {
@@ -388,8 +395,8 @@ namespace PatchClientLib
                 }
 
                 //Handle incoming file
-                // await ConnectionHandler.ReadFileAsync(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);
-                ConnectionHandler.ReadFile(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);
+                // await ConnectionHandler.ReadFileAsync(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);                
+                ConnectionHandler.ReadFile(_client, version.MissingFiles[0].FilePath,dir);
                 Console.WriteLine(version.MissingFiles[0].FilePath + " downloaded");
                 lock (version)
                     version.MissingFiles.RemoveAt(0);
@@ -397,7 +404,7 @@ namespace PatchClientLib
             _downloadingFiles = false;
             Console.WriteLine("All missing files received!");
             DownloadDone?.Invoke();
-            UpdateCurrentInstallations();
+            //UpdateCurrentInstallations();
             //RequestVerifyVersion(version);
 
 
