@@ -52,18 +52,20 @@ namespace GameLauncher.Views {
         //}
 
         private void Version_ComboBox_SelectionChanged (object sender, SelectionChangedEventArgs e) {
-            switch ((viewModel as MainViewModel).SelectedInstall.Status) {
-                case InstallationStatus.Verified:
-                    UpdateButton("Play", Brushes.Green);
-                    break;
-                case InstallationStatus.NotInstalled:
-                    UpdateButton("Install", Brushes.Red);
-                    break;
-                case InstallationStatus.UpdateRequired:
-                    UpdateButton("Update", Brushes.Orange);
-                    break;
-                default:
-                    break;
+            if ((viewModel as MainViewModel).SelectedInstall != null) {
+                switch ((viewModel as MainViewModel).SelectedInstall.Status) {
+                    case InstallationStatus.Verified:
+                        UpdateButton("Play", Brushes.Green);
+                        break;
+                    case InstallationStatus.NotInstalled:
+                        UpdateButton("Install", Brushes.Red);
+                        break;
+                    case InstallationStatus.UpdateRequired:
+                        UpdateButton("Update", Brushes.Orange);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

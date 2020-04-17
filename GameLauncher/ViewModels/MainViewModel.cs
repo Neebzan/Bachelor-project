@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace GameLauncher.ViewModels {
     public enum TemporaryInstallType { Installed, NotInstalled, UpdateRequired }
@@ -23,10 +25,6 @@ namespace GameLauncher.ViewModels {
     //}
 
     public class MainViewModel : Screen {
-
-        private Task<InstallationDataModel> downloadTask;
-
-        private InstallationDataModel DownloadingModel;
 
         public bool IsDownloading { get; private set; }
 
@@ -54,8 +52,8 @@ namespace GameLauncher.ViewModels {
         }
 
         public MainViewModel () {
-            //Settings.Default.GamePaths = null;
-            //Settings.Default.Save();
+            PatchClient.GetDownloadProgress += PatchClient_GetDownloadProgress;
+            PatchClient.DownloadDone += PatchClient_DownloadDone;
         }
 
         private InstallationDataModel selectedInstall;
@@ -78,24 +76,22 @@ namespace GameLauncher.ViewModels {
 
             private set {
                 availableInstalls = value;
-                NotifyOfPropertyChange(() => availableInstalls);
+                NotifyOfPropertyChange(() => AvailableInstalls);
             }
         }
 
-
-        int temporaryProgress = 213;
-        int temporaryTotal = 1231;
+        private string downloadProgress = "";
 
         public string DownloadProgress {
-            get {
-                return "Progress: " + ((Convert.ToSingle(temporaryProgress) / Convert.ToSingle(temporaryTotal)) * 100.0f).ToString("0.00") + "%";
-            }
+            get { return downloadProgress; }
+            set { downloadProgress = value; NotifyOfPropertyChange(() => DownloadProgress); }
         }
 
-        public string DownloadFileName {
-            get {
-                return "Current file: Some file name";
-            }
+        private string downloadFile = "";
+
+        public string DownloadFile {
+            get { return downloadFile; }
+            set { downloadFile = value; NotifyOfPropertyChange(() => DownloadFile); }
         }
 
         public void AddPath (string path) {
@@ -117,30 +113,31 @@ namespace GameLauncher.ViewModels {
         public void DownloadSelectedVersion () {
             if (!IsDownloading) {
                 IsDownloading = true;
-                //Subscribe file downloaded event
-                PatchClient.DownloadDone += PatchClient_DownloadDone;
-                DownloadingModel = SelectedInstall;
-                downloadTask = new Task<InstallationDataModel>(() => PatchClient.DownloadMissingFiles(DownloadingModel));
-                downloadTask.Start();
+                Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
             }
         }
 
-        private void PatchClient_DownloadDone () {
-            DownloadingModel = downloadTask.Result;
+        private void PatchClient_GetDownloadProgress (object sender, DownloadProgressEventArgs e) {
+            DownloadProgress = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f).ToString("0.00") + "%";
+            DownloadFile = e.NextFileName;
+        }
+
+        private void PatchClient_DownloadDone (InstallationDataModel installation) {
             if (AvailableInstalls != null) {
                 int toChange = -1;
+
                 for (int i = 0; i < availableInstalls.Count; i++) {
-                    if (availableInstalls [ i ].VersionName == DownloadingModel.VersionName) {
-                        toChange = i;
-                        break;
-                    }
+                    if (availableInstalls [ i ].VersionName == installation.VersionName)
+                        toChange = i; break;
                 }
+
                 if (toChange != -1)
-                    AvailableInstalls [ toChange ] = DownloadingModel;
-                
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => { AvailableInstalls [ toChange ] = installation; SelectedInstall = AvailableInstalls [ toChange ]; }));
             }
 
             IsDownloading = false;
+            DownloadFile = "";
+            DownloadProgress = "";
         }
     }
 }

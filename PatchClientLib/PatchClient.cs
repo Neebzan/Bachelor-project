@@ -51,9 +51,10 @@ namespace PatchClientLib
         static bool _downloadingFiles;
 
         public static string[] serverVersions = new string[0];
-        public static event Action DownloadDone, VersionVerificationDone;
+        public static event Action VersionVerificationDone;
         public static event Action<string> MissingFileListReceived;
         public static event Action<VersionsFromServerRecievedEventArgs> VersionsFromServerReceived;
+        public static event Action<InstallationDataModel> DownloadDone;
 
         public static List<InstallationDataModel> InstalledVersions = new List<InstallationDataModel>();
 
@@ -381,7 +382,7 @@ namespace PatchClientLib
                 return null;
         }        
 
-        public static InstallationDataModel DownloadMissingFiles (InstallationDataModel version)
+        public static void DownloadMissingFiles (InstallationDataModel version)
         {
 
             DownloadProgressEventArgs args = new DownloadProgressEventArgs();
@@ -438,11 +439,7 @@ namespace PatchClientLib
             Console.WriteLine("All missing files received!");
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
             RequestVerifyVersion(ref version);
-            DownloadDone?.Invoke();
-            return version;
-            //UpdateCurrentInstallations();
-
-
+            DownloadDone?.Invoke(version);
         }
 
         public static bool CheckIfVersionExists(string versionName)

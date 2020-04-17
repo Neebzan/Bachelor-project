@@ -328,7 +328,7 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Label x:Name="DownloadProgress_label" Content="{Binding DownloadProgress}" Margin="20, 0" FontWeight="UltraLight"/>
-            <Label x:Name="DownloadFile_label" Content="{Binding DownloadFileName}" Margin="20, 0" FontWeight="UltraLight"/>
+            <Label x:Name="DownloadFile_label" Content="{Binding DownloadFile}" Margin="20, 0" FontWeight="UltraLight"/>
         </StackPanel>
         <Button x:Name="PlayInstall_Button" Content="Browse" Click="PlayInstallButton_Clicked"  Height="35" Width="100" HorizontalAlignment="Center" Margin="2" Grid.Row="3" Grid.Column="2"/>
         <local:BaseProgressBar x:Name="progress_bar" Grid.Row="3" Grid.Column="0" Value="0" VerticalAlignment="Center" Width="500" Height="14" HorizontalAlignment="Center" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="20,5"/>
