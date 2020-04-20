@@ -131,7 +131,7 @@ namespace DatabaseLib
                 {
                     //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
                     matches = connection.Query<MatchModel>(
-                        "Get_Player_Matches",
+                        "GetPlayerMatches",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
                         ).ToList();
@@ -156,7 +156,7 @@ namespace DatabaseLib
                 {
                     //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
                     abilities = connection.Query<AbilityModel>(
-                        "Get_Player_Abilities",
+                        "GetPlayerAbilities",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
                         ).ToList();
@@ -181,7 +181,7 @@ namespace DatabaseLib
                 {
                     //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
                     abilities = connection.Query<ItemModel>(
-                        "Get_Player_Items",
+                        "GetPlayerItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
                         ).ToList();
@@ -205,7 +205,7 @@ namespace DatabaseLib
                 try
                 {
                     abilities = connection.Query<ItemModel>(
-                        "Get_Player_Equipped_Items",
+                        "GetPlayerEquippedItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
                         ).ToList();
@@ -218,6 +218,54 @@ namespace DatabaseLib
             }
 
             return abilities;
+        }
+
+        public bool UnlockAbility(PlayerModel player, AbilityModel ability)
+        {
+            //Get the players current abilities
+            var playerAbilities = GetPlayerAbilities(player.player_id);
+
+            throw new NotImplementedException();
+
+            using (MySqlConnection connection = CreateConnection())
+            {
+                try
+                {
+                       connection.Query(
+                       "UnlockAbility",
+                       new { PlayerID = player.player_id, AbilityName = ability.ability_name },
+                       commandType: CommandType.StoredProcedure
+                       ).ToList();
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return false;
+                }
+            }
+        }
+
+        public List<AbilityModel> GetAllAbilities()
+        {
+            List<AbilityModel> abilites = new List<AbilityModel>();
+            using (MySqlConnection connection = CreateConnection())
+            {
+                try
+                {
+                    abilites = connection.Query<AbilityModel>(
+                    "GetAllAbilities",
+                    new { },
+                    commandType: CommandType.StoredProcedure
+                    ).ToList();
+                    return abilites;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return null;
+                }
+            }
         }
 
         public List<TestModel> GetAllTest(string playerID)

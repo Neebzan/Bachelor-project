@@ -9,9 +9,12 @@ using PatchClientLib;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsoleForTesting
@@ -21,15 +24,24 @@ namespace ConsoleForTesting
         static void Main(string[] args)
         {
             PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest1";
-            //PatchClient.UpdateCurrentInstallations();
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
+            var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
+            watch.Stop();
+            Console.WriteLine("Elapsed: " + watch.ElapsedMilliseconds);
+            //Thread.Sleep(4000);
 
-            var h = PatchClient.CompleteCheck(new string[] {
-            PatchClient.InstallPath });
+            //var h = PatchClient.CompleteCheck(new string[] {
+            //PatchClient.InstallPath });
 
-            
+
             //var t = PatchClient.InstalledVersions;
 
-            Test();
+            //Test();
+
+            //var testLoadFromFile = h[0].GetModelFromFile();
+            //h[0].SaveToFile();
 
 
 
@@ -39,7 +51,7 @@ namespace ConsoleForTesting
         public static async void Test()
         {
             var t = PatchClient.InstalledVersions;
-            var p = t[0];
+            var p = t[1];
             p.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest1";
             PatchClient.DownloadMissingFiles(p);
             t = PatchClient.InstalledVersions;

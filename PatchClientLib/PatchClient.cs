@@ -242,6 +242,7 @@ namespace PatchClientLib
                     PatchDataModel data = JsonConvert.DeserializeObject<PatchDataModel>(ConnectionHandler.ReadMessage(_client.GetStream()));
                     return data;
                 }
+                Thread.Sleep(16);
             }
             return null;
         }

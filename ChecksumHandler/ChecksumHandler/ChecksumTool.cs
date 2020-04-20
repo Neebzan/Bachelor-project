@@ -33,25 +33,40 @@ namespace ChecksumHandlerLib
 
         public static InstallationDataModel GetInstalledVersion(string installPath)
         {
-            var install = ChecksumTool.GetInstallationAtPath(installPath);
-            InstallationDataModel installedVersion = new InstallationDataModel();
+            var install = GetInstallationAtPath(installPath);
             var tempVersionInfo = install.ElementAt(0);
-            installedVersion.VersionName = tempVersionInfo.Key;
-            installedVersion.InstallPath = installPath;
+            string path = SanitizePath(installPath);
+
+            //Get data from the VersionFile
+            InstallationDataModel tempModel = InstallationDataModel.GetModelFromFile(path);
+
+            if (tempModel == null)
+            {
+                tempModel = new InstallationDataModel();
+                Console.WriteLine("NO VersionInfo FOUND!!");
+            }
+            tempModel.InstallPath = installPath;
+
+
+            tempModel.InstallPath = path;
+
+            tempModel.Files.Clear();
+            tempModel.MissingFiles.Clear();
+
 
             foreach (var item in tempVersionInfo.Value)
             {
-                installedVersion.Files.Add(new FileModel()
+                tempModel.Files.Add(new FileModel()
                 {
                     FileChecksum = item.Value,
                     FilePath = item.Key
                 });
             }
 
-            installedVersion.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath));
+            tempModel.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath));
+            tempModel.SaveToFile();
 
-
-            return installedVersion;
+            return tempModel;
         }
 
         public static List<InstallationDataModel> GetInstalledVersions(string installPath)
@@ -60,9 +75,23 @@ namespace ChecksumHandlerLib
             List<InstallationDataModel> installedVersions = new List<InstallationDataModel>();
             for (int i = 0; i < installs.Count; i++)
             {
-                InstallationDataModel tempModel = new InstallationDataModel();
                 var tempVersionInfo = installs.ElementAt(i);
-                tempModel.VersionName = tempVersionInfo.Key;
+                string path = SanitizePath(installPath + "\\" + tempVersionInfo.Key);
+
+                //Get data from the VersionFile
+                InstallationDataModel tempModel = InstallationDataModel.GetModelFromFile(path);
+
+                if (tempModel == null)
+                {
+                    tempModel = new InstallationDataModel();
+                    Console.WriteLine("NO VersionInfo FOUND!!");
+                }
+
+                tempModel.InstallPath = path;
+                tempModel.Files.Clear();
+                tempModel.MissingFiles.Clear();
+
+                //tempModel.VersionName = tempVersionInfo.Key;
 
                 foreach (var item in tempVersionInfo.Value)
                 {
@@ -73,7 +102,9 @@ namespace ChecksumHandlerLib
                     });
                 }
 
-                tempModel.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath + "\\" + tempModel.VersionName));
+                tempModel.InstallationChecksum = GetCombinedChecksum(tempModel.InstallPath);
+
+                tempModel.SaveToFile();
                 installedVersions.Add(tempModel);
             }
 
@@ -132,24 +163,10 @@ namespace ChecksumHandlerLib
             GetFilesDictionaryProgressEventArgs args = new GetFilesDictionaryProgressEventArgs();
             result = null;
             path = RootedPathCheck(path);
-            //string currentDirectory;
-            //if (!Path.IsPathRooted(path))
-            //{
-            //    currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            //    if (path != "")
-            //    {
-            //        if (currentDirectory[currentDirectory.Length - 1] != '\\')
-            //            currentDirectory += "\\";
-
-            //        currentDirectory += path;
-            //    }
-            //}
-            //else
-            //    currentDirectory = path;
 
             try
             {
-                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).Where(name => !(name == "VersionInfo")).ToArray();
                 args.FilesFound = files.Length;
                 args.ChecksumsGenerated = 0;
                 OnGetFilesDictionaryProgress(args);
@@ -227,52 +244,34 @@ namespace ChecksumHandlerLib
         public static string GetCombinedChecksum(string path)
         {
             path = RootedPathCheck(path);
-            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).ToList();
-            var sha = new SHA256Managed();
-
-            //If the folder is empty, generate a hash based on a 0 byte
-            if (files.Count == 0)
+            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).Where(name => !(name.Contains("VersionInfo"))).ToList();
+            using (MD5 md5 = MD5.Create())
             {
-                sha.ComputeHash(new byte[0]);
-            }
-            else
-                for (int i = 0; i < files.Count; i++)
+                //If the folder is empty, generate a hash based on a 0 byte
+                if (files.Count == 0)
                 {
-                    string relPath = GetRelativePath(files[i], path);
-                    byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
-                    using (FileStream stream = File.OpenRead(files[i]))
+                    md5.ComputeHash(new byte[0]);
+                }
+                else
+                    for (int i = 0; i < files.Count; i++)
                     {
-                        byte[] checksum = sha.ComputeHash(stream);
+                        string relPath = GetRelativePath(files[i], path);
+                        byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+                        using (FileStream stream = File.OpenRead(files[i]))
+                        {
+                            byte[] checksum = md5.ComputeHash(stream);
 
-                        sha.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
-                        if (i == files.Count - 1)
-                            sha.TransformFinalBlock(checksum, 0, checksum.Length);
-                        else
-                            sha.TransformBlock(checksum, 0, checksum.Length, checksum, 0);
+                            md5.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+                            if (i == files.Count - 1)
+                                md5.TransformFinalBlock(checksum, 0, checksum.Length);
+                            else
+                                md5.TransformBlock(checksum, 0, checksum.Length, checksum, 0);
+                        }
                     }
-                }
-            return BitConverter.ToString(sha.Hash).Replace("-", String.Empty);
+                return BitConverter.ToString(md5.Hash).Replace("-", String.Empty);
+            }
         }
 
-        /// <summary>
-        /// Generate checksums for a collection of file paths
-        /// </summary>
-        /// <param name="files"></param>
-        /// <returns></returns>
-        private static string[] GetChecksums(string[] files)
-        {
-            string[] checkSums = new string[files.Length];
-            for (int i = 0; i < files.Length; i++)
-            {
-                using (FileStream stream = File.OpenRead(files[i]))
-                {
-                    var sha = new SHA256Managed();
-                    byte[] checksum = sha.ComputeHash(stream);
-                    checkSums[i] = BitConverter.ToString(checksum).Replace("-", String.Empty);
-                }
-            }
-            return checkSums;
-        }
 
         /// <summary>
         /// Generate checksum from a single file path
@@ -283,15 +282,28 @@ namespace ChecksumHandlerLib
         {
             using (FileStream stream = File.OpenRead(filePath))
             {
-                var sha = new SHA256Managed();
-                byte[] checksum = sha.ComputeHash(stream);
-                byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+                using(MD5 md5 = MD5.Create())
+                {
+                    byte[] checksum = md5.ComputeHash(stream);
+                    byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
 
-                sha.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
-                sha.TransformFinalBlock(checksum, 0, checksum.Length);
+                    md5.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+                    md5.TransformFinalBlock(checksum, 0, checksum.Length);
 
-                return BitConverter.ToString(checksum).Replace("-", String.Empty);
+                    return BitConverter.ToString(checksum).Replace("-", String.Empty);
+                }   
             }
+            //using (FileStream stream = File.OpenRead(filePath))
+            //{
+            //    var sha = new SHA256Managed();
+            //    byte[] checksum = sha.ComputeHash(stream);
+            //    byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+
+            //    sha.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+            //    sha.TransformFinalBlock(checksum, 0, checksum.Length);
+
+            //    return BitConverter.ToString(checksum).Replace("-", String.Empty);
+            //}
         }
 
         public static string RootedPathCheck(string path)
@@ -347,6 +359,7 @@ namespace ChecksumHandlerLib
                 Console.WriteLine("Path does not exist!: " + path);
             return result;
         }
+
 
         public static Dictionary<string, Dictionary<string, string>> GetInstallationAtPath(string path)
         {

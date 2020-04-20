@@ -1,14 +1,18 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Models
 {
     public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer }
+    public enum VersionBranch { None, Release, Beta, Development }
     public class InstallationDataModel
     {
         public string VersionName { get; set; }
+        public VersionBranch VersionBranch;
         public string InstallationChecksum { get; set; }
         public List<FileModel> Files { get; set; } = new List<FileModel>();
         public List<FileModel> MissingFiles { get; set; } = new List<FileModel>();
@@ -18,10 +22,10 @@ namespace Models
         public string InstallPath { get; set; }
 
         [JsonIgnore]
-        private Dictionary<string,string> FilesDictionary = null;
+        private Dictionary<string, string> FilesDictionary = null;
         public Dictionary<string, string> GetFilesAsDictionary()
         {
-            if(FilesDictionary == null)
+            if (FilesDictionary == null)
             {
                 FilesDictionary = new Dictionary<string, string>();
 
@@ -32,6 +36,39 @@ namespace Models
             }
 
             return FilesDictionary;
+        }
+
+        public void SaveToFile()
+        {
+            File.WriteAllText(@InstallPath + @"\VersionInfo", JsonConvert.SerializeObject(this));
+        }
+
+        public bool LoadFromFile()
+        {
+            if (File.Exists(@InstallPath + @"\VersionInfo"))
+            {
+                var temp = JsonConvert.DeserializeObject<InstallationDataModel>(File.ReadAllText(@InstallPath + @"\VersionInfo"));
+                this.Files = temp.Files;
+                this.InstallationChecksum = temp.InstallationChecksum;
+                this.MissingFiles = temp.MissingFiles;
+                this.TotalSize = temp.TotalSize;
+                this.RemainingSize = temp.RemainingSize;
+                this.Status = temp.Status;
+                this.VersionBranch = temp.VersionBranch;
+                this.VersionName = temp.VersionName;
+
+                return true;
+            }
+            return false;
+        }
+
+        public static InstallationDataModel GetModelFromFile(string pathToFolder)
+        {
+            if (File.Exists(@pathToFolder + @"\VersionInfo"))
+            {
+                return JsonConvert.DeserializeObject<InstallationDataModel>(File.ReadAllText(@pathToFolder + @"\VersionInfo"));
+            }
+            return null;
         }
     }
 
