@@ -320,7 +320,7 @@
         <ComboBox x:Name="Version_ComboBox" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding AvailableInstalls}"  SelectedItem="{Binding SelectedInstall}" BorderThickness="0" HorizontalAlignment="Stretch" Margin="20, 0,0,5" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Height="25" Style="{DynamicResource ComboBoxStyle1}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding VersionName}"/>
+                    <TextBlock Text="{Binding VersionBranchToString}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

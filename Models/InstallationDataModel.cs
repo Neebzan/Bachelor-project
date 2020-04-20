@@ -2,16 +2,15 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 
-namespace Models
-{
-	public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer, IsInstalling, IsDeleting}
+namespace Models {
+    public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer, IsInstalling, IsDeleting }
     public enum VersionBranch { None, Release, Beta, Development }
-    
-    public class InstallationDataModel
-    {
+
+    public class InstallationDataModel {
         public string VersionName { get; set; }
         public VersionBranch VersionBranch;
         public string InstallationChecksum { get; set; }
@@ -22,16 +21,20 @@ namespace Models
         public InstallationStatus Status { get; set; }
         public string InstallPath { get; set; }
 
+        public string VersionBranchToString {
+            get {
+                return VersionBranch.ToString();
+            }
+        }
+
+
         [JsonIgnore]
         private Dictionary<string, string> FilesDictionary = null;
-        public Dictionary<string, string> GetFilesAsDictionary()
-        {
-            if (FilesDictionary == null)
-            {
+        public Dictionary<string, string> GetFilesAsDictionary () {
+            if (FilesDictionary == null) {
                 FilesDictionary = new Dictionary<string, string>();
 
-                foreach (var item in Files)
-                {
+                foreach (var item in Files) {
                     FilesDictionary.Add(item.FilePath, item.FileChecksum);
                 }
             }
@@ -39,15 +42,12 @@ namespace Models
             return FilesDictionary;
         }
 
-        public void SaveToFile()
-        {
+        public void SaveToFile () {
             File.WriteAllText(@InstallPath + @"/Version.json", JsonConvert.SerializeObject(this));
         }
 
-        public bool LoadFromFile()
-        {
-            if (File.Exists(@InstallPath + @"/Version.json"))
-            {
+        public bool LoadFromFile () {
+            if (File.Exists(@InstallPath + @"/Version.json")) {
                 var temp = JsonConvert.DeserializeObject<InstallationDataModel>(File.ReadAllText(@InstallPath + @"/Version.json"));
                 this.Files = temp.Files;
                 this.InstallationChecksum = temp.InstallationChecksum;
@@ -63,18 +63,15 @@ namespace Models
             return false;
         }
 
-        public static InstallationDataModel GetModelFromFile(string pathToFolder)
-        {
-            if (File.Exists(@pathToFolder + @"/Version.json"))
-            {
+        public static InstallationDataModel GetModelFromFile (string pathToFolder) {
+            if (File.Exists(@pathToFolder + @"/Version.json")) {
                 return JsonConvert.DeserializeObject<InstallationDataModel>(File.ReadAllText(@pathToFolder + @"/Version.json"));
             }
             return null;
         }
     }
 
-    public class FileModel
-    {
+    public class FileModel {
         public string FileChecksum { get; set; }
         public string FilePath { get; set; }
         public long Size { get; set; }
