@@ -44,6 +44,8 @@ namespace GameLauncher.Views {
             ContentFrame = frame;
             frame.NavigationService.Navigate(new LoginPage());
 
+            progress_bar.Visibility = Visibility.Hidden;
+
             (viewModel as MainViewModel).DownloadProgressUpdated += OnDownloadProgressUpdated;
             (viewModel as MainViewModel).SelectedInstallUpdated += OnSelectedInstallChanged;
         }
@@ -51,6 +53,7 @@ namespace GameLauncher.Views {
         private void OnSelectedInstallChanged (InstallationDataModel installationDataModel) {
             Dispatcher.Invoke(() => {
                 Delete_Button.Visibility = installationDataModel?.Status == InstallationStatus.Verified || installationDataModel?.Status == InstallationStatus.UpdateRequired ? Visibility.Visible : Visibility.Hidden;
+                progress_bar.Visibility = installationDataModel?.Status == InstallationStatus.IsInstalling ? Visibility.Visible : Visibility.Hidden;
             });
         }
 

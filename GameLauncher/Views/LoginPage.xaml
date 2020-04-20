@@ -6,18 +6,18 @@
       xmlns:local="clr-namespace:GameLauncher"
                 xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="248.438" d:DesignWidth="456.641"
       Title="LoginPage">
 
-    <StackPanel VerticalAlignment="Center">
+    <StackPanel VerticalAlignment="Stretch">
         <Label Name="usernameEmail_label" Content="Username or email" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <TextBox Name="usernameEmail_textblock" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label Name="password_label" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <PasswordBox Name="password_passwordBox" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <CheckBox x:Name="remember_username_tick" Opacity=".8" Content="  Remember username" Margin="20,5,20,1" Grid.Row="5" Padding="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Unchecked="remember_username_tick_Unchecked" Checked="remember_username_tick_Checked"/>
-        <CheckBox x:Name="automatic_login_tick" Opacity=".8" Content="  Automatic login" Margin="20,1" Grid.Row="6" Padding="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Unchecked="automatic_login_tick_Unchecked" Checked="automatic_login_tick_Checked"/>
-        <StackPanel Margin="20,20" Orientation="Horizontal" Height="46">
-            <Button Name="login_button" Content="Register" Width="100" Height="30" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,0" Click="login_button_Click"/>
+        <CheckBox x:Name="remember_username_tick" Opacity=".8" Content="  Remember username" Grid.Row="5" Padding="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Unchecked="remember_username_tick_Unchecked" Checked="remember_username_tick_Checked"/>
+        <CheckBox x:Name="automatic_login_tick" Opacity=".8" Content="  Automatic login" Grid.Row="6" Padding="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Unchecked="automatic_login_tick_Unchecked" Checked="automatic_login_tick_Checked"/>
+        <StackPanel Orientation="Horizontal" Height="46">
+            <Button Name="login_button" Content="Login" Width="100" Height="30" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,0" Click="login_button_Click"/>
             <Button Name="register_button" Content="or create and account" FontWeight="Light" Style="{StaticResource BaseButtonStyleNoBackground}" Margin="5,10,20,0" Grid.Row="7" Click="register_button_Click"/>
             <fa:ImageAwesome x:Name="spinner_imageawesome" Opacity=".8" Margin="20,10,20,0"/>
         </StackPanel>

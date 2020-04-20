@@ -5,17 +5,27 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              StartupUri="Views\MainWindow.xaml">
     <Application.Resources>
+        <Color x:Key="DarkBrown">#C4AF8D</Color>
+
+        <Color x:Key="Background">#36383b</Color>
+        <Color x:Key="ColorA">#DCDCDD</Color>
+        <Color x:Key="ColorB">#C5C3C6</Color>
+        <Color x:Key="ColorC">#4C5C68</Color>
+        <Color x:Key="ColorCMouseOver">#596c7a</Color>
+        <Color x:Key="ColorD">#1985A1</Color>
+        <Color x:Key="ColorDMouseOver">#1a9bbd</Color>
+
+        <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}" />
+        <SolidColorBrush x:Key="ColorABrush" Color="{StaticResource ColorA}" />
+        <SolidColorBrush x:Key="ColorBBrush" Color="{StaticResource ColorB}" />
+        <SolidColorBrush x:Key="ColorCBrush" Color="{StaticResource ColorC}" />
+        <SolidColorBrush x:Key="ColorCBrushMouseOver" Color="{StaticResource ColorCMouseOver}" />
+        <SolidColorBrush x:Key="ColorDBrush" Color="{StaticResource ColorD}" />
+        <SolidColorBrush x:Key="ColorDMouseOverBrush" Color="{StaticResource ColorDMouseOver}" />
+
         <Style x:Key="BaseWindowStyle" TargetType="Window">
             <Setter Property="ResizeMode" Value="CanMinimize"/>
             <Setter Property="SizeToContent" Value="WidthAndHeight"/>
-            <!--<Setter Property="Width" Value="800"/>
-            <Setter Property="Height" Value="475"/>-->
-
-            <!--<Setter Property="WindowChrome.WindowChrome">
-                <Setter.Value>
-                    <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
-                </Setter.Value>
-            </Setter>-->
         </Style>
         <Style TargetType="fa:ImageAwesome">
             <Setter Property="Icon" Value="Spinner"/>
@@ -25,54 +35,42 @@
         </Style>
 
         <Style TargetType="Label">
-            <Setter Property="Margin" Value="20,10,20,0"/>
             <Setter Property="VerticalContentAlignment" Value="Bottom"/>
             <Setter Property="Padding" Value="0"/>
-            <!--<Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Opacity="0.25"/>
-                </Setter.Value>
-            </Setter>-->
+            <Setter Property="Foreground" Value="{StaticResource ColorABrush}"/>
         </Style>
 
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="20,2,20,2"/>
+        <Style TargetType="TextBox">            
             <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="Margin" Value="0, 5, 0, 10"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Width" Value="300"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="Background" Value="#FFE6E6E6"/>
-            <Setter Property="Foreground" Value="#FF383838"/>
+            <Setter Property="Background" Value="{StaticResource ColorCBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorBBrush}"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <!--<Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Opacity="0.25"/>
-                </Setter.Value>
-            </Setter>-->
         </Style>
 
         <Style TargetType="PasswordBox">
-            <Setter Property="Margin" Value="20,2,20,2"/>
-
+            <Setter Property="Margin" Value="0, 5, 0, 10"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Width" Value="300"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="Background" Value="#FFE6E6E6"/>
-            <Setter Property="Foreground" Value="#FF383838"/>
+            <Setter Property="Background" Value="{StaticResource ColorCBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorBBrush}"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <!--<Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Opacity="0.25"/>
-                </Setter.Value>
-            </Setter>-->
         </Style>
 
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource ColorABrush}"/>
+        </Style>
+        
         <Style TargetType="Window">
             <Setter Property="WindowStyle" Value="None"/>
             <Setter Property="WindowState" Value="Normal"/>
@@ -98,7 +96,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#FFBD2222"/>
+            <Setter Property="Foreground" Value="{StaticResource ColorDBrush}"/>
 
             <!--<Setter Property="Effect">
                 <Setter.Value>
@@ -117,13 +115,11 @@
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="#FFF11212"/>
+                    <Setter Property="Foreground" Value="{StaticResource ColorDMouseOverBrush}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
-        <Color x:Key="DarkBrown">#C4AF8D</Color>
-        
         <Style TargetType="Button">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -131,9 +127,9 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Background" Value="#1c1c1c"/>
+            <Setter Property="Background" Value="{StaticResource ColorDBrush}"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="0,0"/>
+            <Setter Property="Padding" Value="0,0,0,10"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -144,51 +140,33 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Play">
-                    <Setter Property="Background" Value="#1ce81f"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Installing">
-                    <Setter Property="Background" Value="#1c1c1c"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Deleting">
-                    <Setter Property="Background" Value="#1c1c1c"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Install">
-                    <Setter Property="Background" Value="#fa4b4b"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="X">
-                    <Setter Property="Background" Value="#fa4b4b"></Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Update">
-                    <Setter Property="Background" Value="#f2a21f"></Setter>
-                </DataTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsMouseOver" Value="True" />
                         <Condition Property="Content" Value="Play" />
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#53fc56"/>
+                    <Setter Property="Background" Value="{StaticResource ColorDMouseOverBrush}"/>
                 </MultiTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsMouseOver" Value="True" />
                         <Condition Property="Content" Value="Install" />
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#ff3838"/>
+                    <Setter Property="Background" Value="{StaticResource ColorDMouseOverBrush}"/>
                 </MultiTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsMouseOver" Value="True" />
                         <Condition Property="Content" Value="X" />
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#ff7d7d"/>
+                    <Setter Property="Background" Value="{StaticResource ColorDMouseOverBrush}"/>
                 </MultiTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
                         <Condition Property="IsMouseOver" Value="True" />
                         <Condition Property="Content" Value="Update" />
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#ffb845"/>
+                    <Setter Property="Background" Value="{StaticResource ColorDMouseOverBrush}"/>
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
