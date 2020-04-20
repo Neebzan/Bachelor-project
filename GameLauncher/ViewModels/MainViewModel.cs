@@ -230,15 +230,20 @@ namespace GameLauncher.ViewModels {
                 int toChange = -1;
 
                 for (int i = 0; i < _availableInstalls.Count; i++) {
-                    if (_availableInstalls [ i ].VersionName == installation.VersionName) {
+                    if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
                         toChange = i;
                         break;
                     }
                 }
 
                 if (toChange != -1)
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => { AvailableInstalls [ toChange ] = installation; SelectedInstall = AvailableInstalls [ toChange ]; }));
-            }
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
+                        AvailableInstalls [ toChange ] = installation;
+                        SelectedInstall = AvailableInstalls [ toChange ];
+                    }));
+                }
+            
+
 
             IsDownloading = false;
             DownloadFile = "";
