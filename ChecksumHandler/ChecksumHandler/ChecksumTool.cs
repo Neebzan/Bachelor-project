@@ -69,6 +69,36 @@ namespace ChecksumHandlerLib
             return tempModel;
         }
 
+        public static InstallationDataModel RecheckVersion(InstallationDataModel version)
+        {
+            var install = GetInstallationAtPath(version.InstallPath);
+            var tempVersionInfo = install.ElementAt(0);
+            string path = SanitizePath(version.InstallPath);
+
+            //Get data from the VersionFile
+            if (version.LoadFromFile())
+            {
+                Console.WriteLine("NO Version.json FOUND!!");
+            }
+
+            version.Files.Clear();
+            version.MissingFiles.Clear();
+
+            foreach (var item in tempVersionInfo.Value)
+            {
+                version.Files.Add(new FileModel()
+                {
+                    FileChecksum = item.Value,
+                    FilePath = item.Key
+                });
+            }
+
+            version.InstallationChecksum = GetCombinedChecksum(SanitizePath(version.InstallPath));
+            version.SaveToFile();
+
+            return version;
+        }
+
         public static List<InstallationDataModel> GetInstalledVersions(string installPath)
         {
             var installs = ChecksumTool.GetInstallationsAtPath(installPath);

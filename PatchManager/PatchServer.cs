@@ -241,7 +241,7 @@ namespace PatchManager
 
         private void SendFileToClient(TcpClient client, PatchDataModel data)
         {
-            var temp = masterFiles.FirstOrDefault(x => x.VersionName == data.InstalledVersion.VersionName);
+            var temp = masterFiles.FirstOrDefault(x => x.VersionBranch == data.InstalledVersion.VersionBranch);
             if (temp != null)
             {
                 string path = "";
