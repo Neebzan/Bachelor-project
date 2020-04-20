@@ -23,11 +23,24 @@ namespace ConsoleForTesting
     {
         static void Main(string[] args)
         {
-            PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\VersionTest1";
+            PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp";
             Stopwatch watch = new Stopwatch();
             watch.Start();
             //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
-            var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
+            var h = PatchClient.CompleteCheck(new string[0]);
+            h[0].InstallPath = PatchClient.InstallPath;
+
+            //var q = new InstallationDataModel()
+            //{
+            //    VersionName = "0.1b",
+            //    VersionBranch = VersionBranch.Beta,
+            //    InstallPath = PatchClient.InstallPath,
+            //    Status = InstallationStatus.NotInstalled
+            //};
+
+
+            PatchClient.DownloadMissingFiles(h[0]);
+            //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
             watch.Stop();
             Console.WriteLine("Elapsed: " + watch.ElapsedMilliseconds);
             //Thread.Sleep(4000);

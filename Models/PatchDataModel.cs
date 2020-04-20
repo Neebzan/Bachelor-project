@@ -10,6 +10,6 @@ namespace Models
         public bool Connected;
         public FileModel File;
         public string Message;
-        public string[] Versions;
+        public string[] AvailableBranches;
     }
 }

@@ -94,6 +94,8 @@ namespace PatchClientLib
                 InstalledVersions = CompareLocalVersionsToServerVersions(InstalledVersions);
             }
 
+            _client.Close();
+
             return InstalledVersions;
         }
 
@@ -112,6 +114,8 @@ namespace PatchClientLib
             {
                 await CompareLocalVersionsToServerVersionsAsync();
             }
+
+            _client.Close();
 
             return InstalledVersions;
         }
@@ -151,6 +155,7 @@ namespace PatchClientLib
                     InstallationDataModel temp = new InstallationDataModel()
                     {
                         VersionName = version,
+                        VersionBranch = (VersionBranch)Enum.Parse(typeof(VersionBranch), version),
                         Status = InstallationStatus.NotInstalled
                     };
 
@@ -266,7 +271,7 @@ namespace PatchClientLib
             PatchDataModel response = ReadServerResponse();
 
             if (response != null)
-                return response.Versions;
+                return response.AvailableBranches;
             else
                 return new string[0];
 
@@ -385,6 +390,7 @@ namespace PatchClientLib
 
         public static void DownloadMissingFiles (InstallationDataModel version)
         {
+            _client = new TcpClient(_ip, _port);
 
             DownloadProgressEventArgs args = new DownloadProgressEventArgs();
 
@@ -393,7 +399,8 @@ namespace PatchClientLib
                 RequestType = PatchNetworkRequest.DownloadFile,
                 InstalledVersion = new InstallationDataModel
                 {
-                    VersionName = version.VersionName
+                    VersionName = version.VersionName,
+                    VersionBranch = version.VersionBranch
                 }
             };
 
@@ -440,6 +447,7 @@ namespace PatchClientLib
             Console.WriteLine("All missing files received!");
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
             RequestVerifyVersion(ref version);
+            _client.Close();
             DownloadDone?.Invoke(version);
         }
 

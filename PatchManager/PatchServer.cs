@@ -43,7 +43,7 @@ namespace PatchManager
                 versions = new string[masterFiles.Count];
                 for (int i = 0; i < masterFiles.Count; i++)
                 {
-                    versions[i] = masterFiles[i].VersionName;
+                    versions[i] = masterFiles[i].VersionBranch.ToString();
                 }
                 //versions = ChecksumTool.GetAvailableFolders(masterDirectory);
                 //for (int i = 0; i < versions.Length; i++)
@@ -163,7 +163,7 @@ namespace PatchManager
             PatchDataModel model = new PatchDataModel()
             {
                 RequestType = PatchNetworkRequest.AvailableVersions,
-                Versions = versions
+                AvailableBranches = versions
             };
             byte[] data = ConnectionHandler.ConvertToBytes<PatchDataModel>(model);
             client.GetStream().Write(data, 0, data.Length);
@@ -202,14 +202,14 @@ namespace PatchManager
         private void SendMissingFilesList(TcpClient client, PatchDataModel data)
         {
             //Find the requested version
-            var temp = masterFiles.FirstOrDefault(x => x.VersionName == data.InstalledVersion.VersionName);
+            var temp = masterFiles.FirstOrDefault(x => x.VersionBranch == data.InstalledVersion.VersionBranch);
             List<string> missingFiles = new List<string>();
             if (temp != null)
             {
                 //Check which files are missing/mismatched
                 missingFiles = ChecksumTool.CompareFileDictionaries(temp.GetFilesAsDictionary(), data.InstalledVersion.GetFilesAsDictionary());
 
-                string dir = ChecksumTool.RootedPathCheck(masterDirectory + '/' + temp.VersionName);
+                string dir = ChecksumTool.RootedPathCheck(masterDirectory + '/' + temp.VersionBranch.ToString());
 
                 data.InstalledVersion = GenerateInstallationDataModel(missingFiles, dir);
                 data.InstalledVersion.VersionName = temp.VersionName;
