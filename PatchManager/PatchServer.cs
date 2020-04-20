@@ -172,7 +172,7 @@ namespace PatchManager
         private void SendVersionVerification(TcpClient client, PatchDataModel data)
         {
             //Check if the versions combined checksum matches that of the server
-            var temp = masterFiles.FirstOrDefault(x => x.VersionName == data.InstalledVersion.VersionName);
+            var temp = masterFiles.FirstOrDefault(x => x.VersionBranch == data.InstalledVersion.VersionBranch);
             if (temp != null)
             {
                 if (temp.InstallationChecksum == data.InstalledVersion.InstallationChecksum)
