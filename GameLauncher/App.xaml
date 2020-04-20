@@ -131,7 +131,7 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Background" Value="#FFAEAEAE"/>
+            <Setter Property="Background" Value="#1c1c1c"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="0,0"/>
             <Setter Property="Template">
@@ -148,10 +148,10 @@
                     <Setter Property="Background" Value="#1ce81f"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Installing">
-                    <Setter Property="Background" Value="#FFAEAEAE"></Setter>
+                    <Setter Property="Background" Value="#1c1c1c"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Deleting">
-                    <Setter Property="Background" Value="#FFAEAEAE"></Setter>
+                    <Setter Property="Background" Value="#1c1c1c"></Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding  Path=Content, RelativeSource={RelativeSource Self}}" Value="Install">
                     <Setter Property="Background" Value="#fa4b4b"></Setter>
@@ -174,7 +174,7 @@
                         <Condition Property="IsMouseOver" Value="True" />
                         <Condition Property="Content" Value="Install" />
                     </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#ff7d7d"/>
+                    <Setter Property="Background" Value="#ff3838"/>
                 </MultiTrigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
