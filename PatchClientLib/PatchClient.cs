@@ -61,10 +61,10 @@ namespace PatchClientLib
         static PatchClient()
         {
             //ConnectToServer(30831, "212.10.51.254");
-            _ip = "212.10.51.254";
-            //_ip = "localhost";
-            _port = 30831;
-            //_port = 13000;
+            //_ip = "212.10.51.254";
+            _ip = "localhost";
+            //_port = 30831;
+            _port = 13000;
 
         }
 
@@ -294,6 +294,7 @@ namespace PatchClientLib
                 InstalledVersion = new InstallationDataModel()
                 {
                     VersionName = versionData.VersionName,
+                    VersionBranch = versionData.VersionBranch,
                     InstallationChecksum = versionData.InstallationChecksum
                 }
             };
