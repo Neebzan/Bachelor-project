@@ -7,8 +7,9 @@ using System.Text;
 
 namespace Models
 {
-    public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer }
+	public enum InstallationStatus { Unchecked, Verified, NotInstalled, UpdateRequired, NotFoundOnServer, IsInstalling, IsDeleting}
     public enum VersionBranch { None, Release, Beta, Development }
+    
     public class InstallationDataModel
     {
         public string VersionName { get; set; }
