@@ -71,31 +71,40 @@ namespace ChecksumHandlerLib
 
         public static InstallationDataModel RecheckVersion(InstallationDataModel version)
         {
-            var install = GetInstallationAtPath(version.InstallPath);
-            var tempVersionInfo = install.ElementAt(0);
-            string path = SanitizePath(version.InstallPath);
-
-            //Get data from the VersionFile
-            if (version.LoadFromFile())
-            {
-                Console.WriteLine("NO Version.json FOUND!!");
-            }
-
             version.Files.Clear();
             version.MissingFiles.Clear();
 
-            foreach (var item in tempVersionInfo.Value)
+            if (Directory.Exists(version.InstallPath))
             {
-                version.Files.Add(new FileModel()
-                {
-                    FileChecksum = item.Value,
-                    FilePath = item.Key
-                });
-            }
+                var install = GetInstallationAtPath(version.InstallPath);
 
+                var tempVersionInfo = install.ElementAt(0);
+                string path = SanitizePath(version.InstallPath);
+
+                //Get data from the VersionFile
+                if (version.LoadFromFile())
+                {
+                    Console.WriteLine("NO Version.json FOUND!!");
+                }
+
+                
+
+                foreach (var item in tempVersionInfo.Value)
+                {
+                    version.Files.Add(new FileModel()
+                    {
+                        FileChecksum = item.Value,
+                        FilePath = item.Key
+                    });
+                }
+
+            }
+            else
+            {
+                Directory.CreateDirectory(version.InstallPath);
+            }
             version.InstallationChecksum = GetCombinedChecksum(SanitizePath(version.InstallPath));
             version.SaveToFile();
-
             return version;
         }
 
@@ -312,7 +321,7 @@ namespace ChecksumHandlerLib
         {
             using (FileStream stream = File.OpenRead(filePath))
             {
-                using(MD5 md5 = MD5.Create())
+                using (MD5 md5 = MD5.Create())
                 {
                     byte[] checksum = md5.ComputeHash(stream);
                     byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
@@ -321,7 +330,7 @@ namespace ChecksumHandlerLib
                     md5.TransformFinalBlock(checksum, 0, checksum.Length);
 
                     return BitConverter.ToString(checksum).Replace("-", String.Empty);
-                }   
+                }
             }
             //using (FileStream stream = File.OpenRead(filePath))
             //{

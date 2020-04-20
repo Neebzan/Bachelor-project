@@ -40,6 +40,8 @@ namespace ConsoleForTesting
 
 
             PatchClient.DownloadMissingFiles(h[0]);
+            PatchClient.DownloadMissingFiles(h[0]);
+
             //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
             watch.Stop();
             Console.WriteLine("Elapsed: " + watch.ElapsedMilliseconds);
