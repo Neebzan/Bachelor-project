@@ -92,5 +92,17 @@ namespace GameLauncher.Properties {
                 this["GamePaths"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastSelectedVersion {
+            get {
+                return ((string)(this["LastSelectedVersion"]));
+            }
+            set {
+                this["LastSelectedVersion"] = value;
+            }
+        }
     }
 }

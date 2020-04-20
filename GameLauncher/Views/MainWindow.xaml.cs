@@ -5,6 +5,8 @@ using Models;
 using PatchClientLib;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,56 +33,38 @@ namespace GameLauncher.Views {
         public Frame ContentFrame;
         private Screen viewModel;
 
+
         public MainWindow () {
             InitializeComponent();
 
             viewModel = new MainViewModel();
             this.DataContext = viewModel;
-            //Version_ComboBox.Loaded += Version_ComboBox_Loaded;
+
 
             ContentFrame = frame;
             frame.NavigationService.Navigate(new LoginPage());
 
-            PlayInstall_Button.Content = "";
-            Version_ComboBox.SelectionChanged += Version_ComboBox_SelectionChanged;
+            (viewModel as MainViewModel).DownloadProgressUpdated += OnDownloadProgressUpdated;
+            (viewModel as MainViewModel).SelectedInstallUpdated += OnSelectedInstallChanged;
         }
 
-        //private void Version_ComboBox_Loaded (object sender, RoutedEventArgs e) {
-        //    ControlTemplate ct = Version_ComboBox.Template;
-        //    Popup pop = ct.FindName("PART_Popup", this.Version_ComboBox) as Popup;
-        //    pop.Placement = PlacementMode.Top;
-        //}
-
-        private void Version_ComboBox_SelectionChanged (object sender, SelectionChangedEventArgs e) {
-            if ((viewModel as MainViewModel).SelectedInstall != null) {
-                switch ((viewModel as MainViewModel).SelectedInstall.Status) {
-                    case InstallationStatus.Verified:
-                        UpdateButton("Play", Brushes.Green);
-                        break;
-                    case InstallationStatus.NotInstalled:
-                        UpdateButton("Install", Brushes.Red);
-                        break;
-                    case InstallationStatus.UpdateRequired:
-                        UpdateButton("Update", Brushes.Orange);
-                        break;
-                    default:
-                        break;
-                }
-            }
+        private void OnSelectedInstallChanged (InstallationDataModel installationDataModel) {
+            Dispatcher.Invoke(() => {
+                Delete_Button.Visibility = installationDataModel?.Status == InstallationStatus.Verified || installationDataModel?.Status == InstallationStatus.UpdateRequired ? Visibility.Visible : Visibility.Hidden;
+            });
         }
 
-        private void UpdateButton (string text, SolidColorBrush color) {
-            //PlayInstall_Button.Background = color;
-            //PlayInstall_Button.BorderBrush = Brushes.Red;
-            PlayInstall_Button.Content = text;
+        private void OnDownloadProgressUpdated (float obj) {
+            Dispatcher.Invoke(() => {
+                progress_bar.NewValueGiven?.Invoke(this, new ProgressBarValueChangedEventArgs((float)progress_bar.Value, obj));
+            });
         }
 
         private void PlayInstallButton_Clicked (object sender, RoutedEventArgs e) {
             switch ((viewModel as MainViewModel).SelectedInstall.Status) {
                 case InstallationStatus.NotInstalled:
-                    using (var dialog = new winForms.FolderBrowserDialog()) {
+                    using (var dialog = new winForms.FolderBrowserDialog() { RootFolder = Environment.SpecialFolder.Desktop, Description = "Please select where you want to install the game." }) {
                         winForms.DialogResult folderLocation = dialog.ShowDialog();
-
                         if (folderLocation == System.Windows.Forms.DialogResult.OK) {
                             string path = dialog.SelectedPath;
                             path += "\\" + (viewModel as MainViewModel).SelectedInstall.VersionName;
@@ -98,6 +82,11 @@ namespace GameLauncher.Views {
                     break;
             }
 
+        }
+
+        private void Button_Click (object sender, RoutedEventArgs e) {
+            if (!(viewModel as MainViewModel).IsDeleting)
+                Task.Run(() => (viewModel as MainViewModel).Delete());
         }
     }
 }
