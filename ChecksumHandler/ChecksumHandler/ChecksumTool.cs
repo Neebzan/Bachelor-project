@@ -166,7 +166,7 @@ namespace ChecksumHandlerLib
 
             try
             {
-                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).Where(name => !(name == "VersionInfo")).ToArray();
+                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).Where(name => !(name.Contains("Version.json"))).ToArray();
                 args.FilesFound = files.Length;
                 args.ChecksumsGenerated = 0;
                 OnGetFilesDictionaryProgress(args);
@@ -244,7 +244,7 @@ namespace ChecksumHandlerLib
         public static string GetCombinedChecksum(string path)
         {
             path = RootedPathCheck(path);
-            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).Where(name => !(name.Contains("VersionInfo"))).ToList();
+            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).Where(name => !(name.Contains("Version.json"))).ToList();
             using (MD5 md5 = MD5.Create())
             {
                 //If the folder is empty, generate a hash based on a 0 byte
