@@ -446,7 +446,7 @@ namespace PatchClientLib
 
             _downloadingFiles = false;
             Console.WriteLine("All missing files received!");
-            version = ChecksumTool.GetInstalledVersion(version.InstallPath);
+            version = ChecksumTool.RecheckVersion(version);
             RequestVerifyVersion(ref version);
             _client.GetStream().Close();
             _client.Close();

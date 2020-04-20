@@ -27,7 +27,7 @@ namespace ConsoleForTesting
             Stopwatch watch = new Stopwatch();
             watch.Start();
             //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
-            var h = PatchClient.CompleteCheck(new string[] { PatchClient.InstallPath });
+            var h = PatchClient.CompleteCheck(new string[0]);
             h[0].InstallPath = PatchClient.InstallPath;
 
             //var q = new InstallationDataModel()
