@@ -79,7 +79,7 @@ namespace GameLauncher.ViewModels {
             set {
                 if (!IsDeleting) {
                     _selectedInstall = value;
-                    Settings.Default.LastSelectedVersion = _selectedInstall?.VersionName;
+                    Settings.Default.LastSelectedVersion = _selectedInstall?.VersionBranchToString;
                     Settings.Default.Save();
                     switch (SelectedInstall?.Status) {
                         case InstallationStatus.Verified:
@@ -196,14 +196,17 @@ namespace GameLauncher.ViewModels {
             if (SelectedInstall == null) {
                 if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
                     foreach (InstallationDataModel installation in available) {
-                        if (installation.VersionName == Settings.Default.LastSelectedVersion)
+                        if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
                             SelectedInstall = installation;
+                            break;
+                        }
                     }
                 }
-                //else {
-                //select newest version
-                //}
+                if (SelectedInstall == null)
+                    SelectedInstall = available [ 0 ];
             }
+
+
             return available;
         }
 
