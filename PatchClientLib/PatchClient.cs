@@ -94,6 +94,7 @@ namespace PatchClientLib
                 InstalledVersions = CompareLocalVersionsToServerVersions(InstalledVersions);
             }
 
+            _client.GetStream().Close();
             _client.Close();
 
             return InstalledVersions;
@@ -447,6 +448,7 @@ namespace PatchClientLib
             Console.WriteLine("All missing files received!");
             version = ChecksumTool.GetInstalledVersion(version.InstallPath);
             RequestVerifyVersion(ref version);
+            _client.GetStream().Close();
             _client.Close();
             DownloadDone?.Invoke(version);
         }
