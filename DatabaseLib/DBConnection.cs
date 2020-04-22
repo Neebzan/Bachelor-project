@@ -6,6 +6,7 @@ using Dapper;
 using System.Linq;
 using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
+using RandomNameGeneratorLibrary;
 
 namespace DatabaseLib
 {
@@ -231,11 +232,11 @@ namespace DatabaseLib
             {
                 try
                 {
-                       connection.Query(
-                       "UnlockAbility",
-                       new { PlayerID = player.player_id, AbilityName = ability.ability_name },
-                       commandType: CommandType.StoredProcedure
-                       ).ToList();
+                    connection.Query(
+                    "UnlockAbility",
+                    new { PlayerID = player.player_id, AbilityName = ability.ability_name },
+                    commandType: CommandType.StoredProcedure
+                    ).ToList();
                     return true;
                 }
                 catch (Exception e)
@@ -281,67 +282,114 @@ namespace DatabaseLib
         }
 
 
-        //public AccountModel Insert(AccountModel account)
-        //{
-        //    using (MySqlConnection connection = CreateConnection())
-        //    {
-        //        try
-        //        {
-        //            connection.Open();
-
-        //            MySqlCommand command = connection.CreateCommand();
-
-        //            command.CommandText = "INSERT INTO accounts (account_id, password_hash, email, first_name, last_name) VALUES (@account_id, @password_hash, @email, @first_name, @last_name)";
-
-        //            command.Parameters.AddWithValue("@account_id", account.AccountID);
-        //            command.Parameters.AddWithValue("@password_hash", account.PasswordHash);
-        //            command.Parameters.AddWithValue("@email", account.Email);
-        //            command.Parameters.AddWithValue("@first_name", account.FirstName);
-        //            command.Parameters.AddWithValue("@last_name", account.LastName);
 
 
+        public void InsertRandomData(int amount)
+        {
+            var personGenerator = new PersonNameGenerator();
+            var placeGenerator = new PlaceNameGenerator();
 
-        //            try
-        //            {
-        //                int rowsAffected = command.ExecuteNonQuery();
-        //                account.Status = DatabaseResponse.Success;
-        //                Console.WriteLine("Account inserted succesfully!");
-        //                return account;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                account.Status = DatabaseResponse.AlreadyExists;
-        //                Console.WriteLine(e.Message);
-        //                return account;
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            account.Status = DatabaseResponse.ConnectionFailed;
-        //            Console.WriteLine(e.Message);
-        //            return account;
-        //        }
-        //    }
-        //}
+            Random rnd = new Random(DateTime.Now.Second);
+            using (MySqlConnection connection = CreateConnection())
+            {
+                int index = 0;
+                try
+                {
+                    connection.Open();
 
+                    for (int i = 0; i < amount; i++)
+                    {
+                        AccountModel tempAccount = new AccountModel()
+                        {
+                            account_id = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
+                            email = index.ToString(),
+                            password_hash = index.ToString()
+                        };
 
-        //public bool IsConnected()
-        //{
-        //    if (Connection == null)
-        //    {
-        //        if (String.IsNullOrEmpty(DatabaseName))
-        //            return false;
-        //        string connstring = string.Format("Server={0}; database={1}; UID={2}; password={3}", ServerIP, DatabaseName, Username, Password);
-        //        connection = new MySqlConnection(connstring);
-        //        connection.Open();
-        //    }
+                        PlayerModel tempPlayer = new PlayerModel()
+                        {
+                            experience = (uint)rnd.Next(10000001),
+                            player_id = tempAccount.account_id
+                        };
+                        connection.Insert(tempAccount);
+                        connection.Insert(tempPlayer);
 
-        //    return true;
-        //}
+                        //connection.Query<AccountModel>("select * from accounts");
+                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.player_id);
+                        index++;
+                    }
 
-        //public void Close()
-        //{
-        //    connection.Close();
-        //}
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            Console.WriteLine("All inserted");
+        }
     }
+
+    //public AccountModel Insert(AccountModel account)
+    //{
+    //    using (MySqlConnection connection = CreateConnection())
+    //    {
+    //        try
+    //        {
+    //            connection.Open();
+
+    //            MySqlCommand command = connection.CreateCommand();
+
+    //            command.CommandText = "INSERT INTO accounts (account_id, password_hash, email, first_name, last_name) VALUES (@account_id, @password_hash, @email, @first_name, @last_name)";
+
+    //            command.Parameters.AddWithValue("@account_id", account.AccountID);
+    //            command.Parameters.AddWithValue("@password_hash", account.PasswordHash);
+    //            command.Parameters.AddWithValue("@email", account.Email);
+    //            command.Parameters.AddWithValue("@first_name", account.FirstName);
+    //            command.Parameters.AddWithValue("@last_name", account.LastName);
+
+
+
+    //            try
+    //            {
+    //                int rowsAffected = command.ExecuteNonQuery();
+    //                account.Status = DatabaseResponse.Success;
+    //                Console.WriteLine("Account inserted succesfully!");
+    //                return account;
+    //            }
+    //            catch (Exception e)
+    //            {
+    //                account.Status = DatabaseResponse.AlreadyExists;
+    //                Console.WriteLine(e.Message);
+    //                return account;
+    //            }
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            account.Status = DatabaseResponse.ConnectionFailed;
+    //            Console.WriteLine(e.Message);
+    //            return account;
+    //        }
+    //    }
+    //}
+
+
+    //public bool IsConnected()
+    //{
+    //    if (Connection == null)
+    //    {
+    //        if (String.IsNullOrEmpty(DatabaseName))
+    //            return false;
+    //        string connstring = string.Format("Server={0}; database={1}; UID={2}; password={3}", ServerIP, DatabaseName, Username, Password);
+    //        connection = new MySqlConnection(connstring);
+    //        connection.Open();
+    //    }
+
+    //    return true;
+    //}
+
+    //public void Close()
+    //{
+    //    connection.Close();
+    //}
 }
+
