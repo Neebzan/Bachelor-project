@@ -25,6 +25,7 @@ namespace PatchClientLib {
         public long TotalSize { get; set; }
         public long DownloadedTotal { get; set; }
         public string NextFileName { get; set; }
+        public VersionBranch Version{ get; set; }
     }
 
     public static class PatchClient {
@@ -57,8 +58,8 @@ namespace PatchClientLib {
             //ConnectToServer(30831, "212.10.51.254");
             _ip = "212.10.51.254";
             //_ip = "localhost";
-            _port = 30831;
-            //_port = 13000;
+            //_port = 30831;
+            _port = 13000;
 
         }
 
@@ -356,6 +357,8 @@ namespace PatchClientLib {
                     VersionBranch = version.VersionBranch
                 }
             };
+
+            args.Version = version.VersionBranch;
 
             foreach (var item in version.MissingFiles) {
                 args.TotalSize += item.Size;

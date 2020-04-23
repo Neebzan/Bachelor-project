@@ -240,41 +240,45 @@ namespace GameLauncher.ViewModels {
         }
 
         public void DownloadSelectedVersion () {
-            if (!IsDownloading) {
-                IsDownloading = true;
+            if (SelectedInstall.Status != InstallationStatus.IsInstalling) {
+                SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
                 DownloadProgressPercentage = 0.0f;
                 Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
-                SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
             }
         }
 
         private void PatchClient_GetDownloadProgress (object sender, DownloadProgressEventArgs e) {
-            DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
-            e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
-            DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
+            if (e.Version == SelectedInstall.VersionBranch) {
+                DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
+                e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
+                DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
+            }
+            else {
+                DownloadProgressPercentage = 0;
+                e.NextFileName = "";
+                DownloadProgress = "";
+            }
         }
 
         private void PatchClient_DownloadDone (InstallationDataModel installation) {
-            if (AvailableInstalls != null) {
-                int toChange = -1;
+            //if (AvailableInstalls != null) {
+            //    int toChange = -1;
 
-                for (int i = 0; i < _availableInstalls.Count; i++) {
-                    if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
-                        toChange = i;
-                        break;
-                    }
-                }
+            //    for (int i = 0; i < _availableInstalls.Count; i++) {
+            //        if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
+            //            toChange = i;
+            //            break;
+            //        }
+            //    }
 
-                if (toChange != -1)
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
-                        AvailableInstalls [ toChange ] = installation;
-                        SelectedInstall = AvailableInstalls [ toChange ];
-                    }));
-            }
+            //    if (toChange != -1)
+            //        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
+            //            AvailableInstalls [ toChange ] = installation;
+            //            SelectedInstall = AvailableInstalls [ toChange ];
+            //        }));
+            //}
 
 
-
-            IsDownloading = false;
             DownloadFile = "";
             DownloadProgress = "";
             DownloadProgressPercentage = 100.0f;

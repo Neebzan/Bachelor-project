@@ -182,7 +182,7 @@ namespace PatchManager {
                 //Check which files are missing/mismatched
                 missingFiles = ChecksumTool.CompareFileDictionaries(temp.GetFilesAsDictionary(), data.InstalledVersion.GetFilesAsDictionary());
                 Console.WriteLine(ConsoleExtension.AddTimestamp("Missing files found: " + missingFiles.Count));
-                string dir = ChecksumTool.RootedPathCheck(masterDirectory + '/' + temp.VersionBranch.ToString());
+                string dir = ChecksumTool.RootedPathCheck(temp.InstallPath);
                 Console.WriteLine(ConsoleExtension.AddTimestamp("Dir: " + dir));
                 data.InstalledVersion = GenerateInstallationDataModel(missingFiles, dir);
 
@@ -217,10 +217,10 @@ namespace PatchManager {
             var temp = masterFiles.FirstOrDefault(x => x.VersionBranch == data.InstalledVersion.VersionBranch);
             if (temp != null) {
                 string path = "";
-                if (data.InstalledVersion.VersionName != String.Empty)
-                    path = masterDirectory + '/' + data.InstalledVersion.VersionName + '/' + data.File.FilePath;
-                else
-                    path = masterDirectory + '/' + data.File.FilePath;
+
+
+                path = temp.InstallPath + '/' + data.File.FilePath;
+
 
                 FileInfo fi = new FileInfo(path);
                 Console.WriteLine(ConsoleExtension.AddTimestamp($"{fi.Name} size: {fi.Length}"));
