@@ -20,11 +20,12 @@ namespace DatabaseREST.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<PlayedMatch>> GetAccounts()
+        public ActionResult<IEnumerable<Accounts>> GetAccounts()
         {
             //var accounts = _context.Accounts.OrderByDescending(u => u.AccountId).Take(10);
             //return accounts.ToList();
-            return _context.PlayedMatch;
+            //LOLOLOL
+            return _context.Accounts;
         }
 
         //[HttpGet]
