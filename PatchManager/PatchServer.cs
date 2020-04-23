@@ -202,7 +202,9 @@ namespace PatchManager {
             InstallationDataModel model = new InstallationDataModel();
 
             foreach (var item in filesToAdd) {
-                FileInfo t = new FileInfo(directory + '/' + item);
+                string fileName = directory + '/' + item;
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Filename: " + fileName));
+                FileInfo t = new FileInfo(fileName);
                 model.MissingFiles.Add(new FileModel() { FilePath = item, Size = t.Length });
                 model.TotalSize += t.Length;
             }
