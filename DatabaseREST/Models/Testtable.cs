@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Models.DBModels
+namespace DatabaseREST.Models
 {
     public partial class Testtable
     {

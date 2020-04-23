@@ -9,19 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\DatabaseTest\DBModels\Abilities.cs" Link="DBModels\Abilities.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Accounts.cs" Link="DBModels\Accounts.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\HasLearned.cs" Link="DBModels\HasLearned.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\intrusiveContext.cs" Link="DBModels\intrusiveContext.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\ItemColors.cs" Link="DBModels\ItemColors.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Items.cs" Link="DBModels\Items.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\ItemTypes.cs" Link="DBModels\ItemTypes.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Maps.cs" Link="DBModels\Maps.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Matches.cs" Link="DBModels\Matches.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\PlayedMatch.cs" Link="DBModels\PlayedMatch.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Players.cs" Link="DBModels\Players.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Testtable.cs" Link="DBModels\Testtable.cs" />
-    <Compile Include="..\DatabaseTest\DBModels\Wears.cs" Link="DBModels\Wears.cs" />
+    <Compile Include="..\DatabaseREST\Models\Abilities.cs" Link="DBModels\Abilities.cs" />
+    <Compile Include="..\DatabaseREST\Models\Accounts.cs" Link="DBModels\Accounts.cs" />
+    <Compile Include="..\DatabaseREST\Models\HasLearned.cs" Link="DBModels\HasLearned.cs" />
+    <Compile Include="..\DatabaseREST\Models\intrusiveContext.cs" Link="DBModels\intrusiveContext.cs" />
+    <Compile Include="..\DatabaseREST\Models\ItemColors.cs" Link="DBModels\ItemColors.cs" />
+    <Compile Include="..\DatabaseREST\Models\Items.cs" Link="DBModels\Items.cs" />
+    <Compile Include="..\DatabaseREST\Models\ItemTypes.cs" Link="DBModels\ItemTypes.cs" />
+    <Compile Include="..\DatabaseREST\Models\Maps.cs" Link="DBModels\Maps.cs" />
+    <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="DBModels\Matches.cs" />
+    <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="DBModels\PlayedMatch.cs" />
+    <Compile Include="..\DatabaseREST\Models\Players.cs" Link="DBModels\Players.cs" />
+    <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="DBModels\Testtable.cs" />
+    <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="DBModels\Wears.cs" />
   </ItemGroup>
 
   <ItemGroup>

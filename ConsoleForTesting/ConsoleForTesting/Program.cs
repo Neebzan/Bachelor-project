@@ -1,9 +1,9 @@
 ﻿using ChecksumHandlerLib;
 using ConnectionHandlerLib;
 using DatabaseLib;
+using DatabaseREST.Models;
 using GlobalConfigs;
 using Models;
-using Models.DBModels;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using PatchClientLib;

@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
 using RandomNameGeneratorLibrary;
 using MySql.Data.MySqlClient;
-using Models.DBModels;
 using Microsoft.EntityFrameworkCore;
+using DatabaseREST.Models;
 
 namespace DatabaseLib
 {
@@ -64,6 +64,24 @@ namespace DatabaseLib
         //}
 
         public T Insert<T>(T data) where T : class
+        {
+            try
+            {
+                using (var context = new intrusiveContext())
+                {
+
+                    context.Add(data);
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            return data;
+        }
+
+        public T Update<T>(T data) where T : class
         {
             try
             {

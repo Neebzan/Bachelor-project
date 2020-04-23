@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Models.DBModels
+namespace DatabaseREST.Models
 {
     public partial class intrusiveContext : DbContext
     {
@@ -30,11 +30,11 @@ namespace Models.DBModels
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=password;database=intrusive", x => x.ServerVersion("8.0.19-mysql"));
-            }
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=password;database=intrusive", x => x.ServerVersion("8.0.19-mysql"));
+//            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
