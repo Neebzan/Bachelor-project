@@ -3,6 +3,7 @@ using ConnectionHandlerLib;
 using DatabaseLib;
 using GlobalConfigs;
 using Models;
+using Models.DBModels;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using PatchClientLib;
@@ -30,7 +31,17 @@ namespace ConsoleForTesting
             //var h = PatchClient.CompleteCheck(new string[0]);
             //h[0].InstallPath = PatchClient.InstallPath;
 
-            DBConnection.Instance().InsertRandomData(10000);
+            //DBConnection.Instance().InsertRandomData(10000);
+
+            //DBConnection.Instance().EFCORETest();
+            
+            Accounts acc = new Accounts()
+            {
+                AccountId = "TestAcc222",
+                Email = "some@email.com",
+                PasswordHash = "somePW"
+            };
+            DBConnection.Instance().Insert(acc);
 
             //var q = new InstallationDataModel()
             //{

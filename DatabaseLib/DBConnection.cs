@@ -1,5 +1,4 @@
 ﻿using Models;
-using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using Dapper;
@@ -7,6 +6,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
 using RandomNameGeneratorLibrary;
+using MySql.Data.MySqlClient;
+using Models.DBModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseLib
 {
@@ -40,26 +42,68 @@ namespace DatabaseLib
             return connection;
         }
 
+        //public T Insert<T>(T data) where T : class
+        //{
+        //    using (MySqlConnection connection = CreateConnection())
+        //    {
+        //        try
+        //        {
+        //            connection.Open();
+        //            connection.Insert(data);
+
+        //            //connection.Query<AccountModel>("select * from accounts");
+        //            Console.WriteLine("{0} inserted succesfully!", data.GetType());
+        //            return data;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //            return data;
+        //        }
+        //    }
+        //}
+
         public T Insert<T>(T data) where T : class
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                try
+                using (var context = new intrusiveContext())
                 {
-                    connection.Open();
-                    connection.Insert(data);
 
-                    //connection.Query<AccountModel>("select * from accounts");
-                    Console.WriteLine("{0} inserted succesfully!", data.GetType());
-                    return data;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    return data;
+                    context.Add(data);
+                    context.SaveChanges();
                 }
             }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            return data;
         }
+
+        public void EFCORETest() 
+        {
+            try
+            {
+                using (var context = new intrusiveContext())
+                {
+
+                    var temp = context.Accounts.AsNoTracking().FirstOrDefault(acc => acc.AccountId == "TestAcc");
+                    var test = context.Accounts.Where(acc => acc.AccountId == "TestAcc");
+                    //Console.WriteLine(test.ToQueryString());
+                    //var temp = context.Accounts.FirstOrDefault(acc => acc.AccountId == "TestAcc");
+                    temp.LastName = "Track test";
+
+
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+        }
+
         public List<T> GetAll<T>() where T : class
         {
             using (MySqlConnection connection = CreateConnection())
@@ -122,16 +166,16 @@ namespace DatabaseLib
             }
         }
 
-        public List<MatchModel> GetPlayerMatches(string playerID)
+        public List<Matches> GetPlayerMatches(string playerID)
         {
-            List<MatchModel> matches = new List<MatchModel>();
+            List<Matches> matches = new List<Matches>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    matches = connection.Query<MatchModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    matches = connection.Query<Matches>(
                         "GetPlayerMatches",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -147,16 +191,16 @@ namespace DatabaseLib
             return matches;
         }
 
-        public List<AbilityModel> GetPlayerAbilities(string playerID)
+        public List<Abilities> GetPlayerAbilities(string playerID)
         {
-            List<AbilityModel> abilities = new List<AbilityModel>();
+            List<Abilities> abilities = new List<Abilities>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    abilities = connection.Query<AbilityModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<Abilities>(
                         "GetPlayerAbilities",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -172,16 +216,16 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public List<ItemModel> GetPlayerItems(string playerID)
+        public List<Items> GetPlayerItems(string playerID)
         {
-            List<ItemModel> abilities = new List<ItemModel>();
+            List<Items> abilities = new List<Items>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    abilities = connection.Query<ItemModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<Items>(
                         "GetPlayerItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -197,15 +241,15 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public List<ItemModel> GetPlayerEquippedItems(string playerID)
+        public List<Items> GetPlayerEquippedItems(string playerID)
         {
-            List<ItemModel> abilities = new List<ItemModel>();
+            List<Items> abilities = new List<Items>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    abilities = connection.Query<ItemModel>(
+                    abilities = connection.Query<Items>(
                         "GetPlayerEquippedItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -221,10 +265,10 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public bool UnlockAbility(PlayerModel player, AbilityModel ability)
+        public bool UnlockAbility(Players player, Abilities ability)
         {
             //Get the players current abilities
-            var playerAbilities = GetPlayerAbilities(player.player_id);
+            var playerAbilities = GetPlayerAbilities(player.PlayerId);
 
             throw new NotImplementedException();
 
@@ -234,7 +278,7 @@ namespace DatabaseLib
                 {
                     connection.Query(
                     "UnlockAbility",
-                    new { PlayerID = player.player_id, AbilityName = ability.ability_name },
+                    new { PlayerID = player.PlayerId, AbilityName = ability.AbilityName },
                     commandType: CommandType.StoredProcedure
                     ).ToList();
                     return true;
@@ -247,14 +291,14 @@ namespace DatabaseLib
             }
         }
 
-        public List<AbilityModel> GetAllAbilities()
+        public List<Abilities> GetAllAbilities()
         {
-            List<AbilityModel> abilites = new List<AbilityModel>();
+            List<Abilities> abilites = new List<Abilities>();
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    abilites = connection.Query<AbilityModel>(
+                    abilites = connection.Query<Abilities>(
                     "GetAllAbilities",
                     new { },
                     commandType: CommandType.StoredProcedure
@@ -269,17 +313,17 @@ namespace DatabaseLib
             }
         }
 
-        public List<TestModel> GetAllTest(string playerID)
-        {
-            List<TestModel> matches = new List<TestModel>();
+        //public List<TestModel> GetAllTest(string playerID)
+        //{
+        //    List<TestModel> matches = new List<TestModel>();
 
-            using (MySqlConnection connection = CreateConnection())
-            {
-                matches = connection.Query<TestModel>("SELECT * FROM matches NATURAL JOIN (SELECT * FROM played_match WHERE player_id = @PlayerID) AS matches_played_by_player", new { PlayerID = playerID }).ToList();
-            }
+        //    using (MySqlConnection connection = CreateConnection())
+        //    {
+        //        matches = connection.Query<TestModel>("SELECT * FROM matches NATURAL JOIN (SELECT * FROM played_match WHERE player_id = @PlayerID) AS matches_played_by_player", new { PlayerID = playerID }).ToList();
+        //    }
 
-            return matches;
-        }
+        //    return matches;
+        //}
 
 
 
@@ -299,23 +343,23 @@ namespace DatabaseLib
 
                     for (int i = 0; i < amount; i++)
                     {
-                        AccountModel tempAccount = new AccountModel()
+                        Accounts tempAccount = new Accounts()
                         {
-                            account_id = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
-                            email = index.ToString(),
-                            password_hash = index.ToString()
+                            AccountId = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
+                            Email = index.ToString(),
+                            PasswordHash = index.ToString()
                         };
 
-                        PlayerModel tempPlayer = new PlayerModel()
+                        Players tempPlayer = new Players()
                         {
-                            experience = (uint)rnd.Next(10000001),
-                            player_id = tempAccount.account_id
+                            Experience = (uint)rnd.Next(10000001),
+                            PlayerId = tempAccount.AccountId
                         };
                         connection.Insert(tempAccount);
                         connection.Insert(tempPlayer);
 
                         //connection.Query<AccountModel>("select * from accounts");
-                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.player_id);
+                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
                         index++;
                     }
 
@@ -327,6 +371,7 @@ namespace DatabaseLib
             }
             Console.WriteLine("All inserted");
         }
+
     }
 
     //public AccountModel Insert(AccountModel account)

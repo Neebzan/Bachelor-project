@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseLib", "DatabaseLib\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncher", "GameLauncher\GameLauncher.csproj", "{C912B9E9-3EBE-4355-9EFF-65F8ACF082F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperTools", "HelperTools\HelperTools.csproj", "{6631989F-6484-42D5-8EAA-0B8552826597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelperTools", "HelperTools\HelperTools.csproj", "{6631989F-6484-42D5-8EAA-0B8552826597}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTest", "DatabaseTest\DatabaseTest.csproj", "{2F87C16B-B867-4196-8483-5B34C70E6CC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{6631989F-6484-42D5-8EAA-0B8552826597}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6631989F-6484-42D5-8EAA-0B8552826597}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6631989F-6484-42D5-8EAA-0B8552826597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F87C16B-B867-4196-8483-5B34C70E6CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F87C16B-B867-4196-8483-5B34C70E6CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F87C16B-B867-4196-8483-5B34C70E6CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F87C16B-B867-4196-8483-5B34C70E6CC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
