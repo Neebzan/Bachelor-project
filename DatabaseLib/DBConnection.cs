@@ -9,6 +9,7 @@ using RandomNameGeneratorLibrary;
 using MySql.Data.MySqlClient;
 using Microsoft.EntityFrameworkCore;
 using DatabaseREST.Models;
+using HelperTools;
 
 namespace DatabaseLib
 {
@@ -52,12 +53,12 @@ namespace DatabaseLib
         //            connection.Insert(data);
 
         //            //connection.Query<AccountModel>("select * from accounts");
-        //            Console.WriteLine("{0} inserted succesfully!", data.GetType());
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("{0} inserted succesfully!", data.GetType());
         //            return data;
         //        }
         //        catch (Exception e)
         //        {
-        //            Console.WriteLine(e.Message);
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message);
         //            return data;
         //        }
         //    }
@@ -76,7 +77,7 @@ namespace DatabaseLib
             }
             catch (DbUpdateException e)
             {
-                Console.WriteLine(e.InnerException.Message);
+                Console.WriteLine(ConsoleExtension.AddTimestamp(e.InnerException.Message));
             }
             return data;
         }
@@ -94,7 +95,7 @@ namespace DatabaseLib
             }
             catch (DbUpdateException e)
             {
-                Console.WriteLine(e.InnerException.Message);
+                Console.WriteLine(ConsoleExtension.AddTimestamp(e.InnerException.Message));
             }
             return data;
         }
@@ -108,7 +109,7 @@ namespace DatabaseLib
 
                     var temp = context.Accounts.AsNoTracking().FirstOrDefault(acc => acc.AccountId == "TestAcc");
                     var test = context.Accounts.Where(acc => acc.AccountId == "TestAcc");
-                    //Console.WriteLine(test.ToQueryString());
+                    //Console.WriteLine(ConsoleExtension.AddTimestamp(test.ToQueryString());
                     //var temp = context.Accounts.FirstOrDefault(acc => acc.AccountId == "TestAcc");
                     temp.LastName = "Track test";
 
@@ -118,7 +119,7 @@ namespace DatabaseLib
             }
             catch (DbUpdateException e)
             {
-                Console.WriteLine(e.InnerException.Message);
+                Console.WriteLine(ConsoleExtension.AddTimestamp(e.InnerException.Message));
             }
         }
 
@@ -130,12 +131,12 @@ namespace DatabaseLib
                 {
                     connection.Open();
                     var data = connection.GetAll<T>().ToList();
-                    Console.WriteLine("{0} entries recieved!", data.Count());
+                    Console.WriteLine(ConsoleExtension.AddTimestamp($"{data.Count()} entries recieved!"));
                     return data;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -149,14 +150,14 @@ namespace DatabaseLib
                     connection.Open();
                     var data = connection.Get<T>(key);
                     if (data != null)
-                        Console.WriteLine("{0} retrieved!", data.GetType());
+                        Console.WriteLine(ConsoleExtension.AddTimestamp($"{data.GetType()} retrieved!"));
                     else
-                        Console.WriteLine("No object with key: '{0}' was found", key);
+                        Console.WriteLine(ConsoleExtension.AddTimestamp($"No object with key: '{key}' was found"));
                     return data;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -171,14 +172,14 @@ namespace DatabaseLib
                     connection.Open();
                     var data = connection.Get<T>(key);
                     if (data != null)
-                        Console.WriteLine("{0} retrieved!", data.GetType());
+                        Console.WriteLine(ConsoleExtension.AddTimestamp($"{data.GetType()} retrieved!"));
                     else
-                        Console.WriteLine("No object with key: '{0}' was found", key);
+                        Console.WriteLine(ConsoleExtension.AddTimestamp($"No object with key: '{key}' was found"));
                     return data;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -201,7 +202,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -226,7 +227,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -251,7 +252,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -275,7 +276,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -303,7 +304,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return false;
                 }
             }
@@ -325,7 +326,7 @@ namespace DatabaseLib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                     return null;
                 }
             }
@@ -377,17 +378,17 @@ namespace DatabaseLib
                         connection.Insert(tempPlayer);
 
                         //connection.Query<AccountModel>("select * from accounts");
-                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
+                        Console.WriteLine(ConsoleExtension.AddTimestamp($"{tempPlayer.PlayerId} inserted succesfully!"));
                         index++;
                     }
 
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
                 }
             }
-            Console.WriteLine("All inserted");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("All inserted"));
         }
 
     }
@@ -416,20 +417,20 @@ namespace DatabaseLib
     //            {
     //                int rowsAffected = command.ExecuteNonQuery();
     //                account.Status = DatabaseResponse.Success;
-    //                Console.WriteLine("Account inserted succesfully!");
+    //                Console.WriteLine(ConsoleExtension.AddTimestamp("Account inserted succesfully!");
     //                return account;
     //            }
     //            catch (Exception e)
     //            {
     //                account.Status = DatabaseResponse.AlreadyExists;
-    //                Console.WriteLine(e.Message);
+    //                Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message);
     //                return account;
     //            }
     //        }
     //        catch (Exception e)
     //        {
     //            account.Status = DatabaseResponse.ConnectionFailed;
-    //            Console.WriteLine(e.Message);
+    //            Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message);
     //            return account;
     //        }
     //    }

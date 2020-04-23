@@ -1,6 +1,7 @@
 ﻿using ChecksumHandlerLib;
 using ConnectionHandlerLib;
 using GlobalConfigs;
+using HelperTools;
 using Models;
 using Newtonsoft.Json;
 using System;
@@ -229,7 +230,7 @@ namespace PatchClientLib {
                 RequestType = PatchNetworkRequest.AvailableVersions
             };
             ConnectionHandler.SendObject(model, _client);
-            Console.WriteLine("Version request send to server");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Version request send to server"));
 
             PatchDataModel response = ReadServerResponse();
 
@@ -287,11 +288,11 @@ namespace PatchClientLib {
                 var temp = InstalledVersions.FirstOrDefault(x => x.VersionName == data.InstalledVersion.VersionName);
                 if (temp != null) {
                     temp.Status = InstallationStatus.Verified;
-                    Console.WriteLine(temp.VersionName + " was verified by server");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp(temp.VersionName + " was verified by server"));
                 }
             }
             else
-                Console.WriteLine(data.InstalledVersion.VersionName + " was NOT verified by server");
+                Console.WriteLine(ConsoleExtension.AddTimestamp(data.InstalledVersion.VersionName + " was NOT verified by server"));
 
             VersionVerificationDone?.Invoke();
         }
@@ -385,14 +386,14 @@ namespace PatchClientLib {
                 //Handle incoming file
                 // await ConnectionHandler.ReadFileAsync(_client, version.MissingFiles[0].FilePath, InstallPath + '/' + version.VersionName);                
                 ConnectionHandler.ReadFile(_client, version.MissingFiles [ 0 ].FilePath, version.InstallPath);
-                Console.WriteLine(version.MissingFiles [ 0 ].FilePath + " downloaded");
+                Console.WriteLine(ConsoleExtension.AddTimestamp(version.MissingFiles [ 0 ].FilePath + " downloaded"));
                 args.DownloadedTotal += version.MissingFiles [ 0 ].Size;
                 lock (version)
                     version.MissingFiles.RemoveAt(0);
             }
 
             _downloadingFiles = false;
-            Console.WriteLine("All missing files received!");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("All missing files received!"));
             version = ChecksumTool.RecheckVersion(version);
             RequestVerifyVersion(ref version);
             _client.GetStream().Close();
@@ -436,25 +437,25 @@ namespace PatchClientLib {
 //        RequestType = PatchNetworkRequest.TestConnection
 //    };
 //    ConnectionHandler.SendObject(model, _client);
-//    Console.WriteLine("Connection test send to server");
+//    Console.WriteLine(ConsoleExtension.AddTimestamp("Connection test send to server");
 //}
 
 
 //private static void HandleConnectionTestResponse(PatchDataModel data)
 //{
-//    Console.WriteLine("Response recieved");
-//    Console.WriteLine("Response was;");
-//    Console.WriteLine(data.Message);
+//    Console.WriteLine(ConsoleExtension.AddTimestamp("Response recieved");
+//    Console.WriteLine(ConsoleExtension.AddTimestamp("Response was;");
+//    Console.WriteLine(ConsoleExtension.AddTimestamp(data.Message);
 //}
 
 //private static void HandleAvailableVersionsResponse(PatchDataModel data)
 //{
 //    serverVersions = data.Versions;
-//    Console.WriteLine("Response recieved");
-//    Console.WriteLine("Versions available:");
+//    Console.WriteLine(ConsoleExtension.AddTimestamp("Response recieved");
+//    Console.WriteLine(ConsoleExtension.AddTimestamp("Versions available:");
 //    for (int i = 0; i < data.Versions.Length; i++)
 //    {
-//        Console.WriteLine(data.Versions[i]);
+//        Console.WriteLine(ConsoleExtension.AddTimestamp(data.Versions[i]);
 //    }
 //    VersionsFromServerReceived?.Invoke(new VersionsFromServerRecievedEventArgs(serverVersions));
 //}
@@ -467,7 +468,7 @@ namespace PatchClientLib {
 //        if (!_downloadingFiles)
 //            if (_client.GetStream().DataAvailable)
 //            {
-//                Console.WriteLine("Incoming response");
+//                Console.WriteLine(ConsoleExtension.AddTimestamp("Incoming response");
 //                PatchDataModel data = JsonConvert.DeserializeObject<PatchDataModel>(ConnectionHandler.ReadMessage(_client.GetStream()));
 
 //                switch (data.RequestType)
@@ -500,7 +501,7 @@ namespace PatchClientLib {
 //        //TODO
 //        foreach (var item in temp.MissingFiles)
 //        {
-//            Console.WriteLine("MISSING FILE: " + item.FilePath);
+//            Console.WriteLine(ConsoleExtension.AddTimestamp("MISSING FILE: " + item.FilePath);
 //        }
 //    }
 //    else

@@ -21,6 +21,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\HelperTools\HelperTools.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
   </ItemGroup>
   

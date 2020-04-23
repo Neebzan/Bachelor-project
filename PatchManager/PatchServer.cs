@@ -42,8 +42,8 @@ namespace PatchManager {
                 //versions = ChecksumTool.GetAvailableFolders(masterDirectory);
                 //for (int i = 0; i < versions.Length; i++)
                 //{
-                //    ConsoleExtension.WriteLineTimestamp("Find files for: " + versions[i]);
-                //    ConsoleExtension.WriteLineTimestamp("At path: " + masterDirectory + @"\" + versions[i]);
+                //    Console.WriteLine(ConsoleExtension.AddTimestamp("Find files for: " + versions[i]);
+                //    Console.WriteLine(ConsoleExtension.AddTimestamp("At path: " + masterDirectory + @"\" + versions[i]);
                 //    Dictionary<string, string> temp = new Dictionary<string, string>();
                 //    if (masterDirectory != "")
                 //        ChecksumTool.GetFilesDictionary(out temp, masterDirectory + @"\" + versions[i]);
@@ -52,15 +52,15 @@ namespace PatchManager {
                 //    masterFiles.Add(versions[i], temp);
                 //}
 
-                //ConsoleExtension.WriteLineTimestamp("Versions was:");
+                //Console.WriteLine(ConsoleExtension.AddTimestamp("Versions was:");
                 //for (int i = 0; i < versions.Length; i++)
                 //{
-                //    ConsoleExtension.WriteLineTimestamp(versions[i]);
+                //    Console.WriteLine(ConsoleExtension.AddTimestamp(versions[i]);
                 //}
             }
             catch (Exception e) {
-                ConsoleExtension.WriteLineTimestamp("Updating master files FAILED!");
-                ConsoleExtension.WriteLineTimestamp(e.Message);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Updating master files FAILED!"));
+                Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
             }
         }
 
@@ -78,17 +78,17 @@ namespace PatchManager {
             TcpListener listener = new TcpListener(IPAddress.Any, Configs.PATCH_SERVER_PORT);
             listener.Start();
             running = true;
-            ConsoleExtension.WriteLineTimestamp("Started handling incoming connections");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Started handling incoming connections"));
             while (running) {
                 TcpClient client = listener.AcceptTcpClient();
 
                 lock (clients) {
-                    ConsoleExtension.WriteLineTimestamp("New connection added!");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("New connection added!"));
                     clients.Add(client);
                     Task.Run(() => HandleClientConnection(client));
                 }
             }
-            ConsoleExtension.WriteLineTimestamp("Stopped handling incoming connections");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Stopped handling incoming connections"));
         }
 
         public void HandleClientConnection (TcpClient client) {
@@ -96,13 +96,13 @@ namespace PatchManager {
             while (ConnectionHandler.Connected(client)) {
                 //Wait for data from client
                 if (client.GetStream().DataAvailable) {
-                    ConsoleExtension.WriteLineTimestamp("Recieving request");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("Recieving request"));
                     PatchDataModel data = JsonConvert.DeserializeObject<PatchDataModel>(ConnectionHandler.ReadMessage(client.GetStream()));
 
                     switch (data.RequestType) {
                         case PatchNetworkRequest.AvailableVersions:
                             SendAvailableVersions(client);
-                            ConsoleExtension.WriteLineTimestamp("Versions send to client");
+                            Console.WriteLine(ConsoleExtension.AddTimestamp("Versions send to client"));
                             break;
                         case PatchNetworkRequest.VerifyVersion:
                             SendVersionVerification(client, data);
@@ -115,7 +115,7 @@ namespace PatchManager {
                             break;
                         case PatchNetworkRequest.TestConnection:
                             SendTestConnectionResponse(client);
-                            ConsoleExtension.WriteLineTimestamp("Send test response to client");
+                            Console.WriteLine(ConsoleExtension.AddTimestamp("Send test response to client"));
                             break;
                     }
                 }
@@ -125,7 +125,7 @@ namespace PatchManager {
 
             lock (clients) {
                 clients.Remove(client);
-                ConsoleExtension.WriteLineTimestamp("Client disconnected");
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Client disconnected"));
             }
         }
 
@@ -155,17 +155,17 @@ namespace PatchManager {
                 if (temp.InstallationChecksum == data.InstalledVersion.InstallationChecksum) {
                     data.InstalledVersion.Status = InstallationStatus.Verified;
                     ConnectionHandler.SendObject(data, client);
-                    ConsoleExtension.WriteLineTimestamp("Installation checksum matched and " + data.InstalledVersion.VersionName + " was VERIFIED");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("Installation checksum matched and " + data.InstalledVersion.VersionName + " was VERIFIED"));
                     return;
                 }
                 else {
                     data.InstalledVersion.Status = InstallationStatus.UpdateRequired;
-                    ConsoleExtension.WriteLineTimestamp("Installation checksum did NOT match and " + data.InstalledVersion.VersionName + " was NOT VERIFIED");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("Installation checksum did NOT match and " + data.InstalledVersion.VersionName + " was NOT VERIFIED"));
                     ConnectionHandler.SendObject(data, client);
                 }
             }
             else {
-                ConsoleExtension.WriteLineTimestamp("Version: " + data.InstalledVersion.VersionName + " NOT FOUND");
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Version: " + data.InstalledVersion.VersionName + " NOT FOUND"));
                 ConnectionHandler.SendObject(data, client);
                 return;
             }
@@ -178,16 +178,16 @@ namespace PatchManager {
             var temp = masterFiles.FirstOrDefault(x => x.VersionBranch == data.InstalledVersion.VersionBranch);
             List<string> missingFiles = new List<string>();
             if (temp != null) {
-                ConsoleExtension.WriteLineTimestamp("List found");
+                Console.WriteLine(ConsoleExtension.AddTimestamp("List found"));
                 //Check which files are missing/mismatched
                 missingFiles = ChecksumTool.CompareFileDictionaries(temp.GetFilesAsDictionary(), data.InstalledVersion.GetFilesAsDictionary());
-                ConsoleExtension.WriteLineTimestamp("Missing files found: " + missingFiles.Count);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Missing files found: " + missingFiles.Count));
                 string dir = ChecksumTool.RootedPathCheck(masterDirectory + '/' + temp.VersionBranch.ToString());
-                ConsoleExtension.WriteLineTimestamp("Dir: " + dir);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Dir: " + dir));
                 data.InstalledVersion = GenerateInstallationDataModel(missingFiles, dir);
 
                 data.InstalledVersion.VersionName = temp.VersionName;
-                ConsoleExtension.WriteLineTimestamp("Installation datamodel created: " + data.InstalledVersion.VersionName);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Installation datamodel created: " + data.InstalledVersion.VersionName));
                 ConnectionHandler.SendObject(data, client);
                 return;
             }
@@ -195,7 +195,7 @@ namespace PatchManager {
             data.InstalledVersion.Files.Clear();
             data.Message = "Version doesn't exist on server";
             ConnectionHandler.SendObject(data, client);
-            ConsoleExtension.WriteLineTimestamp("Requested version does not exist on the server!");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Requested version does not exist on the server!"));
         }
 
         private InstallationDataModel GenerateInstallationDataModel (List<string> filesToAdd, string directory = "") {
@@ -221,13 +221,13 @@ namespace PatchManager {
                     path = masterDirectory + '/' + data.File.FilePath;
 
                 FileInfo fi = new FileInfo(path);
-                ConsoleExtension.WriteLineTimestamp($"{fi.Name} size: {fi.Length}");
+                Console.WriteLine(ConsoleExtension.AddTimestamp($"{fi.Name} size: {fi.Length}"));
                 byte [ ] preBuffer = BitConverter.GetBytes((int)fi.Length);
                 client.Client.SendFile(fi.FullName, preBuffer, null, TransmitFileOptions.UseDefaultWorkerThread);
-                ConsoleExtension.WriteLineTimestamp($"{fi.Name} sent");
+                Console.WriteLine(ConsoleExtension.AddTimestamp($"{fi.Name} sent"));
             }
             else
-                ConsoleExtension.WriteLineTimestamp($"{data.File.FilePath} was not found under version: {data.InstalledVersion.VersionName}");
+                Console.WriteLine(ConsoleExtension.AddTimestamp($"{data.File.FilePath} was not found under version: {data.InstalledVersion.VersionName}"));
         }
     }
 }

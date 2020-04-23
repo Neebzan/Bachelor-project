@@ -186,6 +186,10 @@
       <Project>{EEEFCA4C-D9F8-4256-8ADC-CA16F5100811}</Project>
       <Name>GlobalConfigs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\HelperTools\HelperTools.csproj">
+      <Project>{6631989F-6484-42D5-8EAA-0B8552826597}</Project>
+      <Name>HelperTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Models\Models.csproj">
       <Project>{9fb4f256-fdce-4538-b86c-adee6576a502}</Project>
       <Name>Models</Name>

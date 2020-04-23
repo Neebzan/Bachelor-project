@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using HelperTools;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace ChecksumHandlerLib
 
         public static void HelloWorld()
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Hello World!"));
         }
 
         public static event EventHandler<GetFilesDictionaryProgressEventArgs> GetFilesDictionaryProgress = delegate { };
@@ -43,7 +44,7 @@ namespace ChecksumHandlerLib
             if (tempModel == null)
             {
                 tempModel = new InstallationDataModel();
-                Console.WriteLine("NO VersionInfo FOUND!!");
+                Console.WriteLine(ConsoleExtension.AddTimestamp("NO VersionInfo FOUND!!"));
             }
             tempModel.InstallPath = installPath;
 
@@ -84,7 +85,7 @@ namespace ChecksumHandlerLib
                 //Get data from the VersionFile
                 if (version.LoadFromFile())
                 {
-                    Console.WriteLine("NO Version.json FOUND!!");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("NO Version.json FOUND!!"));
                 }
 
                 
@@ -123,7 +124,7 @@ namespace ChecksumHandlerLib
                 if (tempModel == null)
                 {
                     tempModel = new InstallationDataModel();
-                    Console.WriteLine("NO VersionInfo FOUND!!");
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("NO VersionInfo FOUND!!"));
                 }
 
                 tempModel.InstallPath = path;
@@ -221,9 +222,9 @@ namespace ChecksumHandlerLib
             }
             catch (Exception e)
             {
-                Console.WriteLine("Not a valid path OR path not found");
-                Console.WriteLine("Path was: \n" + path);
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Not a valid path OR path not found"));
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Path was: \n" + path));
+                Console.WriteLine(ConsoleExtension.AddTimestamp(e.Message));
 
             }
         }
@@ -347,13 +348,13 @@ namespace ChecksumHandlerLib
 
         public static string RootedPathCheck(string path)
         {
-            //Console.WriteLine("Checking if path is rooted: " + path);
+            //Console.WriteLine(ConsoleExtension.AddTimestamp("Checking if path is rooted: " + path);
             if (!Path.IsPathRooted(path))
             {
-                //Console.WriteLine("Path was NOT rooted");
+                //Console.WriteLine(ConsoleExtension.AddTimestamp("Path was NOT rooted");
                 string currentDirectory;
                 currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                //Console.WriteLine("Current dir is: " + currentDirectory);
+                //Console.WriteLine(ConsoleExtension.AddTimestamp("Current dir is: " + currentDirectory);
                 if (path != "")
                 {
                     if (currentDirectory[currentDirectory.Length - 1] != '\\')
@@ -364,7 +365,7 @@ namespace ChecksumHandlerLib
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                     currentDirectory = currentDirectory.Replace('\\', '/');
 
-                //Console.WriteLine("Final dir is: " + currentDirectory);
+                //Console.WriteLine(ConsoleExtension.AddTimestamp("Final dir is: " + currentDirectory);
                 return currentDirectory;
             }
             else
@@ -384,8 +385,8 @@ namespace ChecksumHandlerLib
 
                 for (int i = 0; i < foldersFound.Length; i++)
                 {
-                    Console.WriteLine("Find files for: " + foldersFound[i]);
-                    Console.WriteLine("At path: " + path + @"\" + foldersFound[i]);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("Find files for: " + foldersFound[i]));
+                    Console.WriteLine(ConsoleExtension.AddTimestamp("At path: " + path + @"\" + foldersFound[i]));
                     Dictionary<string, string> temp = new Dictionary<string, string>();
                     if (path != "")
                         GetFilesDictionary(out temp, path + @"\" + foldersFound[i]);
@@ -395,7 +396,7 @@ namespace ChecksumHandlerLib
                 }
             }
             else
-                Console.WriteLine("Path does not exist!: " + path);
+                Console.WriteLine(ConsoleExtension.AddTimestamp("Path does not exist!: " + path));
             return result;
         }
 

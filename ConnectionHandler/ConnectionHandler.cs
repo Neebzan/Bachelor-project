@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HelperTools;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,7 +85,7 @@ namespace ConnectionHandlerLib
 
             int totalFileSize = BitConverter.ToInt32(readBuffer, 0);
 
-            Console.WriteLine("Incoming file size: " + totalFileSize);
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Incoming file size: " + totalFileSize));
 
             //Create subfolders if needed
             string[] pathSplit = fileName.Split('/');
