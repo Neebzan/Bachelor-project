@@ -101,6 +101,7 @@ namespace PatchClientLib {
                 await CompareLocalVersionsToServerVersionsAsync();
             }
 
+            _client.GetStream().Close();
             _client.Close();
 
             return InstalledVersions;

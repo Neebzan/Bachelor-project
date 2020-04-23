@@ -10,10 +10,12 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using SystemTimer = System.Timers.Timer;
 
 namespace GameLauncher.ViewModels {
     public enum TemporaryInstallType { Installed, NotInstalled, UpdateRequired }
@@ -70,6 +72,17 @@ namespace GameLauncher.ViewModels {
             get { return _downloadFile; }
             set { _downloadFile = value; NotifyOfPropertyChange(() => DownloadFile); }
         }
+
+        private string errorMessage = "";
+
+        public string ErrorMessage {
+            get { return errorMessage; }
+            set {
+                errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
+
 
         public bool IsDeleting { get; private set; }
 
@@ -145,6 +158,16 @@ namespace GameLauncher.ViewModels {
         #endregion
 
         #region Methods
+        void DisplayErrorMessage (string msg, float duration = 3000) {
+            SystemTimer timer = new SystemTimer(3000);
+            ErrorMessage = "msg";
+            timer.Elapsed += Timer_Elapsed;
+        }
+
+        private void Timer_Elapsed (object sender, System.Timers.ElapsedEventArgs e) {
+            ErrorMessage = "";
+        }
+
         public MainViewModel () {
             PatchClient.GetDownloadProgress += PatchClient_GetDownloadProgress;
             PatchClient.DownloadDone += PatchClient_DownloadDone;
@@ -192,21 +215,27 @@ namespace GameLauncher.ViewModels {
         /// </summary>
         /// <returns></returns>
         private BindableCollection<InstallationDataModel> GetAvailableInstalls (StringCollection paths) {
-            BindableCollection<InstallationDataModel> available = new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
-            if (SelectedInstall == null) {
-                if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
-                    foreach (InstallationDataModel installation in available) {
-                        if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
-                            SelectedInstall = installation;
-                            break;
+            BindableCollection<InstallationDataModel> available = new BindableCollection<InstallationDataModel>();
+            try {
+                available = new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
+                if (SelectedInstall == null) {
+                    if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
+                        foreach (InstallationDataModel installation in available) {
+                            if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
+                                SelectedInstall = installation;
+                                break;
+                            }
                         }
                     }
+                    if (SelectedInstall == null)
+                        SelectedInstall = available [ 0 ];
                 }
-                if (SelectedInstall == null)
-                    SelectedInstall = available [ 0 ];
+
+
             }
-
-
+            catch (Exception e) {
+                DisplayErrorMessage(e.Message);
+            }
             return available;
         }
 
@@ -241,8 +270,8 @@ namespace GameLauncher.ViewModels {
                         AvailableInstalls [ toChange ] = installation;
                         SelectedInstall = AvailableInstalls [ toChange ];
                     }));
-                }
-            
+            }
+
 
 
             IsDownloading = false;
