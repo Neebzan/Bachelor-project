@@ -92,12 +92,10 @@
     </Compile>
     <Compile Include="BasePage.cs" />
     <Compile Include="BaseProgressBar.cs" />
-    <Compile Include="CustomComboBox.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\LoggingInPage.xaml.cs">
       <DependentUpon>LoggingInPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Logic.cs" />
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>

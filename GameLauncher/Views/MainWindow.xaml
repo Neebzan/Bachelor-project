@@ -19,28 +19,28 @@
             </Setter>
         </Style>
         <LinearGradientBrush x:Key="ComboBox.Static.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="#FFAEAEAE" Offset="0.0"/>
-            <GradientStop Color="#FFAEAEAE" Offset="1.0"/>
+            <GradientStop Color="{StaticResource ColorC}" Offset="0.0"/>
+            <GradientStop Color="{StaticResource ColorC}" Offset="1.0"/>
         </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
+        <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#1c1c1c"/>
         <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#FFABADB3"/>
+        <SolidColorBrush x:Key="ComboBox.Static.Editable.Border" Color="#1c1c1c"/>
         <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Background" Color="Transparent"/>
         <SolidColorBrush x:Key="ComboBox.Static.Editable.Button.Border" Color="Transparent"/>
         <SolidColorBrush x:Key="ComboBox.MouseOver.Glyph" Color="#FF000000"/>
         <LinearGradientBrush x:Key="ComboBox.MouseOver.Background" EndPoint="0,1" StartPoint="0,0">
-            <GradientStop Color="LightGray" Offset="0.0"/>
-            <GradientStop Color="LightGray" Offset="1.0"/>
+            <GradientStop Color="{StaticResource ColorCMouseOver}" Offset="0.0"/>
+            <GradientStop Color="{StaticResource ColorCMouseOver}" Offset="1.0"/>
         </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="#FF7EB4EA"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="ComboBox.MouseOver.Border" Color="{StaticResource ColorDMouseOver}"/>
+        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Background" Color="{StaticResource ColorCMouseOver}"/>
+        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Border" Color="{StaticResource ColorCMouseOver}"/>
         <LinearGradientBrush x:Key="ComboBox.MouseOver.Editable.Button.Background" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#FFEBF4FC" Offset="0.0"/>
             <GradientStop Color="#FFDCECFC" Offset="1.0"/>
         </LinearGradientBrush>
-        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="#FF7EB4EA"/>
-        <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="#FF000000"/>
+        <SolidColorBrush x:Key="ComboBox.MouseOver.Editable.Button.Border" Color="{StaticResource ColorCMouseOver}"/>
+        <SolidColorBrush x:Key="ComboBox.Pressed.Glyph" Color="Transparent"/>
         <LinearGradientBrush x:Key="ComboBox.Pressed.Background" EndPoint="0,1" StartPoint="0,0">
             <GradientStop Color="#FFDAECFC" Offset="0.0"/>
             <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
@@ -53,7 +53,7 @@
             <GradientStop Color="#FFC4E0FC" Offset="1.0"/>
         </LinearGradientBrush>
         <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
-        <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FFBFBFBF"/>
+        <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="Transparent"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="#FFF0F0F0"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="#FFD9D9D9"/>
         <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFFFFFFF"/>
@@ -129,7 +129,7 @@
                                 <Setter Property="Background" TargetName="splitBorder" Value="{StaticResource ComboBox.Pressed.Editable.Button.Background}"/>
                                 <Setter Property="BorderBrush" TargetName="splitBorder" Value="{StaticResource ComboBox.Pressed.Editable.Button.Border}"/>
                             </MultiDataTrigger>
-                            <Trigger Property="IsEnabled" Value="false">
+                            <Trigger Property="IsEnabled" Value="true">
                                 <Setter Property="Fill" TargetName="arrow" Value="{StaticResource ComboBox.Disabled.Glyph}"/>
                             </Trigger>
                             <MultiDataTrigger>
@@ -167,7 +167,7 @@
                             <ScrollViewer x:Name="DropDownScrollViewer">
                                 <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                                     <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                        <Rectangle x:Name="opaqueRect" Fill="#FFAEAEAE" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
+                                        <Rectangle x:Name="opaqueRect" Fill="#1c1c1c" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
                                     </Canvas>
                                     <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                 </Grid>
@@ -296,28 +296,27 @@
     </Window.Style>
 
     <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FFF0F0F0" Offset="1"/>
-            <GradientStop Color="White"/>
-        </LinearGradientBrush>
+        <SolidColorBrush Color="{StaticResource Background}"/>
     </Window.Background>
 
-    <Grid Height="400" Width="640">
+
+    <Grid Height="400" Width="800">
         <Grid.RowDefinitions>
             <RowDefinition Height=".01*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height=".25*"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="15"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="520"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Frame x:Name="frame" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+        <Frame x:Name="frame" Margin="20" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" NavigationUIVisibility="Hidden" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalAlignment="Top"/>
 
 
-        <ComboBox x:Name="Version_ComboBox" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding AvailableInstalls}"  SelectedItem="{Binding SelectedInstall}" BorderThickness="0" HorizontalAlignment="Stretch" Margin="20, 0,0,5" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Height="25" Style="{DynamicResource ComboBoxStyle1}">
+        <ComboBox x:Name="Version_ComboBox" HorizontalContentAlignment="Left" FontSize="14" FontWeight="Light" Foreground="White" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding AvailableInstalls}"  SelectedItem="{Binding SelectedInstall}" BorderThickness="0" HorizontalAlignment="Stretch" Margin="20,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Bottom" Height="25" Padding="5,0,5,4" Style="{DynamicResource ComboBoxStyle1}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding VersionBranchToString}"/>
@@ -325,9 +324,15 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <Button x:Name="Delete_Button" Content="X" FontSize="13" Click="Button_Click" Grid.Row="2" Grid.Column="1" Width="28" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,10,0,5" />
-        <Button x:Name="PlayInstall_Button" Content="{Binding ButtonText}" Click="PlayInstallButton_Clicked"  Height="35" HorizontalAlignment="Stretch" Margin="20, 0,0,5" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Grid.Row="3" Grid.Column="0"/>
-        <local:BaseProgressBar x:Name="progress_bar" Value="{Binding DownloadProgressPercentage}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="14" HorizontalAlignment="Stretch" BorderThickness="0" Background="#FF404040" Foreground="#FFBD2222" Margin="10,13,20,13"/>
-        <Label x:Name="DownloadProgress_label" Content="{Binding DownloadProgress}" Padding="5,0" Grid.Row="3" Foreground="White" Grid.Column="1" VerticalAlignment="Center" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" FontWeight="UltraLight" Margin="10,13,30,13" Height="14"/>
+        <Label Content="▲&#10;▼" IsHitTestVisible="False" Grid.Row="2" Grid.Column="0" FontSize="8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{StaticResource ColorABrush}"/>
+
+
+        <Button x:Name="PlayInstall_Button" Content="{Binding ButtonText}" Click="PlayInstallButton_Clicked"  HorizontalAlignment="Stretch" FontSize="25" FontWeight="Medium" Margin="20,0,0,0" VerticalAlignment="Stretch" VerticalContentAlignment="Bottom" Grid.Row="3" Grid.Column="0" Grid.RowSpan="1"/>
+        <local:BaseProgressBar x:Name="progress_bar" Value="{Binding DownloadProgressPercentage}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Height="15" HorizontalAlignment="Stretch"  BorderThickness="0" Background="{StaticResource ColorCBrush}" Foreground="{StaticResource ColorDBrush}" Margin="20, 0" />
+        <Label x:Name="DownloadProgress_label"  Content="{Binding DownloadProgress}" Padding="0,0" Grid.Row="3" Foreground="White" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" FontWeight="UltraLight" Height="15" Margin="20, 0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Margin="20,10,20,0" VerticalAlignment="Bottom" HorizontalAlignment="Left">
+            <Label x:Name="Version_Label" Content="{Binding SelectedInstall.VersionName}" Foreground="White" Margin="0,0,10,0"/>
+            <Button x:Name="Delete_Button" Style="{StaticResource BaseButtonStyleNoBackground}" Content="Remove" Click="Button_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

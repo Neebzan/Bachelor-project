@@ -62,15 +62,15 @@ namespace GameLauncher.Views {
         }
 
         private async void CheckAutoLogin (object sender, RoutedEventArgs e) {
-            if (automatic_login_tick.IsChecked == true) {
-                if (!string.IsNullOrEmpty(Settings.Default.Username) && !string.IsNullOrEmpty(Logic.ConvertToUnsecureString(Settings.Default.Password))) {
-                    await AnimateOut();
-                    SecureString password = password_passwordBox.SecurePassword;
-                    string username = usernameEmail_textblock.Text;
-                    bool? rememberUsername = remember_username_tick.IsChecked;
-                    (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoggingInPage(password, username, rememberUsername, true));
-                }
-            }
+            //if (automatic_login_tick.IsChecked == true) {
+            //    if (!string.IsNullOrEmpty(Settings.Default.Username) && !string.IsNullOrEmpty(Logic.ConvertToUnsecureString(Settings.Default.Password))) {
+            //        await AnimateOut();
+            //        SecureString password = password_passwordBox.SecurePassword;
+            //        string username = usernameEmail_textblock.Text;
+            //        bool? rememberUsername = remember_username_tick.IsChecked;
+            //        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoggingInPage(password, username, rememberUsername, true));
+            //    }
+            //}
         }
 
         private void remember_username_tick_Unchecked (object sender, RoutedEventArgs e) {
