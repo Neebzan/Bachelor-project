@@ -1,11 +1,14 @@
 ﻿using Models;
-using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 using Dapper;
 using System.Linq;
 using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
+using RandomNameGeneratorLibrary;
+using MySql.Data.MySqlClient;
+using Microsoft.EntityFrameworkCore;
+using DatabaseREST.Models;
 
 namespace DatabaseLib
 {
@@ -39,26 +42,86 @@ namespace DatabaseLib
             return connection;
         }
 
+        //public T Insert<T>(T data) where T : class
+        //{
+        //    using (MySqlConnection connection = CreateConnection())
+        //    {
+        //        try
+        //        {
+        //            connection.Open();
+        //            connection.Insert(data);
+
+        //            //connection.Query<AccountModel>("select * from accounts");
+        //            Console.WriteLine("{0} inserted succesfully!", data.GetType());
+        //            return data;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //            return data;
+        //        }
+        //    }
+        //}
+
         public T Insert<T>(T data) where T : class
         {
-            using (MySqlConnection connection = CreateConnection())
+            try
             {
-                try
+                using (var context = new intrusiveContext())
                 {
-                    connection.Open();
-                    connection.Insert(data);
 
-                    //connection.Query<AccountModel>("select * from accounts");
-                    Console.WriteLine("{0} inserted succesfully!", data.GetType());
-                    return data;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    return data;
+                    context.Add(data);
+                    context.SaveChanges();
                 }
             }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            return data;
         }
+
+        public T Update<T>(T data) where T : class
+        {
+            try
+            {
+                using (var context = new intrusiveContext())
+                {
+
+                    context.Add(data);
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            return data;
+        }
+
+        public void EFCORETest() 
+        {
+            try
+            {
+                using (var context = new intrusiveContext())
+                {
+
+                    var temp = context.Accounts.AsNoTracking().FirstOrDefault(acc => acc.AccountId == "TestAcc");
+                    var test = context.Accounts.Where(acc => acc.AccountId == "TestAcc");
+                    //Console.WriteLine(test.ToQueryString());
+                    //var temp = context.Accounts.FirstOrDefault(acc => acc.AccountId == "TestAcc");
+                    temp.LastName = "Track test";
+
+
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+        }
+
         public List<T> GetAll<T>() where T : class
         {
             using (MySqlConnection connection = CreateConnection())
@@ -121,16 +184,16 @@ namespace DatabaseLib
             }
         }
 
-        public List<MatchModel> GetPlayerMatches(string playerID)
+        public List<Matches> GetPlayerMatches(string playerID)
         {
-            List<MatchModel> matches = new List<MatchModel>();
+            List<Matches> matches = new List<Matches>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    matches = connection.Query<MatchModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    matches = connection.Query<Matches>(
                         "GetPlayerMatches",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -146,16 +209,16 @@ namespace DatabaseLib
             return matches;
         }
 
-        public List<AbilityModel> GetPlayerAbilities(string playerID)
+        public List<Abilities> GetPlayerAbilities(string playerID)
         {
-            List<AbilityModel> abilities = new List<AbilityModel>();
+            List<Abilities> abilities = new List<Abilities>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    abilities = connection.Query<AbilityModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<Abilities>(
                         "GetPlayerAbilities",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -171,16 +234,16 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public List<ItemModel> GetPlayerItems(string playerID)
+        public List<Items> GetPlayerItems(string playerID)
         {
-            List<ItemModel> abilities = new List<ItemModel>();
+            List<Items> abilities = new List<Items>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    //matches = connection.Query<MatchModel>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
-                    abilities = connection.Query<ItemModel>(
+                    //matches = connection.Query<Matches>("SELECT * FROM matches WHERE matches.match_id IN (SELECT played_match.match_id FROM played_match WHERE played_match.player_id = @PlayerID)", new { PlayerID = playerID }).ToList();
+                    abilities = connection.Query<Items>(
                         "GetPlayerItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -196,15 +259,15 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public List<ItemModel> GetPlayerEquippedItems(string playerID)
+        public List<Items> GetPlayerEquippedItems(string playerID)
         {
-            List<ItemModel> abilities = new List<ItemModel>();
+            List<Items> abilities = new List<Items>();
 
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    abilities = connection.Query<ItemModel>(
+                    abilities = connection.Query<Items>(
                         "GetPlayerEquippedItems",
                         new { PlayerID = playerID },
                         commandType: CommandType.StoredProcedure
@@ -220,10 +283,10 @@ namespace DatabaseLib
             return abilities;
         }
 
-        public bool UnlockAbility(PlayerModel player, AbilityModel ability)
+        public bool UnlockAbility(Players player, Abilities ability)
         {
             //Get the players current abilities
-            var playerAbilities = GetPlayerAbilities(player.player_id);
+            var playerAbilities = GetPlayerAbilities(player.PlayerId);
 
             throw new NotImplementedException();
 
@@ -231,11 +294,11 @@ namespace DatabaseLib
             {
                 try
                 {
-                       connection.Query(
-                       "UnlockAbility",
-                       new { PlayerID = player.player_id, AbilityName = ability.ability_name },
-                       commandType: CommandType.StoredProcedure
-                       ).ToList();
+                    connection.Query(
+                    "UnlockAbility",
+                    new { PlayerID = player.PlayerId, AbilityName = ability.AbilityName },
+                    commandType: CommandType.StoredProcedure
+                    ).ToList();
                     return true;
                 }
                 catch (Exception e)
@@ -246,14 +309,14 @@ namespace DatabaseLib
             }
         }
 
-        public List<AbilityModel> GetAllAbilities()
+        public List<Abilities> GetAllAbilities()
         {
-            List<AbilityModel> abilites = new List<AbilityModel>();
+            List<Abilities> abilites = new List<Abilities>();
             using (MySqlConnection connection = CreateConnection())
             {
                 try
                 {
-                    abilites = connection.Query<AbilityModel>(
+                    abilites = connection.Query<Abilities>(
                     "GetAllAbilities",
                     new { },
                     commandType: CommandType.StoredProcedure
@@ -268,80 +331,128 @@ namespace DatabaseLib
             }
         }
 
-        public List<TestModel> GetAllTest(string playerID)
-        {
-            List<TestModel> matches = new List<TestModel>();
-
-            using (MySqlConnection connection = CreateConnection())
-            {
-                matches = connection.Query<TestModel>("SELECT * FROM matches NATURAL JOIN (SELECT * FROM played_match WHERE player_id = @PlayerID) AS matches_played_by_player", new { PlayerID = playerID }).ToList();
-            }
-
-            return matches;
-        }
-
-
-        //public AccountModel Insert(AccountModel account)
+        //public List<TestModel> GetAllTest(string playerID)
         //{
+        //    List<TestModel> matches = new List<TestModel>();
+
         //    using (MySqlConnection connection = CreateConnection())
         //    {
-        //        try
-        //        {
-        //            connection.Open();
-
-        //            MySqlCommand command = connection.CreateCommand();
-
-        //            command.CommandText = "INSERT INTO accounts (account_id, password_hash, email, first_name, last_name) VALUES (@account_id, @password_hash, @email, @first_name, @last_name)";
-
-        //            command.Parameters.AddWithValue("@account_id", account.AccountID);
-        //            command.Parameters.AddWithValue("@password_hash", account.PasswordHash);
-        //            command.Parameters.AddWithValue("@email", account.Email);
-        //            command.Parameters.AddWithValue("@first_name", account.FirstName);
-        //            command.Parameters.AddWithValue("@last_name", account.LastName);
-
-
-
-        //            try
-        //            {
-        //                int rowsAffected = command.ExecuteNonQuery();
-        //                account.Status = DatabaseResponse.Success;
-        //                Console.WriteLine("Account inserted succesfully!");
-        //                return account;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                account.Status = DatabaseResponse.AlreadyExists;
-        //                Console.WriteLine(e.Message);
-        //                return account;
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            account.Status = DatabaseResponse.ConnectionFailed;
-        //            Console.WriteLine(e.Message);
-        //            return account;
-        //        }
-        //    }
-        //}
-
-
-        //public bool IsConnected()
-        //{
-        //    if (Connection == null)
-        //    {
-        //        if (String.IsNullOrEmpty(DatabaseName))
-        //            return false;
-        //        string connstring = string.Format("Server={0}; database={1}; UID={2}; password={3}", ServerIP, DatabaseName, Username, Password);
-        //        connection = new MySqlConnection(connstring);
-        //        connection.Open();
+        //        matches = connection.Query<TestModel>("SELECT * FROM matches NATURAL JOIN (SELECT * FROM played_match WHERE player_id = @PlayerID) AS matches_played_by_player", new { PlayerID = playerID }).ToList();
         //    }
 
-        //    return true;
+        //    return matches;
         //}
 
-        //public void Close()
-        //{
-        //    connection.Close();
-        //}
+
+
+
+        public void InsertRandomData(int amount)
+        {
+            var personGenerator = new PersonNameGenerator();
+            var placeGenerator = new PlaceNameGenerator();
+
+            Random rnd = new Random(DateTime.Now.Second);
+            using (MySqlConnection connection = CreateConnection())
+            {
+                int index = 0;
+                try
+                {
+                    connection.Open();
+
+                    for (int i = 0; i < amount; i++)
+                    {
+                        Accounts tempAccount = new Accounts()
+                        {
+                            AccountId = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
+                            Email = index.ToString(),
+                            PasswordHash = index.ToString()
+                        };
+
+                        Players tempPlayer = new Players()
+                        {
+                            Experience = (uint)rnd.Next(10000001),
+                            PlayerId = tempAccount.AccountId
+                        };
+                        connection.Insert(tempAccount);
+                        connection.Insert(tempPlayer);
+
+                        //connection.Query<AccountModel>("select * from accounts");
+                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
+                        index++;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            Console.WriteLine("All inserted");
+        }
+
     }
+
+    //public AccountModel Insert(AccountModel account)
+    //{
+    //    using (MySqlConnection connection = CreateConnection())
+    //    {
+    //        try
+    //        {
+    //            connection.Open();
+
+    //            MySqlCommand command = connection.CreateCommand();
+
+    //            command.CommandText = "INSERT INTO accounts (account_id, password_hash, email, first_name, last_name) VALUES (@account_id, @password_hash, @email, @first_name, @last_name)";
+
+    //            command.Parameters.AddWithValue("@account_id", account.AccountID);
+    //            command.Parameters.AddWithValue("@password_hash", account.PasswordHash);
+    //            command.Parameters.AddWithValue("@email", account.Email);
+    //            command.Parameters.AddWithValue("@first_name", account.FirstName);
+    //            command.Parameters.AddWithValue("@last_name", account.LastName);
+
+
+
+    //            try
+    //            {
+    //                int rowsAffected = command.ExecuteNonQuery();
+    //                account.Status = DatabaseResponse.Success;
+    //                Console.WriteLine("Account inserted succesfully!");
+    //                return account;
+    //            }
+    //            catch (Exception e)
+    //            {
+    //                account.Status = DatabaseResponse.AlreadyExists;
+    //                Console.WriteLine(e.Message);
+    //                return account;
+    //            }
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            account.Status = DatabaseResponse.ConnectionFailed;
+    //            Console.WriteLine(e.Message);
+    //            return account;
+    //        }
+    //    }
+    //}
+
+
+    //public bool IsConnected()
+    //{
+    //    if (Connection == null)
+    //    {
+    //        if (String.IsNullOrEmpty(DatabaseName))
+    //            return false;
+    //        string connstring = string.Format("Server={0}; database={1}; UID={2}; password={3}", ServerIP, DatabaseName, Username, Password);
+    //        connection = new MySqlConnection(connstring);
+    //        connection.Open();
+    //    }
+
+    //    return true;
+    //}
+
+    //public void Close()
+    //{
+    //    connection.Close();
+    //}
 }
+

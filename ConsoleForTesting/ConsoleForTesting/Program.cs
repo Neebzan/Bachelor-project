@@ -1,6 +1,7 @@
 ﻿using ChecksumHandlerLib;
 using ConnectionHandlerLib;
 using DatabaseLib;
+using DatabaseREST.Models;
 using GlobalConfigs;
 using Models;
 using MySql.Data.MySqlClient;
@@ -27,8 +28,20 @@ namespace ConsoleForTesting
             Stopwatch watch = new Stopwatch();
             watch.Start();
             //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
-            var h = PatchClient.CompleteCheck(new string[0]);
-            h[0].InstallPath = PatchClient.InstallPath;
+            //var h = PatchClient.CompleteCheck(new string[0]);
+            //h[0].InstallPath = PatchClient.InstallPath;
+
+            //DBConnection.Instance().InsertRandomData(10000);
+
+            //DBConnection.Instance().EFCORETest();
+            
+            Accounts acc = new Accounts()
+            {
+                AccountId = "TestAcc222",
+                Email = "some@email.com",
+                PasswordHash = "somePW"
+            };
+            DBConnection.Instance().Insert(acc);
 
             //var q = new InstallationDataModel()
             //{
@@ -39,8 +52,8 @@ namespace ConsoleForTesting
             //};
 
 
-            PatchClient.DownloadMissingFiles(h[0]);
-            PatchClient.DownloadMissingFiles(h[0]);
+            //PatchClient.DownloadMissingFiles(h[0]);
+            //PatchClient.DownloadMissingFiles(h[0]);
 
             //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
             watch.Stop();

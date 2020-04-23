@@ -97,3 +97,13 @@ CREATE TABLE wears(
     FOREIGN KEY (item_id) REFERENCES items(item_id)
 );
 
+CREATE TABLE testTable(
+	id INT NOT NULL,
+    message VARCHAR(255),
+    PRIMARY KEY(id)
+);
+
+ALTER TABLE testTable
+ADD newMessage VARCHAR(255)
+AFTER id;
+
