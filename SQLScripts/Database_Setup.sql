@@ -4,7 +4,7 @@ USE intrusive;
 -- Enitites
 CREATE TABLE accounts (
 	account_id VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     password_hash VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE players (
 	player_id VARCHAR(255) NOT NULL,
-    experience INT UNSIGNED,
+    experience INT UNSIGNED DEFAULT 0,
     PRIMARY KEY (player_id),
     FOREIGN KEY (player_id) REFERENCES accounts(account_id)
 );

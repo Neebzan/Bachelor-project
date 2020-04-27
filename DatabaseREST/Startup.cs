@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using DatabaseREST.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace DatabaseREST
 {
@@ -31,6 +33,8 @@ namespace DatabaseREST
             //Sæt den dbContext der benyttes af DatabaseAPI'en + hent dens connectionstring fra appsettings.json
             services.AddDbContext<intrusiveContext>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionString"]));
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -30,11 +30,11 @@ namespace DatabaseREST.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=password;database=intrusive", x => x.ServerVersion("8.0.19-mysql"));
-//            }
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=password;database=intrusive", x => x.ServerVersion("8.0.19-mysql"));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,6 +61,10 @@ namespace DatabaseREST.Models
                     .HasName("PRIMARY");
 
                 entity.ToTable("accounts");
+
+                entity.HasIndex(e => e.Email)
+                    .HasName("email")
+                    .IsUnique();
 
                 entity.Property(e => e.AccountId)
                     .HasColumnName("account_id")
@@ -335,13 +339,22 @@ namespace DatabaseREST.Models
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
-                entity.Property(e => e.Experience).HasColumnName("experience");
+                entity.Property(e => e.Experience)
+                    .HasColumnName("experience")
+                    .HasDefaultValueSql("'0'");
 
                 entity.HasOne(d => d.Player)
                     .WithOne(p => p.Players)
                     .HasForeignKey<Players>(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("players_ibfk_1");
+
+                //Ignore derived attributes
+                entity.Ignore(e => e.Level);
+                entity.Ignore(e => e.Skillpoints);
+                entity.Ignore(e => e.SkillpointsUsed);
+                entity.Ignore(e => e.LevelProgress);
+
             });
 
             modelBuilder.Entity<Testtable>(entity =>

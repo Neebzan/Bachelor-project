@@ -99,7 +99,7 @@ namespace DatabaseLib
             return data;
         }
 
-        public void EFCORETest() 
+        public void EFCORETest()
         {
             try
             {
@@ -351,43 +351,121 @@ namespace DatabaseLib
             var personGenerator = new PersonNameGenerator();
             var placeGenerator = new PlaceNameGenerator();
 
+            intrusiveContext context = null;
+
             Random rnd = new Random(DateTime.Now.Second);
-            using (MySqlConnection connection = CreateConnection())
+
+            int index = 10000;
+
+            try
             {
-                int index = 0;
-                try
+                context = new intrusiveContext();
+
+                for (int i = 0; i < amount; i++)
                 {
-                    connection.Open();
-
-                    for (int i = 0; i < amount; i++)
+                    Accounts tempAccount = new Accounts()
                     {
-                        Accounts tempAccount = new Accounts()
-                        {
-                            AccountId = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
-                            Email = index.ToString(),
-                            PasswordHash = index.ToString()
-                        };
+                        AccountId = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
+                        Email = index.ToString(),
+                        PasswordHash = index.ToString()
+                    };
 
-                        Players tempPlayer = new Players()
-                        {
-                            Experience = (uint)rnd.Next(10000001),
-                            PlayerId = tempAccount.AccountId
-                        };
-                        connection.Insert(tempAccount);
-                        connection.Insert(tempPlayer);
+                    Players tempPlayer = new Players()
+                    {
+                        Experience = (uint)rnd.Next(10000001),
+                        PlayerId = tempAccount.AccountId
+                    };
 
-                        //connection.Query<AccountModel>("select * from accounts");
-                        Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
-                        index++;
+
+                    context.Add(tempAccount);
+                    context.Add(tempPlayer);
+
+                    if (i % 100 == 0)
+                    {
+                        context.SaveChanges();
+
+                        context.Dispose();
+                        context = new intrusiveContext();
+                        context.ChangeTracker.AutoDetectChangesEnabled = false;
+
                     }
 
+
+                    context.SaveChanges();
+
+                    //connection.Query<AccountModel>("select * from accounts");
+                    Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
+                    index++;
                 }
-                catch (Exception e)
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.InnerException.Message);
+            }
+            finally
+            {
+                if (context != null)
+                    context.Dispose();
+            }
+
+
+
+
+            //using (MySqlConnection connection = CreateConnection())
+            //{
+            //    int index = 0;
+            //    try
+            //    {
+            //        connection.Open();
+
+            //        for (int i = 0; i < amount; i++)
+            //        {
+            //            Accounts tempAccount = new Accounts()
+            //            {
+            //                AccountId = placeGenerator.GenerateRandomPlaceName() + index.ToString() + personGenerator.GenerateRandomFirstName(),
+            //                Email = index.ToString(),
+            //                PasswordHash = index.ToString()
+            //            };
+
+            //            Players tempPlayer = new Players()
+            //            {
+            //                Experience = (uint)rnd.Next(10000001),
+            //                PlayerId = tempAccount.AccountId
+            //            };
+            //            connection.Insert(tempAccount);
+            //            connection.Insert(tempPlayer);
+
+            //            //connection.Query<AccountModel>("select * from accounts");
+            //            Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
+            //            index++;
+            //        }
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e.Message);
+            //    }
+            //}
+            Console.WriteLine("All inserted");
+        }
+
+        private intrusiveContext AddToContext<T>(intrusiveContext context, T entity, int count, int commitCount, bool recreateContext) where T : class
+        {
+            context.Set<T>().Add(entity);
+
+            if (count % commitCount == 0)
+            {
+                context.SaveChanges();
+                if (recreateContext)
                 {
-                    Console.WriteLine(e.Message);
+                    context.Dispose();
+                    context = new intrusiveContext();
+                    context.ChangeTracker.AutoDetectChangesEnabled = false;
                 }
             }
-            Console.WriteLine("All inserted");
+
+            return context;
         }
 
     }
