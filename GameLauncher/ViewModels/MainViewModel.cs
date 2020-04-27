@@ -10,10 +10,12 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using SystemTimer = System.Timers.Timer;
 
 namespace GameLauncher.ViewModels {
     public enum TemporaryInstallType { Installed, NotInstalled, UpdateRequired }
@@ -70,6 +72,17 @@ namespace GameLauncher.ViewModels {
             get { return _downloadFile; }
             set { _downloadFile = value; NotifyOfPropertyChange(() => DownloadFile); }
         }
+
+        private string errorMessage = "";
+
+        public string ErrorMessage {
+            get { return errorMessage; }
+            set {
+                errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+            }
+        }
+
 
         public bool IsDeleting { get; private set; }
 
@@ -145,6 +158,16 @@ namespace GameLauncher.ViewModels {
         #endregion
 
         #region Methods
+        void DisplayErrorMessage (string msg, float duration = 3000) {
+            SystemTimer timer = new SystemTimer(3000);
+            ErrorMessage = "msg";
+            timer.Elapsed += Timer_Elapsed;
+        }
+
+        private void Timer_Elapsed (object sender, System.Timers.ElapsedEventArgs e) {
+            ErrorMessage = "";
+        }
+
         public MainViewModel () {
             PatchClient.GetDownloadProgress += PatchClient_GetDownloadProgress;
             PatchClient.DownloadDone += PatchClient_DownloadDone;
@@ -192,60 +215,70 @@ namespace GameLauncher.ViewModels {
         /// </summary>
         /// <returns></returns>
         private BindableCollection<InstallationDataModel> GetAvailableInstalls (StringCollection paths) {
-            BindableCollection<InstallationDataModel> available = new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
-            if (SelectedInstall == null) {
-                if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
-                    foreach (InstallationDataModel installation in available) {
-                        if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
-                            SelectedInstall = installation;
-                            break;
+            BindableCollection<InstallationDataModel> available = new BindableCollection<InstallationDataModel>();
+            try {
+                available = new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
+                if (SelectedInstall == null) {
+                    if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
+                        foreach (InstallationDataModel installation in available) {
+                            if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
+                                SelectedInstall = installation;
+                                break;
+                            }
                         }
                     }
+                    if (SelectedInstall == null)
+                        SelectedInstall = available [ 0 ];
                 }
-                if (SelectedInstall == null)
-                    SelectedInstall = available [ 0 ];
+
+
             }
-
-
+            catch (Exception e) {
+                DisplayErrorMessage(e.Message);
+            }
             return available;
         }
 
         public void DownloadSelectedVersion () {
-            if (!IsDownloading) {
-                IsDownloading = true;
+            if (SelectedInstall.Status != InstallationStatus.IsInstalling) {
+                SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
                 DownloadProgressPercentage = 0.0f;
                 Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
-                SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
             }
         }
 
         private void PatchClient_GetDownloadProgress (object sender, DownloadProgressEventArgs e) {
-            DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
-            e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
-            DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
+            if (e.Version == SelectedInstall.VersionBranch) {
+                DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
+                e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
+                DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
+            }
+            else {
+                DownloadProgressPercentage = 0;
+                e.NextFileName = "";
+                DownloadProgress = "";
+            }
         }
 
         private void PatchClient_DownloadDone (InstallationDataModel installation) {
-            if (AvailableInstalls != null) {
-                int toChange = -1;
+            //if (AvailableInstalls != null) {
+            //    int toChange = -1;
 
-                for (int i = 0; i < _availableInstalls.Count; i++) {
-                    if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
-                        toChange = i;
-                        break;
-                    }
-                }
+            //    for (int i = 0; i < _availableInstalls.Count; i++) {
+            //        if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
+            //            toChange = i;
+            //            break;
+            //        }
+            //    }
 
-                if (toChange != -1)
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
-                        AvailableInstalls [ toChange ] = installation;
-                        SelectedInstall = AvailableInstalls [ toChange ];
-                    }));
-                }
-            
+            //    if (toChange != -1)
+            //        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
+            //            AvailableInstalls [ toChange ] = installation;
+            //            SelectedInstall = AvailableInstalls [ toChange ];
+            //        }));
+            //}
 
 
-            IsDownloading = false;
             DownloadFile = "";
             DownloadProgress = "";
             DownloadProgressPercentage = 100.0f;

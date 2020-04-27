@@ -3,6 +3,7 @@ using ConnectionHandlerLib;
 using DatabaseLib;
 using DatabaseREST.Models;
 using GlobalConfigs;
+using HelperTools;
 using Models;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
@@ -70,7 +71,7 @@ namespace ConsoleForTesting
 
             //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
             watch.Stop();
-            Console.WriteLine("Elapsed: " + watch.ElapsedMilliseconds);
+            Console.WriteLine(ConsoleExtension.AddTimestamp("Elapsed: " + watch.ElapsedMilliseconds));
             //Thread.Sleep(4000);
 
             //var h = PatchClient.CompleteCheck(new string[] {
@@ -228,23 +229,23 @@ namespace ConsoleForTesting
         //            Console.CursorLeft = 0;
         //            Console.CursorTop = 0;
 
-        //            Console.WriteLine("Actions available:");
-        //            Console.WriteLine("0. Update shown info");
-        //            Console.WriteLine("1. Check for installed versions");
-        //            Console.WriteLine("2. Test connection to server");
-        //            Console.WriteLine("3. Request available versions from server");
-        //            Console.WriteLine("4. Verify versions with server");
-        //            Console.WriteLine("5. Get missing files from server (VersionTest1)");
-        //            Console.WriteLine("6. Download missing files from server (VersionTest1)");
-        //            Console.WriteLine("7. Run full patch");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Actions available:");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("0. Update shown info");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("1. Check for installed versions");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("2. Test connection to server");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("3. Request available versions from server");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("4. Verify versions with server");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("5. Get missing files from server (VersionTest1)");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("6. Download missing files from server (VersionTest1)");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("7. Run full patch");
 
 
-        //            Console.WriteLine("\n----------------------------------\n");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("\n----------------------------------\n");
         //            PatchClientInfo(pClient);
 
 
-        //            Console.WriteLine("\n----------------------------------\n");
-        //            Console.WriteLine("Log:\n");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("\n----------------------------------\n");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Log:\n");
         //        }
 
         //        static void FullPatch(PatchClient client)
@@ -260,7 +261,7 @@ namespace ConsoleForTesting
         //            ConsoleKeyInfo key = new ConsoleKeyInfo();
 
         //            client.VersionsFromServerReceived += answerRecieved;
-        //            Console.WriteLine("Requesting versions from server!");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Requesting versions from server!");
         //            client.RequestAvailableVersions();
         //            while (!next)
         //            {
@@ -268,10 +269,10 @@ namespace ConsoleForTesting
         //            }
         //            client.VersionsFromServerReceived -= answerRecieved;
         //            next = false;
-        //            Console.WriteLine("Choose which version to patch");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Choose which version to patch");
         //            for (int i = 0; i < client.serverVersions.Length; i++)
         //            {
-        //                Console.WriteLine(i + 1 + ". " + client.serverVersions[i]);
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp(i + 1 + ". " + client.serverVersions[i]);
         //            }
         //            int choice = -1;
         //            while (!next)
@@ -292,16 +293,16 @@ namespace ConsoleForTesting
 
         //            next = false;
 
-        //            Console.WriteLine("Attempting to verify current intallation of: " + client.serverVersions[choice]);
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Attempting to verify current intallation of: " + client.serverVersions[choice]);
         //            if (client.CheckIfVersionExists(client.serverVersions[choice]))
         //            {
         //                var localVersion = client.GetVersionModel(client.serverVersions[choice]);
-        //                Console.WriteLine("A version of {0} exists locally", client.serverVersions[choice]);
-        //                Console.WriteLine("Verifying version with server");
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp("A version of {0} exists locally", client.serverVersions[choice]);
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp("Verifying version with server");
 
         //                client.VersionVerificationDone += answerRecieved;
         //                client.RequestVerifyVersion(client.serverVersions[choice]);
-        //                Console.WriteLine("Waiting for answer from server");
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp("Waiting for answer from server");
         //                while (!next)
         //                {
 
@@ -310,15 +311,15 @@ namespace ConsoleForTesting
 
         //                if (localVersion.Verified)
         //                {
-        //                    Console.WriteLine(localVersion.VersionName + " was VERIFIED by the server, patching DONE!");
-        //                    Console.WriteLine("Press any key to continue...");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp(localVersion.VersionName + " was VERIFIED by the server, patching DONE!");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Press any key to continue...");
         //                    Console.ReadKey();
         //                    return;
         //                }
         //                else
         //                {
-        //                    Console.WriteLine(localVersion.VersionName + " was NOT VERIFIED by the server, patching DONE!");
-        //                    Console.WriteLine("Requesting missing/broken files");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp(localVersion.VersionName + " was NOT VERIFIED by the server, patching DONE!");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Requesting missing/broken files");
         //                    client.MissingFileListReceived += answerRecieved;
         //                    next = false;
 
@@ -328,8 +329,8 @@ namespace ConsoleForTesting
 
         //                    }
         //                    client.MissingFileListReceived -= answerRecieved;
-        //                    Console.WriteLine("Missing files recieved!");
-        //                    Console.WriteLine("Attempting to download missing files");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Missing files recieved!");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Attempting to download missing files");
 
         //                    client.DownloadDone += answerRecieved;
         //                    next = false;
@@ -339,13 +340,13 @@ namespace ConsoleForTesting
 
         //                    }
         //                    client.DownloadDone -= answerRecieved;
-        //                    Console.WriteLine("Download done!");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Download done!");
 
-        //                    Console.WriteLine("Verifying version with server");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Verifying version with server");
         //                    client.VersionVerificationDone += answerRecieved;
         //                    next = false;
         //                    client.RequestVerifyVersion(localVersion.VersionName);
-        //                    Console.WriteLine("Waiting for answer from server");
+        //                    Console.WriteLine(ConsoleExtension.AddTimestamp("Waiting for answer from server");
         //                    while (!next)
         //                    {
 
@@ -353,14 +354,14 @@ namespace ConsoleForTesting
         //                    client.VersionVerificationDone -= answerRecieved;
         //                    if (client.GetVersionModel(localVersion.VersionName).Verified)
         //                    {
-        //                        Console.WriteLine(localVersion.VersionName + " was VERIFIED by the server, patching DONE!");
-        //                        Console.WriteLine("Press any key to continue...");
+        //                        Console.WriteLine(ConsoleExtension.AddTimestamp(localVersion.VersionName + " was VERIFIED by the server, patching DONE!");
+        //                        Console.WriteLine(ConsoleExtension.AddTimestamp("Press any key to continue...");
         //                        Console.ReadKey();
         //                        return;
         //                    }
         //                    else
         //                    {
-        //                        Console.WriteLine("Bohoo, didn't work");
+        //                        Console.WriteLine(ConsoleExtension.AddTimestamp("Bohoo, didn't work");
         //                    }
         //                }
         //            }
@@ -378,11 +379,11 @@ namespace ConsoleForTesting
         //                while (!next) { }
         //                client.DownloadDone -= answerRecieved;
 
-        //                Console.WriteLine("Verifying version with server");
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp("Verifying version with server");
         //                client.VersionVerificationDone += answerRecieved;
         //                next = false;
         //                client.RequestVerifyVersion(client.serverVersions[choice]);
-        //                Console.WriteLine("Waiting for answer from server");
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp("Waiting for answer from server");
         //                while (!next)
         //                {
 
@@ -396,14 +397,14 @@ namespace ConsoleForTesting
 
         //        static void PatchClientInfo(PatchClient client)
         //        {
-        //            Console.WriteLine("Information stored in patchclient:");
-        //            Console.WriteLine("Versions available on server: " + client.serverVersions.Length);
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Information stored in patchclient:");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Versions available on server: " + client.serverVersions.Length);
         //            for (int i = 0; i < client.serverVersions.Length; i++)
         //            {
-        //                Console.WriteLine(client.serverVersions[i]);
+        //                Console.WriteLine(ConsoleExtension.AddTimestamp(client.serverVersions[i]);
         //            }
-        //            Console.WriteLine("-----------------------------------");
-        //            Console.WriteLine("Locally found versions:" + client.InstalledVersions.Count);
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("-----------------------------------");
+        //            Console.WriteLine(ConsoleExtension.AddTimestamp("Locally found versions:" + client.InstalledVersions.Count);
         //            foreach (var item in client.InstalledVersions)
         //            {
         //                Console.Write(item.VersionName);

@@ -8,6 +8,10 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HelperTools\HelperTools.csproj" />
+  </ItemGroup>
   
   <PropertyGroup>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

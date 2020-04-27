@@ -15,6 +15,7 @@
     <ProjectReference Include="..\ChecksumHandler\ChecksumHandler\ChecksumHandler.csproj" />
     <ProjectReference Include="..\ConnectionHandler\ConnectionHandler.csproj" />
     <ProjectReference Include="..\GlobalConfigs\GlobalConfigs.csproj" />
+    <ProjectReference Include="..\HelperTools\HelperTools.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
