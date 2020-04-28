@@ -4,6 +4,20 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatabaseREST.Models
 {
+    public class intrusiveContextReadOnly : intrusiveContext
+    {
+        public intrusiveContextReadOnly(DbContextOptions<intrusiveContextReadOnly> options)
+            : base(options)
+        {
+        }
+
+
+        public override int SaveChanges()
+        {
+            throw new InvalidOperationException("This context is read only!");
+        }
+    }
+
     public partial class intrusiveContext : DbContext
     {
         public intrusiveContext()
@@ -12,6 +26,11 @@ namespace DatabaseREST.Models
 
         public intrusiveContext(DbContextOptions<intrusiveContext> options)
             : base(options)
+        {
+        }
+
+        protected intrusiveContext(DbContextOptions options)
+        : base(options)
         {
         }
 

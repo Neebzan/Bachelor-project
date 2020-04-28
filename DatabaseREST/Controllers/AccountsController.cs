@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatabaseREST.Models;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MySql.Data.MySqlClient;
 
 namespace DatabaseREST.Controllers
 {
@@ -15,10 +17,13 @@ namespace DatabaseREST.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly intrusiveContext _context;
+        private readonly intrusiveContextReadOnly _contextRead;
 
-        public AccountsController(intrusiveContext context)
+        public AccountsController(intrusiveContext context, intrusiveContextReadOnly contextRead)
         {
             _context = context;
+            _contextRead = contextRead;
+            
         }
 
         //[HttpGet]
@@ -27,10 +32,14 @@ namespace DatabaseREST.Controllers
         //    return _context.Accounts.OrderBy(u => u.AccountId).Take(1000).ToList();
         //}
 
+       
+
         [HttpGet]
         public ActionResult<Accounts> Get(string id)
         {
-            var acc = _context.Accounts.Find(id);
+            //var t = Request.Host;
+            //Console.WriteLine("Host test: "+ t);
+            var acc = _contextRead.Accounts.Find(id);
             if (acc == null)
                 return NotFound();
 

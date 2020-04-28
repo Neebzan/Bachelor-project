@@ -32,9 +32,15 @@ namespace DatabaseREST
         {
             //Sæt den dbContext der benyttes af DatabaseAPI'en + hent dens connectionstring fra appsettings.json
             services.AddDbContext<intrusiveContext>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionString"]));
+
+            services.AddDbContext<intrusiveContextReadOnly>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionStringReadOnly"]));
+
+
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            Console.WriteLine("TEST");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
