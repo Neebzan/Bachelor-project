@@ -49,14 +49,14 @@ namespace DatabaseREST.Controllers
         [Route("master")]
         public ActionResult<string> TestHostNameMaster()
         {
-            return GetHostName(_context.Database.GetDbConnection().ConnectionString)[1];
+            return GetHostName(_context.Database.GetDbConnection().ConnectionString)[1] + " - " + _contextRead.Database.GetDbConnection().ConnectionString;
         }
 
         [HttpGet]
         [Route("slave")]
         public ActionResult<string> TestHostNameSlave()
         {
-            return GetHostName(_contextRead.Database.GetDbConnection().ConnectionString)[1];
+            return GetHostName(_contextRead.Database.GetDbConnection().ConnectionString)[1] +" - "+ _contextRead.Database.GetDbConnection().ConnectionString;
         }
 
         [HttpGet]
