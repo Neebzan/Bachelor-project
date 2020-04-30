@@ -49,7 +49,7 @@ namespace DatabaseREST.Controllers
         [Route("master")]
         public ActionResult<string> TestHostNameMaster()
         {
-            return GetHostName(_context.Database.GetDbConnection().ConnectionString)[1] + " - " + _contextRead.Database.GetDbConnection().ConnectionString;
+            return GetHostName(_context.Database.GetDbConnection().ConnectionString)[1] + " - " + _context.Database.GetDbConnection().ConnectionString;
         }
 
         [HttpGet]
