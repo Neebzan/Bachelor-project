@@ -47,6 +47,22 @@ namespace DatabaseREST.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
+        public ActionResult<string> Login([FromHeader]string user, [FromHeader]string pw)
+        {
+
+            var acc = _contextRead.Accounts.Find(user);
+            if (acc == null)
+                return "Account not found";
+
+            if (acc.PasswordHash == pw)
+                return "Success!";
+
+            return "Password did not match!";
+
+        }
+
+        [HttpPost]
         public ActionResult<Accounts> PostAccount(Accounts acc)
         {
             //Check if account exists
