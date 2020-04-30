@@ -31,14 +31,14 @@ namespace GameLauncher.Views {
     /// </summary>
     public partial class MainWindow : Window {
         public Frame ContentFrame;
-        private Screen viewModel;
+        public Screen ViewModel;
 
 
         public MainWindow () {
             InitializeComponent();
 
-            viewModel = new MainViewModel();
-            this.DataContext = viewModel;
+            ViewModel = new MainViewModel();
+            this.DataContext = ViewModel;
 
 
             ContentFrame = frame;
@@ -47,8 +47,8 @@ namespace GameLauncher.Views {
             progress_bar.Visibility = Visibility.Hidden;
             Delete_Button.Visibility = Visibility.Hidden;
 
-            (viewModel as MainViewModel).DownloadProgressUpdated += OnDownloadProgressUpdated;
-            (viewModel as MainViewModel).SelectedInstallUpdated += OnSelectedInstallChanged;
+            (ViewModel as MainViewModel).DownloadProgressUpdated += OnDownloadProgressUpdated;
+            (ViewModel as MainViewModel).SelectedInstallUpdated += OnSelectedInstallChanged;
         }
 
         private void OnSelectedInstallChanged (InstallationDataModel installationDataModel) {
@@ -66,22 +66,22 @@ namespace GameLauncher.Views {
         }
 
         private void PlayInstallButton_Clicked (object sender, RoutedEventArgs e) {
-            switch ((viewModel as MainViewModel).SelectedInstall.Status) {
+            switch ((ViewModel as MainViewModel).SelectedInstall.Status) {
                 case InstallationStatus.NotInstalled:
                     using (var dialog = new winForms.FolderBrowserDialog() { RootFolder = Environment.SpecialFolder.Desktop, Description = "Please select where you want to install the game." }) {
                         winForms.DialogResult folderLocation = dialog.ShowDialog();
                         if (folderLocation == System.Windows.Forms.DialogResult.OK) {
                             string path = dialog.SelectedPath;
-                            path += "\\" + (viewModel as MainViewModel).SelectedInstall.VersionName;
-                            (viewModel as MainViewModel).SelectedInstall.InstallPath = path;
-                            (viewModel as MainViewModel).AddPath(path);
-                            (viewModel as MainViewModel).DownloadSelectedVersion();
+                            path += "\\" + (ViewModel as MainViewModel).SelectedInstall.VersionName;
+                            (ViewModel as MainViewModel).SelectedInstall.InstallPath = path;
+                            (ViewModel as MainViewModel).AddPath(path);
+                            (ViewModel as MainViewModel).DownloadSelectedVersion();
                         }
                     }
 
                     break;
                 case InstallationStatus.UpdateRequired:
-                    (viewModel as MainViewModel).DownloadSelectedVersion();
+                    (ViewModel as MainViewModel).DownloadSelectedVersion();
                     break;
                 default:
                     break;
@@ -90,8 +90,8 @@ namespace GameLauncher.Views {
         }
 
         private void Button_Click (object sender, RoutedEventArgs e) {
-            if (!(viewModel as MainViewModel).IsDeleting)
-                Task.Run(() => (viewModel as MainViewModel).Delete());
+            if (!(ViewModel as MainViewModel).IsDeleting)
+                Task.Run(() => (ViewModel as MainViewModel).Delete());
         }
     }
 }

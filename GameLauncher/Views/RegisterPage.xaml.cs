@@ -1,4 +1,6 @@
-﻿using GameLauncher.Properties;
+﻿using Caliburn.Micro;
+using GameLauncher.Properties;
+using GameLauncher.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,19 +23,25 @@ namespace GameLauncher.Views {
     /// Interaction logic for LoginPage.xaml
     /// </summary>
     public partial class RegisterPage : BasePage {
+        Screen viewModel;
+
         public RegisterPage () {
             InitializeComponent();
             spinner_imageawesome.Visibility = Visibility.Hidden;
+            viewModel = new RegisterViewModel();
         }
 
         private void register_button_Click (object sender, RoutedEventArgs e) {
+            if ((viewModel as RegisterViewModel).Register(username_textblock.Text, password_passwordBox.Password, email_textblock.Text)) {
+
+            }
             //spinner_imageawesome.Visibility = Visibility.Visible;
             //if (!string.IsNullOrEmpty(password_passwordBox.Password) && !string.IsNullOrEmpty(username_textblock.Text) && !string.IsNullOrEmpty(passwordConfirm_passwordBox.Password)) {
-            //    //if (Logic.ConvertToUnsecureString(password_passwordBox.SecurePassword).Contains(" ") ||
-            //    //    username_textblock.Text.Contains(" ")) {
-            //    //    //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "Entries must not contain spaces");
-            //    //    spinner_imageawesome.Visibility = Visibility.Hidden;
-            //    //}
+            //    if (.ConvertToUnsecureString(password_passwordBox.SecurePassword).Contains(" ") ||
+            //        username_textblock.Text.Contains(" ")) {
+            //        //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "Entries must not contain spaces");
+            //        spinner_imageawesome.Visibility = Visibility.Hidden;
+            //    }
             //    else {
             //        SecureString password = password_passwordBox.SecurePassword;
             //        SecureString confirmPass = passwordConfirm_passwordBox.SecurePassword;
@@ -49,16 +57,16 @@ namespace GameLauncher.Views {
 
         private async void CreateUserRequest (SecureString password, SecureString confirmPass, string username) {
             //if (Logic.CheckPassUniformity(password, confirmPass)) {
-                //if (await Logic.SendRegisterRequest(username, password)) {
-                //    Settings.Default.username = username;
-                //    Settings.Default.Save();
+            //if (await Logic.SendRegisterRequest(username, password)) {
+            //    Settings.Default.username = username;
+            //    Settings.Default.Save();
 
-                //    Dispatcher.Invoke(DispatcherPriority.Background,
-                //    new Action(async () => {
-                //        await AnimateOut();
-                //        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoginPage());
-                //    }));
-                //}
+            //    Dispatcher.Invoke(DispatcherPriority.Background,
+            //    new Action(async () => {
+            //        await AnimateOut();
+            //        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoginPage());
+            //    }));
+            //}
             //}
             //else {
             //    Dispatcher.Invoke(DispatcherPriority.Background,
