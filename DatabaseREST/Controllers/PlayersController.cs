@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Primitives;
 
 namespace DatabaseREST.Controllers
 {
@@ -24,41 +25,57 @@ namespace DatabaseREST.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Players> Get(string id, bool full)
+        public ActionResult<Players> Get(string id, bool full, [FromHeader]string token)
         {
-            Players player = null;
+            if (Token.VerifyToken(token, "access"))
+            {
+                Players player = null;
 
-            if (full)
-                player = _context.Players
-                    .Include(p => p.HasLearned)
-                        .ThenInclude(hl => hl.AbilityNameNavigation)
-                    .Include(p => p.Wears)
-                    .Include(p => p.Items)
-                    .Include(p => p.PlayedMatch)
-                    .SingleOrDefault(x => x.PlayerId == id);
+                if (full)
+                    player = _context.Players
+                        .Include(p => p.HasLearned)
+                            .ThenInclude(hl => hl.AbilityNameNavigation)
+                        .Include(p => p.Wears)
+                        .Include(p => p.Items)
+                        .Include(p => p.PlayedMatch)
+                        .SingleOrDefault(x => x.PlayerId == id);
+                else
+                    player = _context.Players.Find(id);
+
+                if (player == null)
+                    return NotFound();
+
+                return player;
+            }
             else
-                player = _context.Players.Find(id);
-
-            if (player == null)
-                return NotFound();
-
-            return player;
+                return Unauthorized("Token invalid or expired!");
         }
 
 
         [HttpPut]
-        public ActionResult Put(Players player)
+        public ActionResult Put(Players player, [FromHeader]string token)
         {
-            var existingPlayer = _context.Abilities.Find(player.PlayerId);
-            if (existingPlayer != null)
+            if (Token.VerifyToken(token, "access"))
             {
-                //Mark as existing and has been modified
-                _context.Entry(player).State = EntityState.Modified;
-                //Save
-                _context.SaveChanges();
-                return Ok();
+                var jwtToken = Token.GetTokenFromString(token);
+                //Check if token is associated with the player
+                if (jwtToken.Subject == player.PlayerId)
+                {
+                    var existingPlayer = _context.Abilities.Find(player.PlayerId);
+                    if (existingPlayer != null)
+                    {
+                        //Mark as existing and has been modified
+                        _context.Entry(player).State = EntityState.Modified;
+                        //Save
+                        _context.SaveChanges();
+                        return Ok();
+                    }
+                    return BadRequest();
+                }
+                return Unauthorized("Token didn't match the requested ressource!");
             }
-            return BadRequest();
+            else
+                return Unauthorized("Token invalid or expired!");
         }
 
         [HttpPost]

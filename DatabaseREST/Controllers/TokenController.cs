@@ -25,47 +25,28 @@ namespace DatabaseREST.Controllers
         {
             _context = context;
             _contextRead = contextRead;
-            
-        }       
 
-        //[HttpPost]
-        //[Route("refresh")]
-        //public ActionResult<string> Login(string refreshToken)
-        //{
+        }
 
-        //    var accTemp = _contextRead.Accounts.Find(acc.AccountId);
-        //    if (accTemp == null)
-        //    {
-        //        return NoContent();
-        //    }
 
-        //    if (acc.PasswordHash == accTemp.PasswordHash)
-        //    {
-        //        //Refresh token
-        //        ClaimsIdentity refClaims = new ClaimsIdentity();
-        //        refClaims.AddClaim(new Claim("sub", acc.AccountId));
-        //        refClaims.AddClaim(new Claim("aud", "refresh"));
 
-        //        string refToken = Token.GenerateToken(refClaims, 14, 0, 0).RawData;
-                
-        //        //Access token
-        //        ClaimsIdentity accClaims = new ClaimsIdentity();
-        //        accClaims.AddClaim(new Claim("sub", acc.AccountId));
-        //        accClaims.AddClaim(new Claim("aud", "access"));
+        [HttpPost]
+        public ActionResult<string> NewAccesstoken([FromHeader]string token)
+        {
 
-        //        string accToken = Token.GenerateToken(accClaims, 0, 0, 10).RawData;
+            string newAccessToken = Token.NewAccessToken(token);
 
-        //        TokenModel tokens = new TokenModel()
-        //        {
-        //            AccessToken = accToken,
-        //            RefreshToken = refToken
-        //        };
+            if (newAccessToken != null)
+            {
+                TokenModel tokens = new TokenModel()
+                {
+                    AccessToken = newAccessToken
+                };
 
-        //        return JsonConvert.SerializeObject(tokens);
-        //    }
-            
-        //    return Unauthorized("Password did not match!");
+                return JsonConvert.SerializeObject(tokens);
+            }
 
-        //}
+            return Unauthorized("Refresh token expired or invalid!");
+        }
     }
 }

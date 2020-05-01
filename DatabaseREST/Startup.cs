@@ -40,13 +40,13 @@ namespace DatabaseREST
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            Console.WriteLine("TEST");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMvc();
+            Console.WriteLine("THIS IS NEW BUILD!!!!!!!");
 
             //var kfdkf = Token.GenerateToken(null, 1, 0, 0);
 

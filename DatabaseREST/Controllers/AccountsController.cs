@@ -25,7 +25,7 @@ namespace DatabaseREST.Controllers
         {
             _context = context;
             _contextRead = contextRead;
-            
+
         }
 
         //[HttpGet]
@@ -34,18 +34,22 @@ namespace DatabaseREST.Controllers
         //    return _context.Accounts.OrderBy(u => u.AccountId).Take(1000).ToList();
         //}
 
-       
+
 
         [HttpGet]
-        public ActionResult<Accounts> Get(string id)
+        public ActionResult<Accounts> Get(string id, [FromHeader]string token)
         {
-            //var t = Request.Host;
-            //Console.WriteLine("Host test: "+ t);
-            var acc = _contextRead.Accounts.Find(id);
-            if (acc == null)
-                return NotFound();
+            if (Token.VerifyToken(token,"access"))
+            {
+                var acc = _contextRead.Accounts.Find(id);
+                if (acc == null)
+                    return NotFound();
 
-            return acc;
+                return acc;
+            }
+            else
+                return Unauthorized("Token invalid or expired!");
+
         }
 
         [HttpPost]
@@ -60,30 +64,16 @@ namespace DatabaseREST.Controllers
             }
 
             if (acc.PasswordHash == accTemp.PasswordHash)
-            {
-                //Refresh token
-                ClaimsIdentity refClaims = new ClaimsIdentity();
-                refClaims.AddClaim(new Claim("sub", acc.AccountId));
-                refClaims.AddClaim(new Claim("aud", "refresh"));
-
-                string refToken = Token.GenerateToken(refClaims, 14, 0, 0).RawData;
-                
-                //Access token
-                ClaimsIdentity accClaims = new ClaimsIdentity();
-                accClaims.AddClaim(new Claim("sub", acc.AccountId));
-                accClaims.AddClaim(new Claim("aud", "access"));
-
-                string accToken = Token.GenerateToken(accClaims, 0, 0, 10).RawData;
-
+            {   
                 TokenModel tokens = new TokenModel()
                 {
-                    AccessToken = accToken,
-                    RefreshToken = refToken
+                    AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(15)),
+                    RefreshToken = Token.GenerateToken(acc.AccountId, "refresh", DateTime.UtcNow.AddDays(14).AddSeconds(0))
                 };
 
                 return JsonConvert.SerializeObject(tokens);
             }
-            
+
             return Unauthorized("Password did not match!");
 
         }
