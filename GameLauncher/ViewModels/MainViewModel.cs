@@ -158,9 +158,11 @@ namespace GameLauncher.ViewModels {
         #endregion
 
         #region Methods
-        void DisplayErrorMessage (string msg, float duration = 3000) {
-            SystemTimer timer = new SystemTimer(3000);
-            ErrorMessage = "msg";
+        public void DisplayErrorMessage (string msg, float duration = 3000) {
+            SystemTimer timer = new SystemTimer(duration);
+            timer.Start();
+
+            ErrorMessage = msg;
             timer.Elapsed += Timer_Elapsed;
         }
 
