@@ -48,6 +48,9 @@ namespace DatabaseREST
         {
             app.UseMvc();
 
+            //var kfdkf = Token.GenerateToken(null, 1, 0, 0);
+
+
             //if (env.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();

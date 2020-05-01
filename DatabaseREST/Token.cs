@@ -13,21 +13,20 @@ namespace DatabaseREST
     public static class Token
     {
 
-        private static string _secretKey = "SomeSecretKey";
+        private static string _secretKey = "SomeSecrffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
 
-        private static JwtSecurityToken GenerateToken(ClaimsIdentity claims, int days = 0, int hours = 0, int minutes = 0)
+        public static JwtSecurityToken GenerateToken(ClaimsIdentity claims, int days = 0, int hours = 0, int minutes = 0)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
-            DateTime validDuration = DateTime.UtcNow;
-            validDuration.AddDays(days);
-            validDuration.AddHours(hours);
-            validDuration.AddMinutes(minutes);
+            DateTime validDuration = DateTime.UtcNow.AddDays(days).AddHours(hours).AddMinutes(minutes);
+
+            SigningCredentials sCredentials = new SigningCredentials(GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
 
             var token = tokenHandler.CreateJwtSecurityToken(
                 expires: validDuration,
                 subject: claims,
-                signingCredentials: new SigningCredentials(GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256Signature)
+                signingCredentials: sCredentials
                 );
 
             return token;
@@ -60,17 +59,6 @@ namespace DatabaseREST
         /// <typeparam name="T"></typeparam>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static T GetModelFromToken<T>(JwtSecurityToken token)
-        {
-            return JsonConvert.DeserializeObject<T>(token.Claims.Where(c => c.Type == typeof(T).Name).Select(c => c.Value).FirstOrDefault().ToString());
-        }
-
-        /// <summary>
-        /// Gets the deserialized object from a JWT claim
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="token"></param>
-        /// <returns></returns>
         public static T GetModelFromToken<T>(string tokenString)
         {
             JwtSecurityToken token = new JwtSecurityToken(tokenString);
@@ -82,8 +70,6 @@ namespace DatabaseREST
             JwtSecurityToken token = new JwtSecurityToken(tokenString);
 
             return token.Claims.ToArray();
-
-            //return JsonConvert.DeserializeObject<T>(token.Claims.Where(c => c.Type == typeof(T).Name).Select(c => c.Value).FirstOrDefault().ToString());
         }
 
         /// <summary>
@@ -103,7 +89,6 @@ namespace DatabaseREST
             }
             catch (Exception e)
             {
-                //Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -111,7 +96,7 @@ namespace DatabaseREST
 
         private static SecurityKey GetSymmetricSecurityKey()
         {
-            byte[] symKey = Encoding.Default.GetBytes(_secretKey);
+            byte[] symKey = Encoding.ASCII.GetBytes(_secretKey);
             return new SymmetricSecurityKey(symKey);
         }
 

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using DatabaseREST.DBModels;
 using DatabaseREST.Models;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 
 namespace DatabaseREST.Controllers
 {
@@ -48,17 +51,41 @@ namespace DatabaseREST.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult<string> Login([FromHeader]string user, [FromHeader]string pw)
+        public ActionResult<string> Login(Accounts acc)
         {
 
-            var acc = _contextRead.Accounts.Find(user);
-            if (acc == null)
-                return "Account not found";
+            var accTemp = _contextRead.Accounts.Find(acc.AccountId);
+            if (accTemp == null)
+            {
+                return NoContent();
+            }
 
-            if (acc.PasswordHash == pw)
-                return "Success!";
+            if (acc.PasswordHash == accTemp.PasswordHash)
+            {
+                //Refresh token
+                ClaimsIdentity refClaims = new ClaimsIdentity();
+                refClaims.AddClaim(new Claim("sub", acc.AccountId));
+                refClaims.AddClaim(new Claim("aud", "refresh"));
 
-            return "Password did not match!";
+                string refToken = Token.GenerateToken(refClaims, 14, 0, 0).RawData;
+                
+                //Access token
+                ClaimsIdentity accClaims = new ClaimsIdentity();
+                accClaims.AddClaim(new Claim("sub", acc.AccountId));
+                accClaims.AddClaim(new Claim("aud", "access"));
+
+                string accToken = Token.GenerateToken(accClaims, 0, 0, 10).RawData;
+
+                TokenModel tokens = new TokenModel()
+                {
+                    AccessToken = accToken,
+                    RefreshToken = refToken
+                };
+
+                return JsonConvert.SerializeObject(tokens);
+            }
+            
+            return Unauthorized("Password did not match!");
 
         }
 
