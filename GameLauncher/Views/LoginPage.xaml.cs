@@ -47,7 +47,7 @@ namespace GameLauncher.Views {
                 Dispatcher.Invoke(DispatcherPriority.Background,
                     new Action(async () => {
                         await AnimateOut();
-                        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoggingInPage(password, username, rememberUsername, false));
+                        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoggingInPage(password, username));
                     }));
             }
             else {

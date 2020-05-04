@@ -94,8 +94,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BasePage.cs" />
+    <Compile Include="Views\BasePage.cs" />
     <Compile Include="BaseProgressBar.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="ViewModels\LoggingInViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="Views\LoggingInPage.xaml.cs">

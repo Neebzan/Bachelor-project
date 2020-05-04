@@ -23,63 +23,67 @@ namespace GameLauncher.Views {
     /// Interaction logic for LoginPage.xaml
     /// </summary>
     public partial class RegisterPage : BasePage {
-        Screen viewModel;
+        Screen _viewModel;
 
         public RegisterPage () {
             InitializeComponent();
             spinner_imageawesome.Visibility = Visibility.Hidden;
-            viewModel = new RegisterViewModel();
+            _viewModel = new RegisterViewModel();
+            this.DataContext = _viewModel;
         }
 
-        private void register_button_Click (object sender, RoutedEventArgs e) {
-            if ((viewModel as RegisterViewModel).Register(username_textblock.Text, password_passwordBox.Password, email_textblock.Text)) {
+        private async void register_button_Click (object sender, RoutedEventArgs e) {
+            spinner_imageawesome.Visibility = Visibility.Visible;
 
+            //If required fields are not empty
+            if (!string.IsNullOrEmpty(password_passwordBox.Password) && !string.IsNullOrEmpty(username_textblock.Text) && !string.IsNullOrEmpty(passwordConfirm_passwordBox.Password)) {
+                if (Utility.ConvertToUnsecureString(password_passwordBox.SecurePassword).Contains(" ") || username_textblock.Text.Contains(" ") || email_textblock.Text.Contains(" ")) {
+                    ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage("Required fields cannot contain spaces");
+                    spinner_imageawesome.Visibility = Visibility.Hidden;
+                }
+                else {
+                    SecureString password = password_passwordBox.SecurePassword;
+                    SecureString confirmPass = passwordConfirm_passwordBox.SecurePassword;
+                    string username = username_textblock.Text;
+                    string email = email_textblock.Text;
+                    string firstName = "";
+                    string lastName = "";
+                    await CreateUserRequest(password, confirmPass, username, email, firstName, lastName);
+                }
             }
-            //spinner_imageawesome.Visibility = Visibility.Visible;
-            //if (!string.IsNullOrEmpty(password_passwordBox.Password) && !string.IsNullOrEmpty(username_textblock.Text) && !string.IsNullOrEmpty(passwordConfirm_passwordBox.Password)) {
-            //    if (.ConvertToUnsecureString(password_passwordBox.SecurePassword).Contains(" ") ||
-            //        username_textblock.Text.Contains(" ")) {
-            //        //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "Entries must not contain spaces");
-            //        spinner_imageawesome.Visibility = Visibility.Hidden;
-            //    }
-            //    else {
-            //        SecureString password = password_passwordBox.SecurePassword;
-            //        SecureString confirmPass = passwordConfirm_passwordBox.SecurePassword;
-            //        string username = username_textblock.Text;
-            //        //Task.Factory.StartNew(() => CreateUserRequest(password, confirmPass, username));
-            //    }
-            //}
-            //else {
-            //    //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "You must fill out all fields");
-            //    spinner_imageawesome.Visibility = Visibility.Hidden;
-            //}
+            else {
+                //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "You must fill out all fields");
+                ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage("You must fill out all required fields");
+                spinner_imageawesome.Visibility = Visibility.Hidden;
+            }
         }
 
-        private async void CreateUserRequest (SecureString password, SecureString confirmPass, string username) {
-            //if (Logic.CheckPassUniformity(password, confirmPass)) {
-            //if (await Logic.SendRegisterRequest(username, password)) {
-            //    Settings.Default.username = username;
-            //    Settings.Default.Save();
+        private async Task CreateUserRequest (SecureString password, SecureString confirmPass, string userID, string email, string firstName, string lastName) {
+            //Convert to unsecure
+            string unsecurePassword = Utility.ConvertToUnsecureString(password);
+            string unsecureConfirmPass = Utility.ConvertToUnsecureString(confirmPass);
 
-            //    Dispatcher.Invoke(DispatcherPriority.Background,
-            //    new Action(async () => {
-            //        await AnimateOut();
-            //        (Application.Current.MainWindow as MainWindow).ContentFrame.NavigationService.Navigate(new LoginPage());
-            //    }));
-            //}
-            //}
-            //else {
-            //    Dispatcher.Invoke(DispatcherPriority.Background,
-            //    new Action(() => {
-            //        spinner_imageawesome.Visibility = Visibility.Hidden;
-            //        //(Application.Current.MainWindow as MainWindow).DisplayError("Create user request failed", "Your password entry does not match the confirm password entry");
-            //    }));
+            //Check for uniformity
+            if (RegisterViewModel.CheckPassUniformity(unsecurePassword, unsecureConfirmPass)) {
+                if (await (_viewModel as RegisterViewModel).Register(userID, email, unsecurePassword)) {
+                    Settings.Default.Username = userID;
+                    Settings.Default.Save();
 
-            //}
-            //Dispatcher.Invoke(DispatcherPriority.Background,
-            //new Action(() => {
-            //    spinner_imageawesome.Visibility = Visibility.Hidden;
-            //}));
+                    Dispatcher.Invoke(DispatcherPriority.Background,
+                    new Action(async () => {
+                        await AnimateOut();
+                        (Application.Current.MainWindow as MainWindow).frame.NavigationService.Navigate(new LoginPage());
+                    }));
+                }
+            }
+            else {
+                spinner_imageawesome.Visibility = Visibility.Hidden;
+                ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage("The passwords did not match");
+            }
+            Dispatcher.Invoke(DispatcherPriority.Background,
+            new Action(() => {
+                spinner_imageawesome.Visibility = Visibility.Hidden;
+            }));
         }
 
         private async void return_button_Click (object sender, RoutedEventArgs e) {

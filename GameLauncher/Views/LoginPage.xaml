@@ -19,7 +19,7 @@
         <StackPanel Orientation="Horizontal" Height="46">
             <Button Name="login_button" Content="Login" Width="100" Height="30" FontWeight="Medium" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,0" Click="login_button_Click"/>
             <Button Name="register_button" Content="or create and account" FontWeight="Light" Style="{StaticResource BaseButtonStyleNoBackground}" Margin="5,10,20,0" Grid.Row="7" Click="register_button_Click"/>
-            <fa:ImageAwesome x:Name="spinner_imageawesome" Opacity=".8" Margin="20,10,20,0"/>
+            <fa:ImageAwesome x:Name="spinner_imageawesome" Opacity=".8" Margin="20,10,20,0" Foreground="White"/>
         </StackPanel>
     </StackPanel>
 </local:BasePage>
