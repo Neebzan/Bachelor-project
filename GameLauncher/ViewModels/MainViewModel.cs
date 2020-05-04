@@ -37,8 +37,6 @@ namespace GameLauncher.ViewModels {
             }
         }
 
-
-
         private float _downloadProgressPercentage;
         public float DownloadProgressPercentage {
             get { return _downloadProgressPercentage; }
@@ -49,7 +47,6 @@ namespace GameLauncher.ViewModels {
             }
         }
 
-
         private string _downloadProgress = "";
         public string DownloadProgress {
             get { return _downloadProgress; }
@@ -59,7 +56,6 @@ namespace GameLauncher.ViewModels {
             }
         }
 
-
         private string _downloadFile = "";
         public string DownloadFile {
             get { return _downloadFile; }
@@ -67,7 +63,6 @@ namespace GameLauncher.ViewModels {
         }
 
         private string errorMessage = "";
-
         public string ErrorMessage {
             get { return errorMessage; }
             set {
@@ -75,7 +70,6 @@ namespace GameLauncher.ViewModels {
                 NotifyOfPropertyChange(() => ErrorMessage);
             }
         }
-
 
         public bool IsDeleting { get; private set; }
 
@@ -155,18 +149,6 @@ namespace GameLauncher.ViewModels {
         #endregion
 
         #region Methods
-        public void DisplayErrorMessage (string msg, float duration = 3000) {
-            SystemTimer timer = new SystemTimer(duration);
-            timer.Start();
-
-            ErrorMessage = msg;
-            timer.Elapsed += Timer_Elapsed;
-        }
-
-        private void Timer_Elapsed (object sender, System.Timers.ElapsedEventArgs e) {
-            ErrorMessage = "";
-        }
-
         public MainViewModel () {
             PatchClient.GetDownloadProgress += PatchClient_GetDownloadProgress;
             PatchClient.DownloadDone += PatchClient_DownloadDone;
@@ -177,6 +159,27 @@ namespace GameLauncher.ViewModels {
                 IssueAutoLogin();
             }
 
+        }
+
+        /// <summary>
+        /// Sets an error to display for a duration of time
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="duration"></param>
+        public void DisplayErrorMessage (string msg, float duration = 3000) {
+            SystemTimer timer = new SystemTimer(duration);
+            timer.Start();
+
+            ErrorMessage = msg;
+            timer.Elapsed += Timer_Elapsed;
+        }
+        /// <summary>
+        /// Wipes error message
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Timer_Elapsed (object sender, System.Timers.ElapsedEventArgs e) {
+            ErrorMessage = "";
         }
 
         private void IssueAutoLogin () {
