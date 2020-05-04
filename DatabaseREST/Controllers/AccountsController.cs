@@ -39,13 +39,40 @@ namespace DatabaseREST.Controllers
         [HttpGet]
         public ActionResult<Accounts> Get(string id, [FromHeader]string token)
         {
-            if (Token.VerifyToken(token,"access"))
+            if (Token.VerifyToken(token, "access"))
             {
-                var acc = _contextRead.Accounts.Find(id);
-                if (acc == null)
-                    return NotFound();
+                var jwtToken = Token.GetTokenFromString(token);
+                //Check if token is associated with the requested player
+                if (jwtToken.Subject == id)
+                {
 
-                return acc;
+                    //var acc = _contextRead.Accounts                        
+                    //    .Include(p => p.Players)
+                    //    .AsNoTracking()
+                    //    .SingleOrDefault(x => x.AccountId == id);
+
+                    var acc = _contextRead.Accounts.Where(x => x.AccountId == id)
+                        .Include(p => p.Players)
+                        .AsNoTracking()
+                        .Select(x => new Accounts
+                        {
+                            AccountId = x.AccountId,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            Players = x.Players
+                        }).SingleOrDefault();
+
+                    if (acc == null)
+                        return NotFound();
+
+
+                    return acc;
+                }
+                else
+                {
+                    return new Accounts() { /*AccountId = acc.AccountId, Players = acc.Players */};
+                }
             }
             else
                 return Unauthorized("Token invalid or expired!");
@@ -64,7 +91,7 @@ namespace DatabaseREST.Controllers
             }
 
             if (acc.PasswordHash == accTemp.PasswordHash)
-            {   
+            {
                 TokenModel tokens = new TokenModel()
                 {
                     AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(15)),

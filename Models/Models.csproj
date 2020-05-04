@@ -9,19 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\DatabaseREST\Models\Abilities.cs" Link="DBModels\Abilities.cs" />
-    <Compile Include="..\DatabaseREST\Models\Accounts.cs" Link="DBModels\Accounts.cs" />
-    <Compile Include="..\DatabaseREST\Models\HasLearned.cs" Link="DBModels\HasLearned.cs" />
-    <Compile Include="..\DatabaseREST\Models\intrusiveContext.cs" Link="DBModels\intrusiveContext.cs" />
-    <Compile Include="..\DatabaseREST\Models\ItemColors.cs" Link="DBModels\ItemColors.cs" />
-    <Compile Include="..\DatabaseREST\Models\Items.cs" Link="DBModels\Items.cs" />
-    <Compile Include="..\DatabaseREST\Models\ItemTypes.cs" Link="DBModels\ItemTypes.cs" />
-    <Compile Include="..\DatabaseREST\Models\Maps.cs" Link="DBModels\Maps.cs" />
-    <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="DBModels\Matches.cs" />
-    <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="DBModels\PlayedMatch.cs" />
-    <Compile Include="..\DatabaseREST\Models\Players.cs" Link="DBModels\Players.cs" />
-    <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="DBModels\Testtable.cs" />
-    <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="DBModels\Wears.cs" />
+    <Compile Include="..\DatabaseREST\Models\Abilities.cs" Link="Models\Abilities.cs" />
+    <Compile Include="..\DatabaseREST\Models\Accounts.cs" Link="Models\Accounts.cs" />
+    <Compile Include="..\DatabaseREST\Models\HasLearned.cs" Link="Models\HasLearned.cs" />
+    <Compile Include="..\DatabaseREST\Models\intrusiveContext.cs" Link="Models\intrusiveContext.cs" />
+    <Compile Include="..\DatabaseREST\Models\ItemColors.cs" Link="Models\ItemColors.cs" />
+    <Compile Include="..\DatabaseREST\Models\Items.cs" Link="Models\Items.cs" />
+    <Compile Include="..\DatabaseREST\Models\ItemTypes.cs" Link="Models\ItemTypes.cs" />
+    <Compile Include="..\DatabaseREST\Models\Maps.cs" Link="Models\Maps.cs" />
+    <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="Models\Matches.cs" />
+    <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="Models\PlayedMatch.cs" />
+    <Compile Include="..\DatabaseREST\Models\Players.cs" Link="Models\Players.cs" />
+    <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="Models\Testtable.cs" />
+    <Compile Include="..\DatabaseREST\Models\TokenModel.cs" Link="Models\TokenModel.cs" />
+    <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="Models\Wears.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 <PropertyGroup>
