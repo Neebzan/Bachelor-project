@@ -13,22 +13,33 @@ using System.Security;
 using System.Runtime.InteropServices;
 
 namespace GameLauncher.ViewModels {
-    class RegisterViewModel : Screen {
+    class LoggingInViewModel : Screen {
 
-        public async Task<bool> Register (string userID, string email, string passwordRaw, string firstName = "Default", string lastName = "Default") {
+        private string _username;
+        private string _password;
+
+        public LoggingInViewModel (string username, SecureString passwordRaw) {
+            try {
+                _username = username;
+                _password = Utility.ConvertToUnsecureString(passwordRaw);
+            }
+            catch (Exception e) {
+                //Throw for now, should be handleded
+                throw;
+            }
+        }
+
+        public async Task<bool> Login () {
 
             RestClient client = new RestClient("http://212.10.51.254:30830/api");
-            RestRequest request = new RestRequest("accounts/", Method.POST);
+            RestRequest request = new RestRequest("accounts/login", Method.POST);
 
             //hash password
-            string password = Utility.HashedString(passwordRaw);
+            string password = Utility.HashedString(_password);
 
             //Create object
             Accounts account = new Accounts() {
-                AccountId = userID,
-                Email = email,
-                FirstName = firstName,
-                LastName = lastName,
+                AccountId = _username,
                 PasswordHash = password
             };
 
@@ -37,10 +48,11 @@ namespace GameLauncher.ViewModels {
 
             try {
                 var response = await client.ExecuteAsync(request, cancellationTokenSource.Token);
-                
-                // Created
-                if (response.StatusCode == System.Net.HttpStatusCode.Created)
+
+                // Logged in
+                if (response.StatusCode == System.Net.HttpStatusCode.OK) {
                     return true;
+                }
 
                 // Already exists
                 else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
@@ -57,15 +69,6 @@ namespace GameLauncher.ViewModels {
             }
 
             return false;
-        }
-
-
-
-        public static bool CheckPassUniformity (string password, string confirmPass) {
-            if (password == confirmPass)
-                return true;
-            else
-                return false;
         }
     }
 }
