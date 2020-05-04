@@ -22,6 +22,7 @@
     <Compile Include="..\DatabaseREST\Models\Players.cs" Link="DBModels\Players.cs" />
     <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="DBModels\Testtable.cs" />
     <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="DBModels\Wears.cs" />
+    <Compile Include="..\DatabaseREST\Token.cs" Link="Token.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -39,13 +39,35 @@ namespace DatabaseREST.Controllers
         [HttpGet]
         public ActionResult<Accounts> Get(string id, [FromHeader]string token)
         {
-            if (Token.VerifyToken(token,"access"))
+            if (Token.VerifyToken(token, "access"))
             {
-                var acc = _contextRead.Accounts.Find(id);
-                if (acc == null)
-                    return NotFound();
+                var jwtToken = Token.GetTokenFromString(token);
+                //Check if token is associated with the requested player
+                if (jwtToken.Subject == id)
+                {
+                    //var acc = _contextRead.Accounts
+                    //    .Include(p => p.Players)
+                    //    .SingleOrDefault(x => x.AccountId == id);
 
-                return acc;
+                    Accounts acc = (Accounts)_contextRead.Accounts.Where(x => x.AccountId == id)
+                        .Include(p => p.Players)
+                        .Select(x => new
+                        {
+                            AccountId = x.AccountId
+                            
+
+                        });
+
+                    if (acc == null)
+                        return NotFound();
+
+
+                    return acc;
+                }
+                else
+                {
+                    return new Accounts() { /*AccountId = acc.AccountId, Players = acc.Players */};
+                }
             }
             else
                 return Unauthorized("Token invalid or expired!");
@@ -64,7 +86,7 @@ namespace DatabaseREST.Controllers
             }
 
             if (acc.PasswordHash == accTemp.PasswordHash)
-            {   
+            {
                 TokenModel tokens = new TokenModel()
                 {
                     AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(15)),

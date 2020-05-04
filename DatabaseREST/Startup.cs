@@ -46,7 +46,7 @@ namespace DatabaseREST
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMvc();
-            Console.WriteLine("THIS IS NEW BUILD!!!!!!!");
+            Console.WriteLine("INCLUDING PLAYERSZZZ");
 
             //var kfdkf = Token.GenerateToken(null, 1, 0, 0);
 
