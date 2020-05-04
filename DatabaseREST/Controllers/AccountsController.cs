@@ -45,18 +45,23 @@ namespace DatabaseREST.Controllers
                 //Check if token is associated with the requested player
                 if (jwtToken.Subject == id)
                 {
-                    //var acc = _contextRead.Accounts
+
+                    //var acc = _contextRead.Accounts                        
                     //    .Include(p => p.Players)
+                    //    .AsNoTracking()
                     //    .SingleOrDefault(x => x.AccountId == id);
 
-                    Accounts acc = (Accounts)_contextRead.Accounts.Where(x => x.AccountId == id)
+                    var acc = _contextRead.Accounts.Where(x => x.AccountId == id)
                         .Include(p => p.Players)
-                        .Select(x => new
+                        .AsNoTracking()
+                        .Select(x => new Accounts
                         {
-                            AccountId = x.AccountId
-                            
-
-                        });
+                            AccountId = x.AccountId,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            Email = x.Email,
+                            Players = x.Players
+                        }).SingleOrDefault();
 
                     if (acc == null)
                         return NotFound();
