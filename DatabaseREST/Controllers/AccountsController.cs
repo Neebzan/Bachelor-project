@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DatabaseREST.Models;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 
 namespace DatabaseREST.Controllers
 {
@@ -23,7 +25,7 @@ namespace DatabaseREST.Controllers
         {
             _context = context;
             _contextRead = contextRead;
-            
+
         }
 
         //[HttpGet]
@@ -32,33 +34,47 @@ namespace DatabaseREST.Controllers
         //    return _context.Accounts.OrderBy(u => u.AccountId).Take(1000).ToList();
         //}
 
-       
+
 
         [HttpGet]
-        public ActionResult<Accounts> Get(string id)
+        public ActionResult<Accounts> Get(string id, [FromHeader]string token)
         {
-            //var t = Request.Host;
-            //Console.WriteLine("Host test: "+ t);
-            var acc = _contextRead.Accounts.Find(id);
-            if (acc == null)
-                return NotFound();
+            if (Token.VerifyToken(token,"access"))
+            {
+                var acc = _contextRead.Accounts.Find(id);
+                if (acc == null)
+                    return NotFound();
 
-            return acc;
+                return acc;
+            }
+            else
+                return Unauthorized("Token invalid or expired!");
+
         }
 
         [HttpPost]
         [Route("login")]
-        public ActionResult<string> Login([FromHeader]string user, [FromHeader]string pw)
+        public ActionResult<string> Login(Accounts acc)
         {
 
-            var acc = _contextRead.Accounts.Find(user);
-            if (acc == null)
-                return "Account not found";
+            var accTemp = _contextRead.Accounts.Find(acc.AccountId);
+            if (accTemp == null)
+            {
+                return NoContent();
+            }
 
-            if (acc.PasswordHash == pw)
-                return "Success!";
+            if (acc.PasswordHash == accTemp.PasswordHash)
+            {   
+                TokenModel tokens = new TokenModel()
+                {
+                    AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(15)),
+                    RefreshToken = Token.GenerateToken(acc.AccountId, "refresh", DateTime.UtcNow.AddDays(14).AddSeconds(0))
+                };
 
-            return "Password did not match!";
+                return JsonConvert.SerializeObject(tokens);
+            }
+
+            return Unauthorized("Password did not match!");
 
         }
 
