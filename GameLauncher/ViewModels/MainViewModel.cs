@@ -18,14 +18,6 @@ using System.Windows.Threading;
 using SystemTimer = System.Timers.Timer;
 
 namespace GameLauncher.ViewModels {
-    public enum TemporaryInstallType { Installed, NotInstalled, UpdateRequired }
-
-    //[SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    //public class TemporaryInstallModel {
-    //    public string VersionName { get; set; }
-    //    public string Path { get; set; }
-    //    public TemporaryInstallType InstallType { get; set; }
-    //}
 
     public class MainViewModel : Screen {
         #region fields
@@ -44,6 +36,7 @@ namespace GameLauncher.ViewModels {
                 NotifyOfPropertyChange(() => ButtonText);
             }
         }
+
 
 
         private float _downloadProgressPercentage;
@@ -90,10 +83,16 @@ namespace GameLauncher.ViewModels {
         public InstallationDataModel SelectedInstall {
             get { return _selectedInstall; }
             set {
-                if (!IsDeleting) {
-                    _selectedInstall = value;
-                    Settings.Default.LastSelectedVersion = _selectedInstall?.VersionBranchToString;
-                    Settings.Default.Save();
+                _selectedInstall = value;
+                NotifyOfPropertyChange(() => SelectedInstall);
+                Settings.Default.LastSelectedVersion = _selectedInstall?.VersionBranchToString;
+                Settings.Default.Save();
+
+                if (IsDownloading) {
+                    ButtonText = "installing..";
+                }
+
+                else if (!IsDeleting) {
                     switch (SelectedInstall?.Status) {
                         case InstallationStatus.Verified:
                             ButtonText = "Play";
@@ -107,15 +106,11 @@ namespace GameLauncher.ViewModels {
                         case InstallationStatus.IsDeleting:
                             ButtonText = "Deleting";
                             break;
-                        case InstallationStatus.IsInstalling:
-                            ButtonText = "Installing";
-                            break;
                         default:
                             break;
                     }
                     SelectedInstallUpdated.Invoke(SelectedInstall);
                 }
-                NotifyOfPropertyChange(() => SelectedInstall);
             }
         }
 
@@ -155,6 +150,8 @@ namespace GameLauncher.ViewModels {
                 return collection;
             }
         }
+
+        public Action DownloadCompleted { get; internal set; }
         #endregion
 
         #region Methods
@@ -174,6 +171,16 @@ namespace GameLauncher.ViewModels {
             PatchClient.GetDownloadProgress += PatchClient_GetDownloadProgress;
             PatchClient.DownloadDone += PatchClient_DownloadDone;
             Task.Run(() => AvailableInstalls = GetAvailableInstalls(GamePaths));
+
+
+            if (Settings.Default.AutoLogin && !string.IsNullOrEmpty(Settings.Default.SessionToken)) {
+                IssueAutoLogin();
+            }
+
+        }
+
+        private void IssueAutoLogin () {
+
         }
 
         private InstallationDataModel UpdateState (InstallationDataModel model, InstallationStatus status) {
@@ -243,6 +250,7 @@ namespace GameLauncher.ViewModels {
 
         public void DownloadSelectedVersion () {
             if (SelectedInstall.Status != InstallationStatus.IsInstalling) {
+                IsDownloading = true;
                 SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
                 DownloadProgressPercentage = 0.0f;
                 Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
@@ -250,40 +258,37 @@ namespace GameLauncher.ViewModels {
         }
 
         private void PatchClient_GetDownloadProgress (object sender, DownloadProgressEventArgs e) {
-            if (e.Version == SelectedInstall.VersionBranch) {
-                DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
-                e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
-                DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
-            }
-            else {
-                DownloadProgressPercentage = 0;
-                e.NextFileName = "";
-                DownloadProgress = "";
-            }
+            DownloadProgressPercentage = ((Convert.ToSingle(e.DownloadedTotal) / Convert.ToSingle(e.TotalSize)) * 100.0f);
+            e.NextFileName = e.NextFileName.Length <= 30 ? e.NextFileName : e.NextFileName.Substring(0, 30);
+            DownloadProgress = "Downloading: " + DownloadProgressPercentage.ToString("0.00") + " % (" + e.NextFileName + ")";
         }
 
         private void PatchClient_DownloadDone (InstallationDataModel installation) {
-            //if (AvailableInstalls != null) {
-            //    int toChange = -1;
+            IsDownloading = false;
+            if (AvailableInstalls != null) {
+                int toChange = -1;
 
-            //    for (int i = 0; i < _availableInstalls.Count; i++) {
-            //        if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
-            //            toChange = i;
-            //            break;
-            //        }
-            //    }
+                for (int i = 0; i < _availableInstalls.Count; i++) {
+                    if (_availableInstalls [ i ].VersionBranch == installation.VersionBranch) {
+                        toChange = i;
+                        break;
+                    }
+                }
 
-            //    if (toChange != -1)
-            //        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
-            //            AvailableInstalls [ toChange ] = installation;
-            //            SelectedInstall = AvailableInstalls [ toChange ];
-            //        }));
-            //}
+                if (toChange != -1)
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(() => {
+                        AvailableInstalls [ toChange ] = installation;
+                        SelectedInstall = AvailableInstalls [ toChange ];
+                    }));
 
+            }
 
+            //Also remove bar
+            DownloadCompleted?.Invoke();
             DownloadFile = "";
             DownloadProgress = "";
             DownloadProgressPercentage = 100.0f;
+
         }
 
         public void AddPath (string path) {

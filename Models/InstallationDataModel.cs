@@ -11,21 +11,23 @@ namespace Models {
 
     public class InstallationDataModel {
         public string VersionName { get; set; }
-        public VersionBranch VersionBranch;
         public string InstallationChecksum { get; set; }
-        public List<FileModel> Files { get; set; } = new List<FileModel>();
-        public List<FileModel> MissingFiles { get; set; } = new List<FileModel>();
-        public long TotalSize { get; set; }
-        public long RemainingSize { get; set; }
-        public InstallationStatus Status { get; set; }
         public string InstallPath { get; set; }
-
         public string VersionBranchToString {
             get {
                 return VersionBranch.ToString();
             }
         }
 
+        public List<FileModel> Files { get; set; } = new List<FileModel>();
+        public List<FileModel> MissingFiles { get; set; } = new List<FileModel>();
+
+        public long TotalSize { get; set; }
+        public long RemainingSize { get; set; }
+
+        public InstallationStatus Status { get; set; }
+
+        public VersionBranch VersionBranch;
 
         [JsonIgnore]
         private Dictionary<string, string> FilesDictionary = null;

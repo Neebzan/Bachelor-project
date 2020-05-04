@@ -11,6 +11,8 @@ using GameLauncher.Views;
 using System.Threading;
 using System.Security;
 using System.Runtime.InteropServices;
+using RestSharp.Extensions;
+using Newtonsoft.Json;
 
 namespace GameLauncher.ViewModels {
     class LoggingInViewModel : Screen {
@@ -32,7 +34,7 @@ namespace GameLauncher.ViewModels {
         public async Task<bool> Login () {
 
             RestClient client = new RestClient("http://212.10.51.254:30830/api");
-            RestRequest request = new RestRequest("accounts/login", Method.POST);
+            RestRequest request = new RestRequest("accounts/login", Method.POST, RestSharp.DataFormat.Json);
 
             //hash password
             string password = Utility.HashedString(_password);
@@ -51,12 +53,9 @@ namespace GameLauncher.ViewModels {
 
                 // Logged in
                 if (response.StatusCode == System.Net.HttpStatusCode.OK) {
+                    var jsonResponse = JsonConvert.DeserializeObject(response.Content);
                     return true;
                 }
-
-                // Already exists
-                else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
-                    ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage("Account already exists");
 
                 // Something else
                 else
