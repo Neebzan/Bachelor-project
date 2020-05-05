@@ -44,6 +44,7 @@ namespace DatabaseREST.Models
         public virtual DbSet<Matches> Matches { get; set; }
         public virtual DbSet<PlayedMatch> PlayedMatch { get; set; }
         public virtual DbSet<Players> Players { get; set; }
+        public virtual DbSet<Servers> Servers { get; set; }
         public virtual DbSet<Testtable> Testtable { get; set; }
         public virtual DbSet<Wears> Wears { get; set; }
 
@@ -374,6 +375,20 @@ namespace DatabaseREST.Models
                 entity.Ignore(e => e.SkillpointsUsed);
                 entity.Ignore(e => e.LevelProgress);
 
+            });
+
+            modelBuilder.Entity<Servers>(entity =>
+            {
+                entity.HasKey(e => e.Secret)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("servers");
+
+                entity.Property(e => e.Secret)
+                    .HasColumnName("secret")
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
             });
 
             modelBuilder.Entity<Testtable>(entity =>

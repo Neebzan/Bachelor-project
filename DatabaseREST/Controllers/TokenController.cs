@@ -31,7 +31,8 @@ namespace DatabaseREST.Controllers
 
 
         [HttpPost]
-        public ActionResult<string> NewAccesstoken([FromHeader]string token)
+        [Produces("application/json")]
+        public ActionResult<TokenModel> NewAccesstoken([FromHeader]string token)
         {
 
             string newAccessToken = Token.NewAccessToken(token);
@@ -43,10 +44,12 @@ namespace DatabaseREST.Controllers
                     AccessToken = newAccessToken
                 };
 
-                return JsonConvert.SerializeObject(tokens);
+                return tokens;
             }
 
             return Unauthorized("Refresh token expired or invalid!");
         }
+
+
     }
 }

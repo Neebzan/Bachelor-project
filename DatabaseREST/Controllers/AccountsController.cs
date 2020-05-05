@@ -25,7 +25,6 @@ namespace DatabaseREST.Controllers
         {
             _context = context;
             _contextRead = contextRead;
-
         }
 
         //[HttpGet]
@@ -37,6 +36,7 @@ namespace DatabaseREST.Controllers
 
 
         [HttpGet]
+        [Produces("application/json")]
         public ActionResult<Accounts> Get(string id, [FromHeader]string token)
         {
             if (Token.VerifyToken(token, "access"))
@@ -46,7 +46,7 @@ namespace DatabaseREST.Controllers
                 if (jwtToken.Subject == id)
                 {
 
-                    //var acc = _contextRead.Accounts                        
+                    //var acc = _contextRead.Accounts
                     //    .Include(p => p.Players)
                     //    .AsNoTracking()
                     //    .SingleOrDefault(x => x.AccountId == id);
@@ -66,12 +66,23 @@ namespace DatabaseREST.Controllers
                     if (acc == null)
                         return NotFound();
 
-
                     return acc;
                 }
                 else
                 {
-                    return new Accounts() { /*AccountId = acc.AccountId, Players = acc.Players */};
+                    var acc = _contextRead.Accounts.Where(x => x.AccountId == id)
+                        .Include(p => p.Players)
+                        .AsNoTracking()
+                        .Select(x => new Accounts
+                        {
+                            AccountId = x.AccountId,
+                            Players = x.Players
+                        }).SingleOrDefault();
+
+                    if (acc == null)
+                        return NotFound();
+
+                    return acc;
                 }
             }
             else
@@ -81,7 +92,8 @@ namespace DatabaseREST.Controllers
 
         [HttpPost]
         [Route("login")]
-        public ActionResult<string> Login(Accounts acc)
+        [Produces("application/json")]
+        public ActionResult<TokenModel> Login(Accounts acc)
         {
 
             var accTemp = _contextRead.Accounts.Find(acc.AccountId);
@@ -94,11 +106,11 @@ namespace DatabaseREST.Controllers
             {
                 TokenModel tokens = new TokenModel()
                 {
-                    AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(15)),
+                    AccessToken = Token.GenerateToken(acc.AccountId, "access", DateTime.UtcNow.AddMinutes(60)),
                     RefreshToken = Token.GenerateToken(acc.AccountId, "refresh", DateTime.UtcNow.AddDays(14).AddSeconds(0))
                 };
 
-                return JsonConvert.SerializeObject(tokens);
+                return tokens;
             }
 
             return Unauthorized("Password did not match!");

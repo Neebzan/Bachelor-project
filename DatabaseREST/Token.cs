@@ -13,7 +13,9 @@ namespace DatabaseREST
     public static class Token
     {
 
-        private static string _secretKey = "SomeSecrffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+        private static string _UserSecretKey = "SomeSecrffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+        private static string _ServerSecretKey = "SomeSserverseecretyffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+
 
         public static JwtSecurityToken GenerateToken(ClaimsIdentity claims, DateTime expirationDate)
         {
@@ -98,9 +100,9 @@ namespace DatabaseREST
             {
                 JwtSecurityToken tempToken = new JwtSecurityToken(refreshToken);
 
-                string user = tempToken.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
+                //string user = tempToken.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
 
-                return GenerateToken(user, "access", DateTime.UtcNow.AddMinutes(15));
+                return GenerateToken(tempToken.Subject, "access", DateTime.UtcNow.AddMinutes(15));
             }
             return null;
         }
@@ -140,7 +142,7 @@ namespace DatabaseREST
 
         private static SecurityKey GetSymmetricSecurityKey()
         {
-            byte[] symKey = Encoding.ASCII.GetBytes(_secretKey);
+            byte[] symKey = Encoding.ASCII.GetBytes(_UserSecretKey);
             return new SymmetricSecurityKey(symKey);
         }
 
@@ -155,7 +157,7 @@ namespace DatabaseREST
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero, //Default clockskew is approx. 5 minutes
+                //ClockSkew = TimeSpan.Zero, //Default clockskew is approx. 5 minutes
                 IssuerSigningKey = GetSymmetricSecurityKey()
             };
 
