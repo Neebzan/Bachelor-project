@@ -187,6 +187,8 @@ namespace PatchManager {
                 data.InstalledVersion = GenerateInstallationDataModel(missingFiles, dir);
 
                 data.InstalledVersion.VersionName = temp.VersionName;
+                data.InstalledVersion.VersionBranch = temp.VersionBranch;
+
                 Console.WriteLine(ConsoleExtension.AddTimestamp("Installation datamodel created: " + data.InstalledVersion.VersionName));
                 ConnectionHandler.SendObject(data, client);
                 return;

@@ -201,11 +201,11 @@ namespace PatchClientLib {
         }
 
         /// <summary>
-        /// Genereates model data for each version installed on the path
+        /// Generates model data for each version installed on the path
         /// </summary>
-        public static void UpdateCurrentInstallations () {
-            InstalledVersions = ChecksumTool.GetInstalledVersions(InstallPath);
-        }
+        //public static void UpdateCurrentInstallations () {
+        //    InstalledVersions = ChecksumTool.GetInstalledVersions(InstallPath);
+        //}
 
         /// <summary>
         /// Listens for responses from the patching service after connecting
@@ -309,7 +309,12 @@ namespace PatchClientLib {
             PatchDataModel response = ReadServerResponse();
 
             if (response != null) {
+                
                 version.MissingFiles = response.InstalledVersion.MissingFiles;
+                version.VersionName = response.InstalledVersion.VersionName;
+                version.TotalSize = response.InstalledVersion.TotalSize;
+                version.RemainingSize = response.InstalledVersion.RemainingSize;
+
                 if (version.MissingFiles.Count > 0 && version.Status != InstallationStatus.NotInstalled)
                     version.Status = InstallationStatus.UpdateRequired;
 
@@ -359,10 +364,10 @@ namespace PatchClientLib {
             };
 
             args.Version = version.VersionBranch;
-
-            foreach (var item in version.MissingFiles) {
-                args.TotalSize += item.Size;
-            }
+            args.TotalSize = version.TotalSize;
+            //foreach (var item in version.MissingFiles) {
+            //    args.TotalSize += item.Size;
+            //}
 
 
 

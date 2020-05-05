@@ -30,7 +30,26 @@ namespace ConsoleForTesting
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            Login();
+            //Matches testMatch = new Matches()
+            //{   
+            //    MapName = "map1",
+            //    Begun = DateTime.Now,
+            //    Ended = DateTime.Now.AddDays(1),
+            //    Difficulty = 100
+
+            //};
+
+            //PlayedMatch testPlayedMatch = new PlayedMatch()
+            //{
+            //    Deaths = 5,
+            //    Score = 999,
+            //    Kills = 10,
+            //    MatchId = 1,
+            //    PlayerId = "neebz"
+            //};
+
+            //DBConnection.Instance().Insert(testMatch);
+            //DBConnection.Instance().Insert(testPlayedMatch);
 
             //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
             //var h = PatchClient.CompleteCheck(new string[0]);
@@ -45,9 +64,18 @@ namespace ConsoleForTesting
             //{
             //    Status = InstallationStatus.NotInstalled,
             //    VersionBranch = VersionBranch.Beta,
-            //    VersionName = "Beta"
+            //    VersionName = ""
             //};
-            //PatchClient._client = new TcpClient("localhost", 13000);
+
+            string[] paths = new string[] { @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp" };
+            PatchClient._client = new TcpClient("localhost", 13000);
+
+            var tempInstallation = PatchClient.CompleteCheck(paths);
+
+            tempInstallation[1].InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\test";
+
+            PatchClient.DownloadMissingFiles(tempInstallation[1]);
+
             //PatchClient.RequestVersionMissingFiles(ref gh);
             //PatchClient._client.GetStream().Close();
             //PatchClient._client.Close();

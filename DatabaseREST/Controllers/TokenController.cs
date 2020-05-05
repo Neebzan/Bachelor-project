@@ -53,23 +53,16 @@ namespace DatabaseREST.Controllers
         [HttpPost]
         [Route("server")]
         [Produces("application/json")]
-        public ActionResult<TokenModel> NewServertoken([FromHeader]string serverSecret)
+        public ActionResult<string> NewServertoken([FromHeader]string serverSecret)
         {
-             var server = _contextRead.Servers.Find(serverSecret);
+            var server = _contextRead.Servers.Find(serverSecret);
 
-            //string newAccessToken = Token.NewAccessToken(token);
+            if(server != null)
+            {
+                return Token.GenerateServerToken();
+            }
 
-            //if (newAccessToken != null)
-            //{
-            //    TokenModel tokens = new TokenModel()
-            //    {
-            //        AccessToken = newAccessToken
-            //    };
-
-            //    return tokens;
-            //}
-
-            return Unauthorized("Refresh token expired or invalid!");
+            return Unauthorized();
         }
 
 
