@@ -98,9 +98,9 @@ namespace DatabaseREST
             {
                 JwtSecurityToken tempToken = new JwtSecurityToken(refreshToken);
 
-                string user = tempToken.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
+                //string user = tempToken.Claims.Where(c => c.Type == "sub").Select(c => c.Value).FirstOrDefault();
 
-                return GenerateToken(user, "access", DateTime.UtcNow.AddMinutes(15));
+                return GenerateToken(tempToken.Subject, "access", DateTime.UtcNow.AddMinutes(15));
             }
             return null;
         }
@@ -155,7 +155,7 @@ namespace DatabaseREST
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero, //Default clockskew is approx. 5 minutes
+                //ClockSkew = TimeSpan.Zero, //Default clockskew is approx. 5 minutes
                 IssuerSigningKey = GetSymmetricSecurityKey()
             };
 

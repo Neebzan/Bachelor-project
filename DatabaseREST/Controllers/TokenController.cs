@@ -31,6 +31,7 @@ namespace DatabaseREST.Controllers
 
 
         [HttpPost]
+        [Produces("application/json")]
         public ActionResult<string> NewAccesstoken([FromHeader]string token)
         {
 

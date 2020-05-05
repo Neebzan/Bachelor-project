@@ -40,6 +40,8 @@ namespace DatabaseREST
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+            //services.AddMvc().AddNewtonsoftJson();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +49,11 @@ namespace DatabaseREST
         {
             app.UseMvc();
             Console.WriteLine("INCLUDING PLAYERSZZZ");
+
+
+            string t = "{\"RefreshToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBYmJvdHQ0NDM5U2NvdCIsImF1ZCI6InJlZnJlc2giLCJuYmYiOjE1ODg2NjUyNjUsImV4cCI6MTU4OTg3NDg2NSwiaWF0IjoxNTg4NjY1MjY1fQ.wu-U8nCNn1x39JWxMzlTVYmr2JmYJ7JygNCrf137klI\",\"AccessToken\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBYmJvdHQ0NDM5U2NvdCIsImF1ZCI6ImFjY2VzcyIsIm5iZiI6MTU4ODY2NTI2NSwiZXhwIjoxNTg4NjY4ODY1LCJpYXQiOjE1ODg2NjUyNjV9.Fvh1pESNil6ihQwRrKfUkt3O9UfX2xbTgd8Nx3wE6vQ\"}";
+
+            TokenModel tsd = JsonConvert.DeserializeObject<TokenModel>(t);
 
             //var kfdkf = Token.GenerateToken(null, 1, 0, 0);
 
