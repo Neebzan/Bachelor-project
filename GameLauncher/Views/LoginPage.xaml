@@ -10,8 +10,8 @@
       Title="LoginPage">
 
     <StackPanel VerticalAlignment="Stretch">
-        <Label Name="usernameEmail_label" Content="Username or email" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <TextBox Name="usernameEmail_textblock" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Label Name="username_label" Content="Username" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBox Name="username_textblock" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <Label Name="password_label" Content="Password" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <PasswordBox Name="password_passwordBox" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         <CheckBox x:Name="remember_username_tick" Opacity=".8" Content="  Remember username" Grid.Row="5" Padding="0" VerticalContentAlignment="Center" Grid.ColumnSpan="2" Unchecked="remember_username_tick_Unchecked" Checked="remember_username_tick_Checked"/>

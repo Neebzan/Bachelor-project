@@ -13,47 +13,80 @@ using System.Security;
 using System.Runtime.InteropServices;
 using RestSharp.Extensions;
 using Newtonsoft.Json;
+using GameLauncher.Properties;
+using RestSharp.Serialization.Json;
+using RestSharp.Serializers.NewtonsoftJson;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace GameLauncher.ViewModels {
     class LoggingInViewModel : Screen {
+        private const string URL = "http://212.10.51.254:30830";
 
-        private string _username;
-        private string _password;
-
-        public LoggingInViewModel (string username, SecureString passwordRaw) {
-            try {
-                _username = username;
-                _password = Utility.ConvertToUnsecureString(passwordRaw);
-            }
-            catch (Exception e) {
-                //Throw for now, should be handleded
-                throw;
-            }
-        }
-
-        public async Task<bool> Login () {
-
+        public async Task<bool> LoginTokenAsync () {
             RestClient client = new RestClient("http://212.10.51.254:30830/api");
-            RestRequest request = new RestRequest("accounts/login", Method.POST, RestSharp.DataFormat.Json);
 
-            //hash password
-            string password = Utility.HashedString(_password);
+            RestRequest request = new RestRequest("token", Method.POST);
+            request.AddHeader("token", Settings.Default.RefreshToken);
 
-            //Create object
-            Accounts account = new Accounts() {
-                AccountId = _username,
-                PasswordHash = password
-            };
-
-            request.AddJsonBody(account);
             var cancellationTokenSource = new CancellationTokenSource();
 
             try {
                 var response = await client.ExecuteAsync(request, cancellationTokenSource.Token);
-
-                // Logged in
                 if (response.StatusCode == System.Net.HttpStatusCode.OK) {
-                    var jsonResponse = JsonConvert.DeserializeObject(response.Content);
+                    var tokens = JsonConvert.DeserializeObject<TokenModel>(response.Content);
+
+                    Settings.Default.AccessToken = tokens.AccessToken;
+                    Settings.Default.Save();
+
+                    return true;
+                }
+
+                // Something else
+                else {
+                    Settings.Default.AccessToken = Settings.Default.RefreshToken = "";
+                    Settings.Default.Save();
+                    ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage(response.StatusDescription);
+                }
+            }
+
+            // Exception
+            catch (Exception e) {
+                ((Application.Current.MainWindow as MainWindow).ViewModel as MainViewModel).DisplayErrorMessage(e.Message);
+            }
+
+            return false;
+        }
+
+
+        public async Task<bool> LoginAsync (string username, SecureString rawPassword) {
+            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestRequest request = new RestRequest("accounts/login", Method.POST);
+
+            //Convert to unsecure
+            string unsecurePassword = Utility.ConvertToUnsecureString(rawPassword);
+            //hash password
+            string hashedPassword = Utility.HashedString(unsecurePassword);
+
+            //Create object
+            Accounts account = new Accounts() {
+                AccountId = username,
+                PasswordHash = hashedPassword
+            };
+
+            request.AddJsonBody(account);
+
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            try {
+                var response = await client.ExecuteAsync(request, cancellationTokenSource.Token);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK) {
+                    var tokens = JsonConvert.DeserializeObject<TokenModel>(response.Content);
+
+                    Settings.Default.AccessToken = tokens.AccessToken;
+                    Settings.Default.RefreshToken = tokens.RefreshToken;
+                    Settings.Default.Save();
+
                     return true;
                 }
 

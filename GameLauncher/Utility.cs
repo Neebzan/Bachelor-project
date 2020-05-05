@@ -6,6 +6,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace GameLauncher {
     public static class Utility {
