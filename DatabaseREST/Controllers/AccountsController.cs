@@ -93,7 +93,7 @@ namespace DatabaseREST.Controllers
         [HttpPost]
         [Route("login")]
         [Produces("application/json")]
-        public ActionResult<string> Login(Accounts acc)
+        public ActionResult<TokenModel> Login(Accounts acc)
         {
 
             var accTemp = _contextRead.Accounts.Find(acc.AccountId);
@@ -110,7 +110,7 @@ namespace DatabaseREST.Controllers
                     RefreshToken = Token.GenerateToken(acc.AccountId, "refresh", DateTime.UtcNow.AddDays(14).AddSeconds(0))
                 };
 
-                return JsonConvert.SerializeObject(tokens);
+                return tokens;
             }
 
             return Unauthorized("Password did not match!");

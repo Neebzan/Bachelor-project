@@ -13,7 +13,9 @@ namespace DatabaseREST
     public static class Token
     {
 
-        private static string _secretKey = "SomeSecrffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+        private static string _UserSecretKey = "SomeSecrffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+        private static string _ServerSecretKey = "SomeSserverseecretyffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
+
 
         public static JwtSecurityToken GenerateToken(ClaimsIdentity claims, DateTime expirationDate)
         {
@@ -140,7 +142,7 @@ namespace DatabaseREST
 
         private static SecurityKey GetSymmetricSecurityKey()
         {
-            byte[] symKey = Encoding.ASCII.GetBytes(_secretKey);
+            byte[] symKey = Encoding.ASCII.GetBytes(_UserSecretKey);
             return new SymmetricSecurityKey(symKey);
         }
 

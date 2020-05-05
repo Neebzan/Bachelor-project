@@ -8,6 +8,7 @@ using Models;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using PatchClientLib;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,11 +29,14 @@ namespace ConsoleForTesting
             PatchClient.InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp";
             Stopwatch watch = new Stopwatch();
             watch.Start();
+
+            Login();
+
             //var h = PatchClient.CompleteCheck(new string[] {PatchClient.InstallPath });
             //var h = PatchClient.CompleteCheck(new string[0]);
             //h[0].InstallPath = PatchClient.InstallPath;
 
-            DBConnection.Instance().InsertRandomData(5000);
+            //DBConnection.Instance().InsertRandomData(5000);
 
             //DBConnection.Instance().EFCORETest();
 
@@ -72,7 +76,7 @@ namespace ConsoleForTesting
             //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
             watch.Stop();
             Console.WriteLine(ConsoleExtension.AddTimestamp("Elapsed: " + watch.ElapsedMilliseconds));
-            //Thread.Sleep(4000);
+            Thread.Sleep(4000);
 
             //var h = PatchClient.CompleteCheck(new string[] {
             //PatchClient.InstallPath });
@@ -88,6 +92,36 @@ namespace ConsoleForTesting
 
 
             Console.ReadKey();
+        }
+
+        public static bool Login()
+        {
+
+            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestRequest request = new RestRequest("accounts/login", Method.POST);
+            client.UseJson();
+            //request.AddHeader("content-type", "application/json");
+            //client.UseNewtonsoftJson();
+
+            //hash password
+            //string password = Utility.HashedString(_password);
+
+            //Create object
+            Accounts account = new Accounts()
+            {
+                AccountId = "neebz2",
+                PasswordHash = "re"
+            };
+            //request.AddParameter("application/json", account, ParameterType.RequestBody);
+
+            request.AddJsonBody(account);
+
+            var response = client.Execute<TokenModel>(request);
+            
+
+            var h = JsonConvert.DeserializeObject<TokenModel>(response.Content);
+            string fff = response.Content;
+            return true;
         }
 
         public static async void Test()

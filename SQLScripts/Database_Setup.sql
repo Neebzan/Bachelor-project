@@ -97,6 +97,11 @@ CREATE TABLE wears(
     FOREIGN KEY (item_id) REFERENCES items(item_id)
 );
 
+CREATE TABLE Servers(
+	secret VARCHAR(255) NOT NULL
+    PRIMARY KEY(secret)
+);
+
 CREATE TABLE testTable(
 	id INT NOT NULL,
     message VARCHAR(255),
