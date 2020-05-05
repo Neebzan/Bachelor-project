@@ -20,6 +20,7 @@
     <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="Models\Matches.cs" />
     <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="Models\PlayedMatch.cs" />
     <Compile Include="..\DatabaseREST\Models\Players.cs" Link="Models\Players.cs" />
+    <Compile Include="..\DatabaseREST\Models\Servers.cs" Link="Models\Servers.cs" />
     <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="Models\Testtable.cs" />
     <Compile Include="..\DatabaseREST\Models\TokenModel.cs" Link="Models\TokenModel.cs" />
     <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="Models\Wears.cs" />
