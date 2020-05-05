@@ -28,9 +28,15 @@ namespace GameLauncher.Views {
             InitializeComponent();
 
             _viewModel = new UserViewModel();
+            this.DataContext = _viewModel;
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(Settings.Default.AccessToken);
             username_label.Content = jwtSecurityToken.Subject;
+            Loaded += UserPage_Loaded;
+        }
+
+        private async void UserPage_Loaded (object sender, RoutedEventArgs e) {
+            await (_viewModel as UserViewModel).ExtractPlayerInfo();
         }
 
         private void Logout_Click (object sender, RoutedEventArgs e) {
