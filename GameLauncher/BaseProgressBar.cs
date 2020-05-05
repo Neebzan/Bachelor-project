@@ -31,7 +31,7 @@ namespace GameLauncher
         }
 
         private async Task AnimateBar (double oldValue, double newValue) {
-            await this.AnimateValueChange((float)oldValue, (float)newValue, 1.0f);
+            await this.AnimateValueChange((float)oldValue, (float)newValue, .5f);
         }
     }
 }
