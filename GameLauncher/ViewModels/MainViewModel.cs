@@ -155,7 +155,7 @@ namespace GameLauncher.ViewModels {
             Task.Run(() => AvailableInstalls = GetAvailableInstalls(GamePaths));
 
 
-            if (Settings.Default.AutoLogin && !string.IsNullOrEmpty(Settings.Default.SessionToken)) {
+            if (Settings.Default.AutoLogin && !string.IsNullOrEmpty(Settings.Default.AccessToken)) {
                 IssueAutoLogin();
             }
 

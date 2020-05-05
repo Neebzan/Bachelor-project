@@ -61,17 +61,6 @@ namespace GameLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Security.SecureString Password {
-            get {
-                return ((global::System.Security.SecureString)(this["Password"]));
-            }
-            set {
-                this["Password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Username {
             get {
@@ -108,12 +97,12 @@ namespace GameLauncher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SessionToken {
+        public string AccessToken {
             get {
-                return ((string)(this["SessionToken"]));
+                return ((string)(this["AccessToken"]));
             }
             set {
-                this["SessionToken"] = value;
+                this["AccessToken"] = value;
             }
         }
         

@@ -11,9 +11,6 @@
     <Setting Name="AutoLogin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Password" Type="System.Security.SecureString" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="Username" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -23,7 +20,7 @@
     <Setting Name="LastSelectedVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SessionToken" Type="System.String" Scope="User">
+    <Setting Name="AccessToken" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="RefreshToken" Type="System.String" Scope="User">

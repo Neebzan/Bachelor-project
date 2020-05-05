@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace GameLauncher {
     public class BasePage : Page {
@@ -43,7 +44,6 @@ namespace GameLauncher {
                     break;
             }
         }
-
         public async Task AnimateIn () {
             switch (this.PageLoadAnimation) {
                 case PageAnimation.None:
