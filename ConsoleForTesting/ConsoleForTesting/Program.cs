@@ -68,13 +68,16 @@ namespace ConsoleForTesting
             //};
 
             string[] paths = new string[] { @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp" };
-            PatchClient._client = new TcpClient("localhost", 13000);
+            //PatchClient._client = new TcpClient("localhost", 13000);
+            PatchClient._ip = "localhost";
+            PatchClient._port = 13000;
+
 
             var tempInstallation = PatchClient.CompleteCheck(paths);
 
             tempInstallation[1].InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\test";
 
-            PatchClient.DownloadMissingFiles(tempInstallation[1]);
+            PatchClient.DownloadMissingFilesNew(tempInstallation[1]);
 
             //PatchClient.RequestVersionMissingFiles(ref gh);
             //PatchClient._client.GetStream().Close();
