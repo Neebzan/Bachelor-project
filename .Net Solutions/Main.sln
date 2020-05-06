@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLauncher", "GameLaunche
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelperTools", "HelperTools\HelperTools.csproj", "{6631989F-6484-42D5-8EAA-0B8552826597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseREST", "DatabaseREST\DatabaseREST.csproj", "{90A13D50-02A4-47BB-9348-341777605413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseREST", "DatabaseREST\DatabaseREST.csproj", "{90A13D50-02A4-47BB-9348-341777605413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
