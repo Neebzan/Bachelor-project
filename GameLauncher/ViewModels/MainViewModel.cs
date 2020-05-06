@@ -256,7 +256,7 @@ namespace GameLauncher.ViewModels {
                 IsDownloading = true;
                 SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
                 DownloadProgressPercentage = 0.0f;
-                Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
+                Task.Run(() => PatchClient.DownloadMissingFilesNew(SelectedInstall));
             }
         }
 

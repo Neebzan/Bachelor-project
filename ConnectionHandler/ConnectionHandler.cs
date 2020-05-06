@@ -198,7 +198,7 @@ namespace ConnectionHandlerLib
                     {
 
                         // read the file in chunks of 1KB
-                        var buffer = new byte[1024 * 4];
+                        var buffer = new byte[1024];
                         bytesRead = 0;
                         //int totalBytesRead = 0;
                         int remainingBytes = totalFileSize;
