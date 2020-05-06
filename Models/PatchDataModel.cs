@@ -2,7 +2,7 @@
 
 namespace Models
 {
-    public enum PatchNetworkRequest { AvailableVersions, VerifyVersion, TestConnection, DownloadFile, MissingFiles }
+    public enum PatchNetworkRequest { AvailableVersions, VerifyVersion, TestConnection, DownloadFile, MissingFiles, DownloadFiles }
     public class PatchDataModel
     {
         public PatchNetworkRequest RequestType;

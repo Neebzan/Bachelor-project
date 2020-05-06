@@ -17,11 +17,11 @@ namespace DatabaseREST
         private static string _ServerSecretKey = "SomeSserverseecretyffffffffffffffffffffffffffffffffffffffffffffffffffetKey";
 
 
-        public static JwtSecurityToken GenerateToken(ClaimsIdentity claims, DateTime expirationDate)
+        public static JwtSecurityToken GenerateUserToken(ClaimsIdentity claims, DateTime expirationDate)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
-            SigningCredentials sCredentials = new SigningCredentials(GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256);
+            SigningCredentials sCredentials = new SigningCredentials(GetSymmetricUserSecurityKey(), SecurityAlgorithms.HmacSha256);
 
             var token = tokenHandler.CreateJwtSecurityToken(
                 expires: expirationDate,
@@ -31,6 +31,26 @@ namespace DatabaseREST
 
             return token;
         }
+
+        public static JwtSecurityToken GenerateServerToken(DateTime expirationDate)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            SigningCredentials sCredentials = new SigningCredentials(GetSymmetricServerSecurityKey(), SecurityAlgorithms.HmacSha256);
+
+            ClaimsIdentity claims = new ClaimsIdentity();
+            claims.AddClaim(new Claim("sub", "gServer"));
+
+            var token = tokenHandler.CreateJwtSecurityToken(
+                expires: expirationDate,
+                subject: claims,
+                signingCredentials: sCredentials
+                );
+
+            return token;
+        }
+
+
 
         //public static void Create()
         //{
@@ -91,12 +111,12 @@ namespace DatabaseREST
             accClaims.AddClaim(new Claim("sub", userID));
             accClaims.AddClaim(new Claim("aud", aud));
 
-            return GenerateToken(accClaims, expirationDate).RawData;
+            return GenerateUserToken(accClaims, expirationDate).RawData;
         }
 
         public static string NewAccessToken(string refreshToken)
         {
-            if(VerifyToken(refreshToken, "refresh"))
+            if (VerifyToken(refreshToken, "refresh"))
             {
                 JwtSecurityToken tempToken = new JwtSecurityToken(refreshToken);
 
@@ -105,6 +125,11 @@ namespace DatabaseREST
                 return GenerateToken(tempToken.Subject, "access", DateTime.UtcNow.AddMinutes(15));
             }
             return null;
+        }
+
+        public static string GenerateServerToken()
+        {
+            return GenerateServerToken(DateTime.UtcNow.AddMinutes(120)).RawData;
         }
 
         /// <summary>
@@ -127,7 +152,34 @@ namespace DatabaseREST
 
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
-                    TokenValidationParameters validationParameters = GetTokenValidationParameters(aud);
+                    TokenValidationParameters validationParameters = GetTokenValidationParameters(GetSymmetricUserSecurityKey(), aud);
+                    tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        public static bool VerifyServerToken(string token)
+        {
+            if (token != null)
+            {
+                try
+                {
+                    //JwtSecurityToken tempToken = new JwtSecurityToken(token);
+                    //if (aud != "")
+                    //{
+                    //    if (!tempToken.Audiences.Contains(aud))
+                    //        return false;
+                    //}
+
+                    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+                    TokenValidationParameters validationParameters = GetTokenValidationParameters(GetSymmetricServerSecurityKey(), "gServer");
                     tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                     return true;
                 }
@@ -140,9 +192,15 @@ namespace DatabaseREST
         }
 
 
-        private static SecurityKey GetSymmetricSecurityKey()
+        private static SecurityKey GetSymmetricUserSecurityKey()
         {
             byte[] symKey = Encoding.ASCII.GetBytes(_UserSecretKey);
+            return new SymmetricSecurityKey(symKey);
+        }
+
+        private static SecurityKey GetSymmetricServerSecurityKey()
+        {
+            byte[] symKey = Encoding.ASCII.GetBytes(_ServerSecretKey);
             return new SymmetricSecurityKey(symKey);
         }
 
@@ -150,7 +208,7 @@ namespace DatabaseREST
         /// Get the Token Validation Parameters for the validation process
         /// </summary>
         /// <returns></returns>
-        private static TokenValidationParameters GetTokenValidationParameters(string aud = "")
+        private static TokenValidationParameters GetTokenValidationParameters(SecurityKey key, string aud = "")
         {
             TokenValidationParameters validParams = new TokenValidationParameters()
             {
@@ -158,10 +216,10 @@ namespace DatabaseREST
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 //ClockSkew = TimeSpan.Zero, //Default clockskew is approx. 5 minutes
-                IssuerSigningKey = GetSymmetricSecurityKey()
+                IssuerSigningKey = key
             };
 
-            if(aud != "")
+            if (aud != "")
             {
                 validParams.ValidateAudience = true;
                 validParams.ValidAudience = aud;

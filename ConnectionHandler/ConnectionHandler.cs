@@ -119,7 +119,7 @@ namespace ConnectionHandlerLib
 
         public static void FileRead_Callback(IAsyncResult ar)
         {
-            
+
         }
 
         public static bool ReadFile(TcpClient client, string fileName, string saveDirectory = "")
@@ -152,7 +152,7 @@ namespace ConnectionHandlerLib
                 {
                     // read the file in chunks of 1KB
                     var buffer = new byte[1024];
-                    bytesRead = 0; bytesRead = 0;
+                    bytesRead = 0;
                     int totalBytesRead = 0;
                     while (totalBytesRead < totalFileSize)
                     {
@@ -162,6 +162,61 @@ namespace ConnectionHandlerLib
                     }
                     return true;
                 }
+            }
+            return false;
+        }
+
+        public static bool ReadFileStream(TcpClient client, string fileName, long fileSize, string saveDirectory = "")
+        {
+            byte[] readBuffer = new byte[4];
+
+            if (saveDirectory != "")
+            {
+                if (saveDirectory[saveDirectory.Length - 1] != '\\')
+                    saveDirectory += "\\";
+            }
+            while (Connected(client))
+            {
+
+                while (client.GetStream().DataAvailable)
+                {
+                    int bytesRead = 0;
+
+                    while (bytesRead < 4)
+                    {
+                        bytesRead += client.GetStream().Read(readBuffer, bytesRead, 4 - bytesRead);
+                    }
+
+                    int totalFileSize = BitConverter.ToInt32(readBuffer, 0);
+
+                    //Create subfolders if needed
+                    string[] pathSplit = fileName.Split('/');
+                    string subfolders = fileName.Replace(pathSplit[pathSplit.Length - 1], "");
+                    Directory.CreateDirectory(saveDirectory + subfolders);
+
+                    using (var output = File.Create(saveDirectory + fileName))
+                    {
+
+                        // read the file in chunks of 1KB
+                        var buffer = new byte[1024 * 4];
+                        bytesRead = 0;
+                        //int totalBytesRead = 0;
+                        int remainingBytes = totalFileSize;
+
+                        while (remainingBytes > 0)
+                        {
+                            if (remainingBytes > buffer.Length)
+                                bytesRead = client.Client.Receive(buffer, buffer.Length, SocketFlags.None);
+                            else
+                                bytesRead = client.Client.Receive(buffer, remainingBytes, SocketFlags.None);
+                            output.Write(buffer, 0, bytesRead);
+                            remainingBytes -= bytesRead;
+                        }
+                        return true;
+
+                    }
+                }
+
             }
             return false;
         }
