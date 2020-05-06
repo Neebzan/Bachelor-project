@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR;
 
 public class HandPresence : MonoBehaviour {
@@ -45,8 +47,14 @@ public class HandPresence : MonoBehaviour {
         }
     }
 
+
+
+
     // Update is called once per frame
     void Update () {
+        PointFinger();
+
+
         UpdateHandAnimation();
 
 
@@ -59,6 +67,20 @@ public class HandPresence : MonoBehaviour {
         //if (targetDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 primary2DAxisValue) && primary2DAxisValue != Vector2.zero)
         //    Debug.Log("Primary touchpad: " + primary2DAxisValue);
 
+
+    }
+
+    private void PointFinger () {
+
+        //RaycastHit hit;
+
+        //GraphicRaycaster.
+
+        //if(Physics.Raycast(new Ray(transform.position, transform.forward), out hit, 100.0f)) {
+        //    hit.
+        //}
+
+        
 
     }
 }
