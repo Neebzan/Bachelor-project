@@ -307,11 +307,9 @@ namespace PatchManager
                     //client.GetStream().Write(preBuffer);
 
                     Console.WriteLine(ConsoleExtension.AddTimestamp($"{fi.Name} size: {fi.Length}"));
-                    using (FileStream fStream = fi.OpenRead())
-                    {
-                        //fStream.CopyTo(client.GetStream());
-                        client.Client.SendFile(fi.FullName, preBuffer, null, TransmitFileOptions.UseDefaultWorkerThread);
-                    }
+
+                    client.Client.SendFile(fi.FullName, preBuffer, null, TransmitFileOptions.UseDefaultWorkerThread);
+
                     Console.WriteLine(ConsoleExtension.AddTimestamp($"{fi.Name} sent"));
                 }
 
