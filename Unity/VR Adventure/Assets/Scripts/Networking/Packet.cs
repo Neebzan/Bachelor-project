@@ -68,6 +68,12 @@ public class Packet : IDisposable
         return readableBuffer;
     }
 
+    /// <summary>Gets the length of the unread data contained in the packet.</summary>
+    public int UnreadLength()
+    {
+        return Length() - readPos; // Return the remaining length (unread)
+    }
+
     public void Reset(bool _reset)
     {
         if (_reset)
