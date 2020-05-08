@@ -55,7 +55,7 @@ namespace ConsoleForTesting
             //var h = PatchClient.CompleteCheck(new string[0]);
             //h[0].InstallPath = PatchClient.InstallPath;
 
-            //DBConnection.Instance().InsertRandomData(5000);
+            DBConnection.Instance().InsertRandomData(100);
 
             //DBConnection.Instance().EFCORETest();
 
@@ -67,17 +67,17 @@ namespace ConsoleForTesting
             //    VersionName = ""
             //};
 
-            string[] paths = new string[] { @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp" };
-            //PatchClient._client = new TcpClient("localhost", 13000);
-            PatchClient._ip = "localhost";
-            PatchClient._port = 13000;
+            //string[] paths = new string[] { @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\welp" };
+            ////PatchClient._client = new TcpClient("localhost", 13000);
+            //PatchClient._ip = "localhost";
+            //PatchClient._port = 13000;
 
 
-            var tempInstallation = PatchClient.CompleteCheck(paths);
+            //var tempInstallation = PatchClient.CompleteCheck(paths);
 
-            tempInstallation[1].InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\test";
+            //tempInstallation[1].InstallPath = @"H:\Skole\Bachelor-project\ConsoleForTesting\ConsoleForTesting\bin\Debug\ClientFiles\test";
 
-            PatchClient.DownloadMissingFilesNew(tempInstallation[1]);
+            //PatchClient.DownloadMissingFilesNew(tempInstallation[1]);
 
             //PatchClient.RequestVersionMissingFiles(ref gh);
             //PatchClient._client.GetStream().Close();
@@ -105,9 +105,9 @@ namespace ConsoleForTesting
             //PatchClient.DownloadMissingFiles(h[0]);
 
             //var t = ChecksumTool.GetInstalledVersion(PatchClient.InstallPath);
-            watch.Stop();
-            Console.WriteLine(ConsoleExtension.AddTimestamp("Elapsed: " + watch.ElapsedMilliseconds));
-            Thread.Sleep(4000);
+            //watch.Stop();
+            //Console.WriteLine(ConsoleExtension.AddTimestamp("Elapsed: " + watch.ElapsedMilliseconds));
+            //Thread.Sleep(4000);
 
             //var h = PatchClient.CompleteCheck(new string[] {
             //PatchClient.InstallPath });

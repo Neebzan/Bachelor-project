@@ -9,21 +9,57 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\DatabaseREST\Models\Abilities.cs" Link="Models\Abilities.cs" />
-    <Compile Include="..\DatabaseREST\Models\Accounts.cs" Link="Models\Accounts.cs" />
-    <Compile Include="..\DatabaseREST\Models\HasLearned.cs" Link="Models\HasLearned.cs" />
-    <Compile Include="..\DatabaseREST\Models\intrusiveContext.cs" Link="Models\intrusiveContext.cs" />
-    <Compile Include="..\DatabaseREST\Models\ItemColors.cs" Link="Models\ItemColors.cs" />
-    <Compile Include="..\DatabaseREST\Models\Items.cs" Link="Models\Items.cs" />
-    <Compile Include="..\DatabaseREST\Models\ItemTypes.cs" Link="Models\ItemTypes.cs" />
-    <Compile Include="..\DatabaseREST\Models\Maps.cs" Link="Models\Maps.cs" />
-    <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="Models\Matches.cs" />
-    <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="Models\PlayedMatch.cs" />
-    <Compile Include="..\DatabaseREST\Models\Players.cs" Link="Models\Players.cs" />
-    <Compile Include="..\DatabaseREST\Models\Servers.cs" Link="Models\Servers.cs" />
-    <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="Models\Testtable.cs" />
-    <Compile Include="..\DatabaseREST\Models\TokenModel.cs" Link="Models\TokenModel.cs" />
-    <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="Models\Wears.cs" />
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\DatabaseREST\Models\Abilities.cs" Link="EFModels\Abilities.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Accounts.cs" Link="EFModels\Accounts.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\HasLearned.cs" Link="EFModels\HasLearned.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\intrusiveContext.cs" Link="EFModels\intrusiveContext.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\ItemColors.cs" Link="EFModels\ItemColors.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Items.cs" Link="EFModels\Items.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\ItemTypes.cs" Link="EFModels\ItemTypes.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Maps.cs" Link="EFModels\Maps.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Matches.cs" Link="EFModels\Matches.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\PlayedMatch.cs" Link="EFModels\PlayedMatch.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Players.cs" Link="EFModels\Players.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Servers.cs" Link="EFModels\Servers.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Testtable.cs" Link="EFModels\Testtable.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\TokenModel.cs" Link="EFModels\TokenModel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\DatabaseREST\Models\Wears.cs" Link="EFModels\Wears.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="EFModels\" />
   </ItemGroup>
 
 <PropertyGroup>

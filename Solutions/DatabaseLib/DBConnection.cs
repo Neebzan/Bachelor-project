@@ -355,7 +355,7 @@ namespace DatabaseLib
 
             Random rnd = new Random(DateTime.Now.Second);
 
-            int index = 10000;
+            int index = 10001;
 
             try
             {
