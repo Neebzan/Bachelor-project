@@ -38,7 +38,6 @@ public class UIProvider : MonoBehaviour {
         if (inputDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonPressed)) {
             if (!_isPressingButton && primaryButtonPressed) {
                 _isPressingButton = true;
-                Debug.Log("Primary button pressed");
                 SetMenu(!_menuOpened);
             }
             else if (_isPressingButton && !primaryButtonPressed) {
