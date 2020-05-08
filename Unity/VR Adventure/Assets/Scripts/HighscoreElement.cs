@@ -6,7 +6,19 @@ using TMPro;
 
 public class HighscoreElement : MonoBehaviour
 {
-    public Text Placement;
-    public Text Username;
-    public Text Score;
+    public TextMeshProUGUI Placement;
+    public TextMeshProUGUI Username;
+    public TextMeshProUGUI Score;
+
+	private Image backgroundImage;
+
+	[HideInInspector]
+	public Image BackgroundImage {
+		get {
+			if (backgroundImage == null) {
+				backgroundImage = GetComponent<Image>();
+			}
+			return backgroundImage;
+		}
+	}
 }

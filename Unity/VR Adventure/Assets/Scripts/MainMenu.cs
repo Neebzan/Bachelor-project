@@ -11,7 +11,8 @@ using UnityEngine.Networking;
 public class MainMenu : MonoBehaviour {
     private Canvas _canvas;
 
-    public GameObject HighscorePanel;
+    public List<GameObject> MenuPanels = new List<GameObject>();
+
     public GameObject [ ] HighscoreElements = new GameObject [ 10 ];
 
     private readonly string refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJBYmJvdHQ0NDM5U2NvdCIsImF1ZCI6InJlZnJlc2giLCJuYmYiOjE1ODg5MjYzMjYsImV4cCI6MTU5ODA4NDcyNiwiaWF0IjoxNTg4OTI2MzI2fQ.5RMfdQIWmAGMnRBSYgL43dhNWVuDqEo0a56yYCHaw14";
@@ -23,12 +24,21 @@ public class MainMenu : MonoBehaviour {
     private void Awake () {
         _canvas = GetComponent<Canvas>();
         StartCoroutine(GetHighscores(accessToken, "Neebz"));
+        NavigateTo(MenuPanels [ 1 ]);
     }
 
     public void PlayGame () {
         Debug.Log("Play game pressed");
     }
 
+    public void NavigateTo (GameObject navigateToPanel) {
+        foreach (GameObject panel in MenuPanels) {
+            if (navigateToPanel == panel)
+                panel.SetActive(true);
+            else
+                panel.SetActive(false);
+        }
+    }
 
     IEnumerator GetHighscores (string token, string id = "", int perPage = 10) {
         string url = _baseUrl + "highscore/xp/?perPage=" + perPage;
@@ -57,10 +67,10 @@ public class MainMenu : MonoBehaviour {
                     element.Placement.text = highscores [ i ].Rank.ToString();
                     element.Username.text = highscores [ i ].Player.PlayerId;
                     element.Score.text = highscores [ i ].Player.Experience.ToString();
+                    if (!String.IsNullOrEmpty(id) && highscores [ i ].Player.PlayerId == id) {
+                        element.BackgroundImage.color = new Color(.9f,.82f,.4f);
+                    }
                 }
-
-
-
             }
         }
     }
