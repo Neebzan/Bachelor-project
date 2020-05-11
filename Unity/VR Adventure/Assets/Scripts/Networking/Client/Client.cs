@@ -122,8 +122,11 @@ public class Client : MonoBehaviour
 
             incomingPacket.SetBytes(_data);
 
-            //Check if there 4 or more bytes in the packet (size of int is 4), which tells of how many byte the entire packet contains
-            //if(incomingPacket.)
+            //Check if there 4 or more bytes in the packet (size of int is 4)
+            if(incomingPacket.UnreadLength() >= 4)
+            {
+                return true;
+            }
             return true;
         }
 
