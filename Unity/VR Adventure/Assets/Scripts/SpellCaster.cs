@@ -20,6 +20,13 @@ public class SpellCaster : MonoBehaviour {
     private CharacterController _characterController = null;
     private Fireball _castFireball;
 
+    private Vector3 _pointBetween {
+        get {
+            return LeftController.PointerFinger.position + (RightController.PointerFinger.position - LeftController.PointerFinger.position) * .5f;
+        }
+    }
+
+
     void Start () {
         _characterController = GetComponent<CharacterController>();
     }
@@ -27,14 +34,31 @@ public class SpellCaster : MonoBehaviour {
     void Update () {
         CheckForSpellcast();
         if (castingSpell) {
-            Vector3 pointBetween = LeftController.transform.position + (RightController.transform.position - LeftController.transform.position) * .5f;
-            _castFireball.transform.position = pointBetween;
-            _castFireball.Size = Vector3.Distance(RightController.transform.position, LeftController.transform.position) * .5f;
+            _castFireball.transform.position = _pointBetween;
+            float distance = Vector3.Distance(RightController.PointerFinger.position, LeftController.PointerFinger.position);
+            _castFireball.Size = distance - .1f;
         }
     }
 
 
     private void CheckForSpellcast () {
+        if (!castingSpell) {
+            // Force Push
+            if (RightController.HandMaterial != null) {
+                if (RightController.CurrentGesture == HandGesture.Open) {
+                    if (RightController.SecondaryButtonPressed) {
+                        RightController.HandMaterial.SetFloat("Vector1_654486F", 1.0f);
+                        RightController.HandMaterial.SetFloat("_Glow", 1.0f);
+                    }
+                }
+            }
+
+            // Shield
+            if (RightController.CurrentGesture == HandGesture.Open && LeftController.CurrentGesture == HandGesture.Open) {
+
+            }
+        }
+
         if (!castingSpell && RightController.CurrentGesture == HandGesture.Pinch && LeftController.CurrentGesture == HandGesture.Pinch) {
             castingSpell = true;
             CastFireball();
@@ -48,10 +72,8 @@ public class SpellCaster : MonoBehaviour {
     }
 
     private void CastFireball () {
-        Vector3 pointBetween = LeftController.transform.position + (RightController.transform.position - LeftController.transform.position) * .5f;
-
         GameObject instans = Instantiate(FireballPrefab);
-        instans.transform.position = pointBetween;
+        instans.transform.position = _pointBetween;
         _castFireball = instans.GetComponent<Fireball>();
     }
 }

@@ -3252,6 +3252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 801232466}
+  RightHand: 1
 --- !u!114 &801232466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5621,6 +5622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 1723859465}
+  RightHand: 0
 --- !u!114 &1723859465
 MonoBehaviour:
   m_ObjectHideFlags: 0
