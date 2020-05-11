@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using DatabaseREST.Models;
@@ -30,12 +31,19 @@ namespace DatabaseREST.Controllers
 
         [HttpGet]
         [Route("xp")]
-        public ActionResult<IEnumerable<HighscoreEntry>> Get([FromHeader]string token, int perPage = 10, int page = 0, string id = "")
+        public ActionResult<HighscorePage> Get([FromHeader]string token, int perPage = 10, int page = 1, string id = "")
         {
             if (Token.VerifyToken(token, "access"))
             {
                 int rankIndex = 1;
+                int curPage = 1;
                 List<Players> players;
+
+                HighscorePage hPage = new HighscorePage()
+                {
+                    CurrentPage = 1,
+                    TotalPageCount = 1
+                };
 
                 if (id != "")
                 {
@@ -45,11 +53,12 @@ namespace DatabaseREST.Controllers
                         //Minus one to always get the correct page number based on
                         //page 0 = 1..10
                         //page 1 = 11..20 etc.
-                        int curPage = (_context.Players.Where(p => p.Experience >= player.Experience).Count() - 1) / perPage;
+                        curPage = (_context.Players.Where(p => p.Experience >= player.Experience).Count() - 1) / perPage;
+
+
 
                         players = _contextRead.Players.OrderByDescending(p => p.Experience).Skip(perPage * curPage).Take(perPage).ToList();
 
-                        //Plus one to show correct rank based on 1 indexed ranks
                         rankIndex = curPage * perPage + 1;
 
                     }
@@ -57,9 +66,19 @@ namespace DatabaseREST.Controllers
                         return NotFound();
                 }
                 else
-                    players = _contextRead.Players.OrderByDescending(p => p.Experience).Skip(perPage * page).Take(perPage).ToList();
+                {
+                    curPage = page;
+                    if (curPage < 1)
+                    {
+                        curPage = 1;
+                    }
+                    players = _contextRead.Players.OrderByDescending(p => p.Experience).Skip(perPage * (curPage - 1)).Take(perPage).ToList();
+                    rankIndex = (curPage - 1) * perPage + 1;
+                }
 
                 List<HighscoreEntry> result = new List<HighscoreEntry>();
+                //Plus one to show correct rank based on 1 indexed ranks
+
                 for (int i = 0; i < players.Count; i++)
                 {
                     result.Add(new HighscoreEntry()
@@ -70,7 +89,11 @@ namespace DatabaseREST.Controllers
                     rankIndex++;
                 }
 
-                return result;
+                hPage.CurrentPage = curPage;
+                hPage.Entries = result;
+                hPage.TotalPageCount = (_contextRead.Players.Count() / perPage) + 1;
+
+                return hPage;
 
             }
             return Unauthorized("Token invalid or expired!");
