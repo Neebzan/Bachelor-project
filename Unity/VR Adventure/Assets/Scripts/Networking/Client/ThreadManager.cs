@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using UnityEngine;
 
 public class ThreadManager : MonoBehaviour
 {
     private static readonly List<Action> executeOnMainThread = new List<Action>();
     private static readonly List<Action> executeCopiedOnMainThread = new List<Action>();
+    private static List<Action> actionsToBeRemoved = new List<Action>();
     private static bool actionToExecuteOnMainThread = false;
 
     // Update is called once per frame
@@ -16,7 +18,7 @@ public class ThreadManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets and actions to be executed on the main thread!
+    /// Sets an actions to be executed on the main thread!
     /// </summary>
     /// <param name="_action"></param>
     public static void ExecuteOnMainThread(Action _action)
@@ -50,6 +52,13 @@ public class ThreadManager : MonoBehaviour
         for (int i = 0; i < executeCopiedOnMainThread.Count; i++)
         {
             executeCopiedOnMainThread[i]();
+            actionsToBeRemoved.Add(executeCopiedOnMainThread[i]);
+        }
+
+        //Remove actions that has aslready fired
+        for (int i = 0; i < actionsToBeRemoved.Count; i++)
+        {
+            executeCopiedOnMainThread.Remove(actionsToBeRemoved[i]);
         }
     }
 

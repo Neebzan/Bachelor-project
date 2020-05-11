@@ -16,6 +16,9 @@ public class Client : MonoBehaviour
 
     public TCP tcp;
 
+    private delegate void PacketHandler(Packet _packet);
+    private static Dictionary<int, PacketHandler> packetHandlers;
+
 
     public bool isConnected = false;
 
@@ -38,6 +41,7 @@ public class Client : MonoBehaviour
 
     public void ConnectToServer()
     {
+        InitClientData();
         tcp.Connect();
     }
 
@@ -59,6 +63,21 @@ public class Client : MonoBehaviour
 
             receiveBuffer = new byte[dataBufferSize];
             client.BeginConnect(instance.ip, instance.port, ConnectCallback, client);
+        }
+
+        public void SendData(Packet _packet)
+        {
+            try
+            {
+                if (client != null)
+                {
+                    stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Couldn't sent data via TCP: {e}");
+            }
         }
 
         private void ConnectCallback(IAsyncResult _result)
@@ -122,15 +141,67 @@ public class Client : MonoBehaviour
 
             incomingPacket.SetBytes(_data);
 
-            //Check if there 4 or more bytes in the packet (size of int is 4)
-            if(incomingPacket.UnreadLength() >= 4)
+            //Check if there is 4 or more bytes in the packet (size of int is 4)
+            if (incomingPacket.UnreadLength() >= 4)
+            {
+                //Read the length of the incoming packet
+                packetLength = incomingPacket.ReadInt();
+                if (packetLength <= 0)
+                {
+                    //If the length is 0, return
+                    return true;
+                }
+
+            }
+
+            //Keep reading until there is no more data left to read for this specific packet
+            //We keep this in a while loop here because one packet might be made up of several packets
+            while (packetLength > 0 && packetLength <= incomingPacket.UnreadLength())
+            {
+                byte[] bytes = incomingPacket.ReadBytes(packetLength);
+
+                ThreadManager.ExecuteOnMainThread(() =>
+                {
+                    using (Packet _packet = new Packet(bytes))
+                    {
+                        int _packetId = _packet.ReadInt();
+                        packetHandlers[_packetId](_packet);
+                    }
+                });
+
+                packetLength = 0;
+
+                //Check if there 4 or more bytes in the packet (size of int is 4)
+                if (incomingPacket.UnreadLength() >= 4)
+                {
+                    //Read the length of the incoming packet
+                    packetLength = incomingPacket.ReadInt();
+                    if (packetLength <= 0)
+                    {
+                        //If the length is 0, return
+                        return true;
+                    }
+
+                }
+            }
+
+            if(packetLength <= 1)
             {
                 return true;
             }
-            return true;
-        }
 
+            return false;
+        }
     }
+
+    private void InitClientData()
+    {
+        packetHandlers = new Dictionary<int, PacketHandler>()
+        {
+            {(int)ServerPackets.Welcome, ClientHandle.WelcomeMessage }
+        };
+    }
+
     private void Disconnect()
     {
         if (isConnected)

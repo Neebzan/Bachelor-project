@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ public class ServerPacketSender
 
             SendTCPPacket(client, packet);
         }
+        Console.WriteLine($"Welcome message sent to client {client}");
     }
 
     private static void SendTCPPacket(int _clientId, Packet _packet)

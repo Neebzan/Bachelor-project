@@ -14,5 +14,6 @@ public class ClientHandle : MonoBehaviour
         Client.instance.id = id;
 
         //Send a response to server here
+        ClientPacketSender.WelcomeReceived();
     }
 }

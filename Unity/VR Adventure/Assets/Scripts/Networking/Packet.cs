@@ -11,7 +11,7 @@ public enum ServerPackets
 
 public enum ClientPackets
 {
-
+    WelcomeReceived
 }
 
 
@@ -125,6 +125,24 @@ public class Packet : IDisposable
     #endregion
 
     #region ReadMethods
+    public byte[] ReadBytes(int _length, bool _moveReadPos = true)
+    {
+        if(buffer.Count > readPos)
+        {
+            //Get the bytes from the current read position in the buffer, to the amount of "_length"
+            byte[] _value = buffer.GetRange(readPos, _length).ToArray();
+            if(_moveReadPos)
+            {
+                //If we're moving the current read position
+                readPos += _length;
+            }
+            return _value;
+        }
+        else
+        {
+            throw new Exception("Couldn't read value of type 'byte[]'!");
+        }
+    }
     public int ReadInt(bool _moveReadPos = true)
     {
         if (buffer.Count > readPos)

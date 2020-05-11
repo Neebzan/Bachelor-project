@@ -12,6 +12,9 @@ public class Server
 
     public static Dictionary<int, ServerClient> clients = new Dictionary<int, ServerClient>();
 
+    public delegate void PacketHandler(int _fromClient, Packet _packet);
+    public static Dictionary<int, PacketHandler> packetHandlers;
+
     private static TcpListener tcpListener;
 
     public static void Start(int _maxPlayers, int _port)
@@ -71,6 +74,11 @@ public class Server
         {
             clients.Add(i, new ServerClient(i));
         }
+
+        packetHandlers = new Dictionary<int, PacketHandler>()
+        {
+            {(int)ClientPackets.WelcomeReceived, ServerHandle.WelcomeReceived }
+        };
     }
 
     public static void Stop()

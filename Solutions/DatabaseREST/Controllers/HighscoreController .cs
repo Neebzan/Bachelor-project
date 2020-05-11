@@ -53,13 +53,14 @@ namespace DatabaseREST.Controllers
                         //Minus one to always get the correct page number based on
                         //page 0 = 1..10
                         //page 1 = 11..20 etc.
-                        curPage = (_context.Players.Where(p => p.Experience >= player.Experience).Count() - 1) / perPage;
-
-
+                        curPage = _context.Players.Where(p => p.Experience >= player.Experience).Count() / perPage;
 
                         players = _contextRead.Players.OrderByDescending(p => p.Experience).Skip(perPage * curPage).Take(perPage).ToList();
 
                         rankIndex = curPage * perPage + 1;
+
+                        //Keep pages 1 indexed
+                        curPage++;
 
                     }
                     else
