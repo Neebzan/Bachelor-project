@@ -35,6 +35,7 @@ public class MainMenu : MonoBehaviour {
         foreach (GameObject panel in MenuPanels) {
             if (navigateToPanel == panel)
                 panel.SetActive(true);
+
             else
                 panel.SetActive(false);
         }
@@ -46,20 +47,16 @@ public class MainMenu : MonoBehaviour {
         if (id != "")
             url += "&id=" + id;
 
-
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             webRequest.SetRequestHeader("token", token);
 
-            // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError) {
-                Debug.Log(webRequest.error);
-            }
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+                Debug.Log(webRequest.error);            
 
             if (webRequest.isDone) {
                 string json = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
-                Debug.Log("JSON: " + json);
                 List<HighscoreEntry> highscores = JsonConvert.DeserializeObject<List<HighscoreEntry>>(json);
 
                 for (int i = 0; i < highscores.Count; i++) {
@@ -67,9 +64,9 @@ public class MainMenu : MonoBehaviour {
                     element.Placement.text = highscores [ i ].Rank.ToString();
                     element.Username.text = highscores [ i ].Player.PlayerId;
                     element.Score.text = highscores [ i ].Player.Experience.ToString();
-                    if (!String.IsNullOrEmpty(id) && highscores [ i ].Player.PlayerId == id) {
-                        element.BackgroundImage.color = new Color(.9f,.82f,.4f);
-                    }
+
+                    if (!String.IsNullOrEmpty(id) && highscores [ i ].Player.PlayerId == id)
+                        element.BackgroundImage.color = new Color(.9f,.82f,.4f);                    
                 }
             }
         }
