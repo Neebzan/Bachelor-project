@@ -21,9 +21,15 @@ public class MainMenu : MonoBehaviour {
     private readonly string _baseUrl = "http://212.10.51.254:30830/api/";
 
 
+    private int _currentPage = -1;
+    private int _totalPages = -1;
+    private string _userID = "Neebz";
+
+    private bool isUpdatingHighscores = false;
+
     private void Awake () {
         _canvas = GetComponent<Canvas>();
-        StartCoroutine(GetHighscores(accessToken, "Neebz"));
+        StartCoroutine(GetHighscores(accessToken, _userID));
         NavigateTo(MenuPanels [ 1 ]);
     }
 
@@ -41,11 +47,27 @@ public class MainMenu : MonoBehaviour {
         }
     }
 
+    public void ChangePage (int pages) {
+        if (!isUpdatingHighscores) {
+            if (_totalPages != -1) {
+                if (_currentPage + pages > 0 && _currentPage + pages <= _totalPages) {
+                    _currentPage += pages;
+                    StartCoroutine(GetHighscores(accessToken));
+                }
+            }
+        }
+    }
+
     IEnumerator GetHighscores (string token, string id = "", int perPage = 10) {
+        isUpdatingHighscores = true;
         string url = _baseUrl + "highscore/xp/?perPage=" + perPage;
 
         if (id != "")
             url += "&id=" + id;
+
+        else if (_currentPage >= 1) {
+            url += "&page=" + _currentPage;
+        }
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(url)) {
             webRequest.SetRequestHeader("token", token);
@@ -53,23 +75,41 @@ public class MainMenu : MonoBehaviour {
             yield return webRequest.SendWebRequest();
 
             if (webRequest.isNetworkError || webRequest.isHttpError)
-                Debug.Log(webRequest.error);            
+                Debug.Log(webRequest.error);
 
             if (webRequest.isDone) {
                 string json = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
-                List<HighscoreEntry> highscores = JsonConvert.DeserializeObject<List<HighscoreEntry>>(json);
+                HighscorePage highscores = JsonConvert.DeserializeObject<HighscorePage>(json);
 
-                for (int i = 0; i < highscores.Count; i++) {
+                for (int i = 0; i < highscores.Entries.Count; i++) {
                     HighscoreElement element = HighscoreElements [ i ].GetComponent<HighscoreElement>();
-                    element.Placement.text = highscores [ i ].Rank.ToString();
-                    element.Username.text = highscores [ i ].Player.PlayerId;
-                    element.Score.text = highscores [ i ].Player.Experience.ToString();
+                    element.Placement.text = highscores.Entries [ i ].Rank.ToString();
+                    element.Username.text = highscores.Entries [ i ].Player.PlayerId;
+                    element.Score.text = highscores.Entries [ i ].Player.Experience.ToString();
 
-                    if (!String.IsNullOrEmpty(id) && highscores [ i ].Player.PlayerId == id)
-                        element.BackgroundImage.color = new Color(.9f,.82f,.4f);                    
+                    if (!String.IsNullOrEmpty(_userID) && highscores.Entries [ i ].Player.PlayerId == _userID)
+                        element.Highlight(true);
+                    else
+                        element.Highlight(false);
+
                 }
+
+                if (highscores.Entries.Count < perPage) {
+                    for (int i = highscores.Entries.Count; i < perPage; i++) {
+                        HighscoreElement element = HighscoreElements [ i ].GetComponent<HighscoreElement>();
+                        element.Placement.text = "";
+                        element.Username.text = "";
+                        element.Score.text = "";
+
+                        element.Highlight(false);
+                    }
+                }
+
+                _currentPage = highscores.CurrentPage;
+                _totalPages = highscores.TotalPageCount;
             }
         }
+        isUpdatingHighscores = false;
     }
 }
 

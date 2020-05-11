@@ -18,9 +18,9 @@ public class HandPresence : MonoBehaviour {
         List<InputDevice> inputDevices = new List<InputDevice>();
         InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, inputDevices);
 
-        foreach (var item in inputDevices) {
-            Debug.Log(item.name + item.characteristics);
-        }
+        //foreach (var item in inputDevices) {
+        //    Debug.Log(item.name + item.characteristics);
+        //}
 
         if (inputDevices.Count > 0) {
             targetDevice = inputDevices [ 0 ];
