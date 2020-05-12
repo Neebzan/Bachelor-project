@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 71415749}
   - component: {fileID: 71415753}
   - component: {fileID: 71415752}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 72800014}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Camera Offset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -894,6 +894,7 @@ GameObject:
   - component: {fileID: 204441037}
   - component: {fileID: 204441039}
   - component: {fileID: 204441038}
+  - component: {fileID: 204441040}
   m_Layer: 0
   m_Name: HighscoreBasePanel
   m_TagString: Untagged
@@ -955,6 +956,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 204441036}
   m_CullTransparentMesh: 0
+--- !u!114 &204441040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204441036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f510d5049efd36f42ae780885bfc9ce6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighscoreElements:
+  - {fileID: 9095306651258682326}
+  - {fileID: 5640363622284234345}
+  - {fileID: 5640363622742012686}
+  - {fileID: 5640363623583697827}
+  - {fileID: 5640363623318916916}
+  - {fileID: 5640363623845891033}
+  - {fileID: 5640363623086870572}
+  - {fileID: 5640363622652997052}
+  - {fileID: 5640363622524503343}
+  - {fileID: 5640363623384999162}
 --- !u!1 &250736605
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,7 +996,7 @@ GameObject:
   - component: {fileID: 250736612}
   - component: {fileID: 250736614}
   - component: {fileID: 250736613}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: XR Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1101,7 +1125,7 @@ MonoBehaviour:
   Controllers:
   - {fileID: 801232466}
   - {fileID: 676368190}
-  StartInMenu: 1
+  StartInMenu: 0
   UI: {fileID: 1719701969}
 --- !u!114 &250736613
 MonoBehaviour:
@@ -2394,7 +2418,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7941593134942214220}
+      - m_Target: {fileID: 204441040}
         m_MethodName: ChangePage
         m_Mode: 3
         m_Arguments:
@@ -2547,7 +2571,7 @@ GameObject:
   - component: {fileID: 676368189}
   - component: {fileID: 676368188}
   - component: {fileID: 676368187}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RightHandUI Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3153,7 +3177,7 @@ GameObject:
   - component: {fileID: 801232463}
   - component: {fileID: 801232464}
   - component: {fileID: 801232465}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RightHand Controller
   m_TagString: Controller
   m_Icon: {fileID: 0}
@@ -3253,6 +3277,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 801232466}
   RightHand: 1
+  SphereCollider: {fileID: 0}
+  SecondaryButtonPressed: 0
+  Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &801232466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4758,7 +4785,7 @@ GameObject:
   - component: {fileID: 1473269904}
   - component: {fileID: 1473269903}
   - component: {fileID: 1473269902}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LeftHandUI Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5523,7 +5550,7 @@ GameObject:
   - component: {fileID: 1723859462}
   - component: {fileID: 1723859463}
   - component: {fileID: 1723859464}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LeftHand Controller
   m_TagString: Controller
   m_Icon: {fileID: 0}
@@ -5623,6 +5650,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 1723859465}
   RightHand: 0
+  SphereCollider: {fileID: 0}
+  SecondaryButtonPressed: 0
+  Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1723859465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6023,7 +6053,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh18832
+  m_Name: pb_Mesh16996
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6418,7 +6448,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7941593134942214220}
+      - m_Target: {fileID: 204441040}
         m_MethodName: ChangePage
         m_Mode: 3
         m_Arguments:
@@ -13572,17 +13602,6 @@ MonoBehaviour:
   MenuPanels:
   - {fileID: 1366744632}
   - {fileID: 204441036}
-  HighscoreElements:
-  - {fileID: 9095306651258682326}
-  - {fileID: 5640363622284234345}
-  - {fileID: 5640363622742012686}
-  - {fileID: 5640363623583697827}
-  - {fileID: 5640363623318916916}
-  - {fileID: 5640363623845891033}
-  - {fileID: 5640363623086870572}
-  - {fileID: 5640363622652997052}
-  - {fileID: 5640363622524503343}
-  - {fileID: 5640363623384999162}
 --- !u!224 &8148751736909584070
 RectTransform:
   m_ObjectHideFlags: 0

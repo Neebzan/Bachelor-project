@@ -10,45 +10,29 @@ public class GestureController : MonoBehaviour {
     public XRController Controller;
     public bool RightHand = true;
 
+    public SphereCollider SphereCollider;
     private SphereCollider _collider;
     private Transform _pointerFinger;
 
 
+    private Hand _hand;
+    public Hand Hand {
+        get {
+            if (_hand == null) {
+                Transform modelTransform = Controller?.modelTransform;
+                _hand = modelTransform.childCount > 0 ? modelTransform.GetChild(0).childCount > 0 ? modelTransform.GetChild(0).GetChild(0).GetComponent<Hand>() : null : null;
+            }
+            return _hand;
+        }
+    }
+
     public bool SecondaryButtonPressed;
 
-    private Material _handMaterial;
-    public Material HandMaterial {
-        get {
-            if (_handMaterial == null) {
-                if (RightHand)
-                    _handMaterial = GameObject.Find("hands:Rhand")?.GetComponent<SkinnedMeshRenderer>()?.material;
-                else
-                    _handMaterial = GameObject.Find("hands:Lhand")?.GetComponent<SkinnedMeshRenderer>()?.material;
-            }
-            return _handMaterial;
-        }
-    }
-
-
-    [HideInInspector]
-    public Transform PointerFinger {
-        get {
-            if (_pointerFinger == null) {
-                if (RightHand) {
-                    _pointerFinger = GameObject.Find("hands:b_r_index_ignore")?.transform;
-                }
-                else
-                    _pointerFinger = GameObject.Find("hands:b_l_index_ignore")?.transform;
-            }
-
-            return _pointerFinger == null ? transform : _pointerFinger;
-        }
-    }
 
     [HideInInspector]
     public HandGesture CurrentGesture { get; private set; }
 
-    private Vector3 _velocity;
+    public Vector3 Velocity;
     private Vector3 _velocity2;
 
 
@@ -62,10 +46,11 @@ public class GestureController : MonoBehaviour {
 
     private void CheckInput () {
         if (Controller.enableInputActions) {
+            // Resetting
             CurrentGesture = HandGesture.Open;
             SecondaryButtonPressed = false;
 
-            // Grisp
+            // Grasp
             if (Controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
                 CurrentGesture = gripValue > .5f ? HandGesture.Grip : HandGesture.Open;
             }
@@ -79,30 +64,12 @@ public class GestureController : MonoBehaviour {
 
             // Velocity
             if (Controller.inputDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 velocityValue)) {
-                _velocity = Quaternion.Euler(0, -90, 0) * velocityValue;
+                Velocity = Quaternion.Euler(0, -90, 0) * velocityValue;
             }
 
+            // Secondary button
             if (Controller.inputDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out bool secondaryButtonValue)) {
                 SecondaryButtonPressed = secondaryButtonValue;
-            }
-        }
-    }
-
-    private void OnTriggerEnter (Collider other) {
-        Debug.Log("On Trigger Enter");
-        Fireball fireball = other.GetComponent<Fireball>();
-        if (fireball != null) {
-            if (fireball.Active) {
-                //Fire fireball
-                if (!fireball.Launched) {
-                    Debug.Log("Fireball not launched");
-                    if (CurrentGesture == HandGesture.Punch) {
-                        Debug.Log("Launch fireball");
-                        fireball.Launch(_velocity * 50.0f);
-                    }
-                }
-
-                //Get hit
             }
         }
     }

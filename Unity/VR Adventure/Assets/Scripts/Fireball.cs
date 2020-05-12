@@ -8,11 +8,15 @@ public class Fireball : MonoBehaviour {
     private string _wobbleSizeProperty = "Vector1_417B252A";
 
     private MeshRenderer _meshRenderer;
-    private SphereCollider _collider;
+
+    [SerializeField]
+    private SphereCollider _physicalCollider;
+    [SerializeField]
+    private SphereCollider _triggerCollider;
+
     private Rigidbody _rigidBody;
 
     public bool Active = false;
-    public bool Launched = false;
 
     private float _size;
     public float Size {
@@ -28,43 +32,21 @@ public class Fireball : MonoBehaviour {
 
     private void Awake () {
         _meshRenderer = GetComponent<MeshRenderer>();
-        _collider = GetComponent<SphereCollider>();
         _rigidBody = GetComponent<Rigidbody>();
+        _triggerCollider = GetComponent<SphereCollider>();
     }
 
     private void Expand () {
         _meshRenderer.material.SetFloat(_sizeProperty, Size);
-        //_meshRenderer.material.SetFloat(_wobbleSizeProperty, Size * .5f);
     }
 
     public void Create () {
-        _collider.radius = Size * .5f;
+        _physicalCollider.radius = Size * .5f;
+        _triggerCollider.radius = Size * .5f;
         Active = true;
     }
 
-    public void Launch (Vector3 relativeVelocity) {
-        if (!Launched) {
-            _rigidBody.AddForce(relativeVelocity);
-            Launched = true;
-        }
+    public void ApplyForce (Vector3 relativeVelocity) {
+        _rigidBody.AddForce(relativeVelocity);
     }
-
-    //private void OnTriggerEnter (Collider other) {
-    //    if (other.tag == "Controller") {
-    //    Debug.Log("collision hit!");
-    //    //    Fireball fireball = collision.gameObject.GetComponent<Fireball>();
-    //    //    if (fireball != null) {
-    //    //        if (fireball.Active) {
-    //    //            //Fire fireball
-    //    //            if (!fireball.Launched) {
-    //    //                if (CurrentGesture == HandGesture.Punch) {
-    //    //                    fireball.Launch(collision.relativeVelocity);
-    //    //                }
-    //    //            }
-
-    //    //            //Get hit
-    //    //        }
-    //    //    }
-    //    //}
-    //}
 }
