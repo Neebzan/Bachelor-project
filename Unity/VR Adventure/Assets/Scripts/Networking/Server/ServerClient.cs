@@ -7,95 +7,70 @@ using System;
 
 public class ServerClient
 {
-    public static int dataBufferSize = 4096;
-
     public int id;
     public Player player;
 
     public TCP tcp;
+    public UDP udp;
+
+    public bool isConnected = false;
 
     public ServerClient(int _id)
     {
         id = _id;
         tcp = new TCP(id);
+        udp = new UDP(id);     
     }
 
-    public class TCP
+    ~ServerClient()
     {
-        public TcpClient client;
-        private readonly int id;
+       
+    }
 
-        private NetworkStream stream;
-        private byte[] receiveBuffer;
+    public void Connect(TcpClient tcpClient)
+    {
+        tcp.Disconnected += Server.DisconnectClient;
+        tcp.Connect(tcpClient, PacketHandlers.Server);
+        isConnected = true;
+    }
 
-        public TCP(int _id)
+    public void SpawnPlayer(string _userName)
+    {
+        player = ServerManager.instance.InstantiatePlayer();
+        player.Initialize(id, _userName);
+
+        //Send all existing players to the client
+        foreach (var client in Server.clients.Values)
         {
-            id = _id;
-        }
-
-        public void Connect(TcpClient _client)
-        {
-            client = _client;
-            client.ReceiveBufferSize = dataBufferSize;
-
-            stream = client.GetStream();
-
-            receiveBuffer = new byte[dataBufferSize];
-
-            stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-            ServerPacketSender.WelcomeMessage(id, "This is a welcome message!");
-        }
-
-        public void SendData(Packet _packet)
-        {
-            try
+            //if player exists
+            if (client.player != null)
             {
-                if(client != null)
-                {
-                    stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Couldn't sent data to {id} via TCP: {e}");
+                //If not this player
+                if (client.id != id)
+                    ServerPacketSender.SpawnPlayer(id, client.player);
             }
         }
 
-        private void ReceiveCallback(IAsyncResult _result)
+        //Send the new player, to all existing player
+        foreach (var client in Server.clients.Values)
         {
-            try
-            {
-                int bytesReceived = stream.EndRead(_result);
-                //
-                if(bytesReceived <= 0)
-                {
-                    Server.clients[id].tcp.Disconnect();
-                    return;
-                }
+            if (client.player != null)
+                ServerPacketSender.SpawnPlayer(client.id, player);
 
-                byte[] data = new byte[bytesReceived];
-                Array.Copy(receiveBuffer, data, bytesReceived);
-
-                //Wait for next data
-                stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
         }
 
-        /// <summary>Closes and cleans up the TCP connection.</summary>
-        public void Disconnect()
+    }
+
+    public void Disconnect()
+    {
+        if (isConnected)
         {
-            client.Close();
-            stream = null;
-            //receivedData = null;
-            receiveBuffer = null;
-            client = null;
+            tcp.Disconnected -= Server.DisconnectClient;
+            isConnected = false;
+            player = null;
+            tcp.Disconnect();
+            udp.Disconnect();
+            Debug.Log("Disconnected from server.");
         }
     }
 

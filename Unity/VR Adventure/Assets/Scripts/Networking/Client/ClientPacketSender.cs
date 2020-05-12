@@ -12,9 +12,36 @@ public class ClientPacketSender : MonoBehaviour
         using(Packet _packet = new Packet((int)ClientPackets.WelcomeReceived))
         {
             _packet.Write(Client.instance.id);
-            _packet.Write("TestUserName");
+            _packet.Write(Client.instance.userName);
 
             SendTCPData(_packet);
+        }
+    }
+
+    public static void UdpTestReceived()
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.UdpTestReceived))
+        {
+            _packet.Write(Client.instance.id);
+            _packet.Write("Yo Server bruh, I got that UDP packet!");
+
+            SendUDPData(_packet);
+        }
+    }
+
+    public static void PlayerMovement(bool[] inputs)
+    {
+        //Debug.Log("Sending inputs!");
+        using (Packet _packet = new Packet((int)ClientPackets.PlayerMovement))
+        {
+            _packet.Write(inputs.Length);
+            _packet.Write(Client.instance.id);
+            foreach (var item in inputs)
+            {
+                _packet.Write(item);
+            }
+
+            SendUDPData(_packet);
         }
     }
 
@@ -22,6 +49,12 @@ public class ClientPacketSender : MonoBehaviour
     {
         _packet.WriteLength(); //Add a length to the packet
         Client.instance.tcp.SendData(_packet);
+    }
+
+    private static void SendUDPData(Packet _packet)
+    {
+        _packet.WriteLength(); //Add a length to the packet
+        Client.instance.udp.SendData(_packet);
     }
 }
 

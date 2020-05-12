@@ -4,16 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public enum ServerPackets
-{
-    Welcome
-}
-
-public enum ClientPackets
-{
-    WelcomeReceived
-}
-
 
 public class Packet : IDisposable
 {
@@ -86,6 +76,16 @@ public class Packet : IDisposable
             readPos -= 4; //"Unread" bytes for some reason?
     }
 
+    /// <summary>
+    /// Insert an int into the buffer at the given position (Default 0)
+    /// </summary>
+    /// <param name="_value"></param>
+    /// <param name="pos"></param>
+    public void InsertInt(int _value, int pos = 0)
+    {
+        buffer.InsertRange(pos, BitConverter.GetBytes(_value));
+    }
+
     #region WriteMethods
     public void Write(byte[] _value)
     {
@@ -120,6 +120,10 @@ public class Packet : IDisposable
         Write(_value.y);
         Write(_value.z);
         Write(_value.w);
+    }
+    public void Write(bool _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
     }
 
     #endregion
@@ -161,6 +165,41 @@ public class Packet : IDisposable
         }
     }
 
+    public bool ReadBool(bool _moveReadPos = true)
+    {
+        if (buffer.Count > readPos)
+        {
+            //When there's unread bytes
+            bool _value = BitConverter.ToBoolean(readableBuffer, readPos);
+            if (_moveReadPos)
+            {
+                readPos += 1; // size of bool
+            }
+            return _value;
+        }
+        else
+        {
+            throw new Exception("Could not read value of type 'bool'!");
+        }
+    }
+    public float ReadFloat(bool _moveReadPos = true)
+    {
+        if (buffer.Count > readPos)
+        {
+            //When there's unread bytes
+            float _value = BitConverter.ToSingle(readableBuffer, readPos);
+            if (_moveReadPos)
+            {
+                readPos += 4; //Size of int
+            }
+            return _value;
+        }
+        else
+        {
+            throw new Exception("Couldn't read value of type 'float'!");
+        }
+    }
+
     public string ReadString(bool _moveReadPos = true)
     {
         try
@@ -182,6 +221,16 @@ public class Packet : IDisposable
         {
             throw new Exception("Couldn't read value of type 'string'!");
         }
+    }
+
+    public Vector3 ReadVector3(bool _moveReadPos = true)
+    {
+        return new Vector3(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
+    }
+
+    public Quaternion ReadQuaternion(bool _moveReadPos = true)
+    {
+        return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
     }
     #endregion
 

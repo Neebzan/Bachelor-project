@@ -5,6 +5,8 @@ using UnityEngine;
 public class ServerManager : MonoBehaviour
 {
     public static ServerManager instance;
+
+    public GameObject playerPrefab;
     private void Awake()
     {
         if (instance == null)
@@ -18,6 +20,9 @@ public class ServerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+
         Server.Start(10, 27000);
     }
 
@@ -26,5 +31,9 @@ public class ServerManager : MonoBehaviour
         Server.Stop();
     }
 
+    public Player InstantiatePlayer()
+    {
+        return Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
+    }
 
 }
