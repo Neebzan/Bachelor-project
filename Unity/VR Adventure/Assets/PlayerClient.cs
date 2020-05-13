@@ -15,5 +15,7 @@ public class PlayerClient : MonoBehaviour
     private void FixedUpdate()
     {
         ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
+        HandDataPacket tempLeft = new HandDataPacket();
+
     }
 }
