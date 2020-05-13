@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Client.unity
     guid: e21bea3588abb9c418a42376a559b199
+  - enabled: 0
+    path: Assets/Scenes/VR - Esben.unity
+    guid: 6780fe7a3fe9c5045a37a3224fb2a013
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bf984ad8ba8a8e24aa7c95e1f6a6a115,
       type: 2}

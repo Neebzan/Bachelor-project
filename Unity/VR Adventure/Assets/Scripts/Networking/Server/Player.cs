@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
             vrPlayer.LeftHand = packet;
         else
             vrPlayer.RightHand = packet;
-    }    
+    }
 
     public void SetHead(Vector3 pos, Quaternion rot)
     {
@@ -70,6 +70,9 @@ public class Player : MonoBehaviour
         ServerPacketSender.HeadData(vrPlayer);
         ServerPacketSender.VRRightHandData(vrPlayer);
         ServerPacketSender.VRLeftHandData(vrPlayer);
+
+        Console.WriteLine("LeftHand pos: " + vrPlayer.LeftHand.HandPosition);
+        Console.WriteLine("RightHand pos: " + vrPlayer.RightHand.HandPosition);
 
 
         //Vector2 _inputDirection = Vector2.zero;
