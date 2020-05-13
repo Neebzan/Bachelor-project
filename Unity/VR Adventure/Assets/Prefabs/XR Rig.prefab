@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1090247718326729529}
   - component: {fileID: 1090247718326729525}
   - component: {fileID: 1090247718326729530}
-  - component: {fileID: 1090247718326729531}
   m_Layer: 10
   m_Name: LeftHand Controller
   m_TagString: Controller
@@ -111,19 +110,6 @@ MonoBehaviour:
   m_PlayHapticsOnHoverExit: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
---- !u!135 &1090247718326729531
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1090247718326729528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.14
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1090247719149840816
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1090247719149840817
 Transform:
   m_ObjectHideFlags: 0
@@ -473,7 +459,6 @@ GameObject:
   - component: {fileID: 1090247719551414130}
   - component: {fileID: 1090247719551414126}
   - component: {fileID: 1090247719551414131}
-  - component: {fileID: 1090247719551414124}
   m_Layer: 10
   m_Name: RightHand Controller
   m_TagString: Controller
@@ -489,7 +474,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090247719551414129}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.22, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8980869553907906393}
@@ -573,19 +558,6 @@ MonoBehaviour:
   m_PlayHapticsOnHoverExit: 0
   m_HapticHoverExitIntensity: 0
   m_HapticHoverExitDuration: 0
---- !u!135 &1090247719551414124
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1090247719551414129}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.14
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1090247719644820997
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,7 +577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1090247719644820998
 Transform:
   m_ObjectHideFlags: 0
@@ -1255,6 +1227,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftController: {fileID: 8307223246676468134}
   RightController: {fileID: 8980869553907739448}
+  LeftSpellController: {fileID: 1100004122}
+  RightSpellController: {fileID: 588824744}
   FireballPrefab: {fileID: 7691268142325897640, guid: aba00bfda32f65448b7fbfd76abd006d,
     type: 3}
 --- !u!114 &2001544760000219180
@@ -3450,6 +3424,8 @@ GameObject:
   - component: {fileID: 8307223246685983249}
   - component: {fileID: 4806764138292053705}
   - component: {fileID: 8307223246676468134}
+  - component: {fileID: 1100004123}
+  - component: {fileID: 1100004122}
   m_Layer: 10
   m_Name: Left Hand Model
   m_TagString: Untagged
@@ -3524,6 +3500,35 @@ MonoBehaviour:
   Hand: {fileID: 0}
   TriggerValue: 0
   GripValue: 0
+--- !u!65 &1100004123
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307223246676468135}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.092208154, y: 0.09982904, z: 0.1641829}
+  m_Center: {x: -0.03970286, y: 0.03523597, z: 0.011802498}
+--- !u!114 &1100004122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8307223246676468135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ed6f393b62b074eb145fc673f380e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ForceChargeupMax: 1
+  ForceCharge: 0
+  ForcePercentageCharged: 0
+  UsingForce: 0
 --- !u!1 &8307223246676468145
 GameObject:
   m_ObjectHideFlags: 0
@@ -4525,6 +4530,8 @@ GameObject:
   - component: {fileID: 8980869553900476559}
   - component: {fileID: 2023085758119832019}
   - component: {fileID: 8980869553907739448}
+  - component: {fileID: 588824745}
+  - component: {fileID: 588824744}
   m_Layer: 10
   m_Name: Right Hand Model
   m_TagString: Untagged
@@ -4599,6 +4606,35 @@ MonoBehaviour:
   Hand: {fileID: 0}
   TriggerValue: 0
   GripValue: 0
+--- !u!65 &588824745
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980869553907739449}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.092208154, y: 0.09982904, z: 0.1641829}
+  m_Center: {x: 0.039702855, y: 0.035235975, z: 0.011802498}
+--- !u!114 &588824744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8980869553907739449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ed6f393b62b074eb145fc673f380e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ForceChargeupMax: 1
+  ForceCharge: 0
+  ForcePercentageCharged: 0
+  UsingForce: 0
 --- !u!1 &8980869553907739451
 GameObject:
   m_ObjectHideFlags: 0
