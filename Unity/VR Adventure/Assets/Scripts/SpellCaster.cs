@@ -10,8 +10,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 public enum Spell { None, Fireball, ForcePush }
 
 public class SpellCaster : MonoBehaviour {
-    public GestureController LeftController;
-    public GestureController RightController;
+    public HandPresence LeftController;
+    public HandPresence RightController;
 
 
     private bool _isPressingRight = false;

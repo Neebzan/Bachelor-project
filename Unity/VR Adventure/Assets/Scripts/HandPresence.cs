@@ -4,83 +4,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
-
+using UnityEngine.XR.Interaction.Toolkit;
+public enum HandGesture { Open, Pinch, Punch, Grip }
 public class HandPresence : MonoBehaviour {
+
+    [HideInInspector]
+    public HandGesture CurrentGesture { get; private set; }
     private InputDevice targetDevice;
-    public GameObject HandModelPrefab;
-    public InputDeviceCharacteristics controllerCharacteristics;
-    private GameObject spawnedHandModel;
+    public XRController Controller;
+    public bool SecondaryButtonPressed;
+
+    public Vector3 Velocity;
+    [HideInInspector]
+    public Hand Hand;
+
     private Animator handAnimator;
 
-    // Start is called before the first frame update
     void Start () {
-
-        List<InputDevice> inputDevices = new List<InputDevice>();
-        InputDevices.GetDevicesWithCharacteristics(controllerCharacteristics, inputDevices);
-
-        //foreach (var item in inputDevices) {
-        //    Debug.Log(item.name + item.characteristics);
-        //}
-
-        if (inputDevices.Count > 0) {
-            targetDevice = inputDevices [ 0 ];
-        }
-
-        spawnedHandModel = GameObject.Instantiate(HandModelPrefab, transform);
-        handAnimator = spawnedHandModel.GetComponent<Animator>();
-
+        targetDevice = Controller.inputDevice;
+        handAnimator = GetComponent<Animator>();
+        Hand = GetComponent<Hand>();
     }
 
     void UpdateHandAnimation () {
-        if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue)) {
-            handAnimator.SetFloat("Trigger", triggerValue);
-        }
-        else {
-            handAnimator.SetFloat("Trigger", 0);
-        }
+        CurrentGesture = HandGesture.Open;
+        SecondaryButtonPressed = false;
+
 
         if (targetDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
             handAnimator.SetFloat("Grip", gripValue);
+            CurrentGesture = gripValue > .5f ? HandGesture.Grip : HandGesture.Open;
         }
         else {
             handAnimator.SetFloat("Grip", 0);
         }
+        if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue)) {
+            handAnimator.SetFloat("Trigger", triggerValue);
+            if (triggerValue > .5f) {
+                CurrentGesture = CurrentGesture == HandGesture.Grip ? HandGesture.Punch : HandGesture.Pinch;
+            }
+        }
+        else {
+            handAnimator.SetFloat("Trigger", 0);
+        }
+        if (targetDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 velocityValue)) {
+            Velocity = Quaternion.Euler(0, -90, 0) * velocityValue;
+        }
+        if (targetDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out bool secondaryButtonValue)) {
+            SecondaryButtonPressed = secondaryButtonValue;
+        }
     }
 
 
-
-
-    // Update is called once per frame
     void Update () {
-        PointFinger();
-
-
         UpdateHandAnimation();
-
-
-        //if(targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonValue) && primaryButtonValue)
-        //    Debug.Log("Presing primary button");
-
-        //if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue) && triggerValue > 0.1)
-        //    Debug.Log("Trigger pressed: " + triggerValue);
-
-        //if (targetDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out Vector2 primary2DAxisValue) && primary2DAxisValue != Vector2.zero)
-        //    Debug.Log("Primary touchpad: " + primary2DAxisValue);
-
-
-    }
-
-    private void PointFinger () {
-
-        //RaycastHit hit;
-
-        //GraphicRaycaster.
-
-        //if(Physics.Raycast(new Ray(transform.position, transform.forward), out hit, 100.0f)) {
-        //    hit.
-        //}
-
-        
-
     }
 }
