@@ -7,56 +7,66 @@ using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 public enum HandGesture { Open, Pinch, Punch, Grip }
 public class HandPresence : MonoBehaviour {
+    public XRController Controller;
 
+    private InputDevice _targetDevice;
+    private Animator _handAnimator;
+
+    #region public fields
     [HideInInspector]
     public HandGesture CurrentGesture { get; private set; }
-    private InputDevice targetDevice;
-    public XRController Controller;
+
+    [HideInInspector]
     public bool SecondaryButtonPressed;
 
+    [HideInInspector]
     public Vector3 Velocity;
+
     [HideInInspector]
     public Hand Hand;
 
-    private Animator handAnimator;
+    [HideInInspector]
+    public float TriggerValue;
+
+    [HideInInspector]
+    public float GripValue;
+    #endregion
 
     void Start () {
-        targetDevice = Controller.inputDevice;
-        handAnimator = GetComponent<Animator>();
+        _targetDevice = Controller.inputDevice;
+        _handAnimator = GetComponent<Animator>();
         Hand = GetComponent<Hand>();
     }
 
-    void UpdateHandAnimation () {
+    void UpdateHandInputs () {
         CurrentGesture = HandGesture.Open;
-        SecondaryButtonPressed = false;
 
+        _targetDevice.TryGetFeatureValue(CommonUsages.grip, out GripValue);
+        _targetDevice.TryGetFeatureValue(CommonUsages.trigger, out TriggerValue);
+        _targetDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out SecondaryButtonPressed);
+        
 
-        if (targetDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue)) {
-            handAnimator.SetFloat("Grip", gripValue);
-            CurrentGesture = gripValue > .5f ? HandGesture.Grip : HandGesture.Open;
-        }
-        else {
-            handAnimator.SetFloat("Grip", 0);
-        }
-        if (targetDevice.TryGetFeatureValue(CommonUsages.trigger, out float triggerValue)) {
-            handAnimator.SetFloat("Trigger", triggerValue);
-            if (triggerValue > .5f) {
-                CurrentGesture = CurrentGesture == HandGesture.Grip ? HandGesture.Punch : HandGesture.Pinch;
-            }
-        }
-        else {
-            handAnimator.SetFloat("Trigger", 0);
-        }
-        if (targetDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 velocityValue)) {
-            Velocity = Quaternion.Euler(0, -90, 0) * velocityValue;
-        }
-        if (targetDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out bool secondaryButtonValue)) {
-            SecondaryButtonPressed = secondaryButtonValue;
+        if (_targetDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 value)) {
+            Velocity = Quaternion.Euler(0, -90, 0) * value;
         }
     }
 
+    void UpdateHandAnimation () {
+        _handAnimator.SetFloat("Grip", GripValue);
+        _handAnimator.SetFloat("Trigger", TriggerValue);
+    }
+
+    void UpdateHandGesture () {
+        CurrentGesture = GripValue > .5f ? HandGesture.Grip : HandGesture.Open;
+
+        if (TriggerValue > .5f)
+            CurrentGesture = CurrentGesture == HandGesture.Grip ? HandGesture.Punch : HandGesture.Pinch;
+        
+    }
 
     void Update () {
+        UpdateHandInputs();
         UpdateHandAnimation();
+        UpdateHandGesture();
     }
 }

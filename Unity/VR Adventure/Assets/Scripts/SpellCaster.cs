@@ -104,7 +104,7 @@ public class SpellCaster : MonoBehaviour {
                     Collider [ ] collisions = Physics.OverlapSphere(transform.position, 5.0f, mask);
                     if (collisions.Length > 0) {
                         for (int i = 0; i < collisions.Length; i++) {
-                            float angle = Vector3.Angle(-RightController.transform.right, (collisions [ i ].transform.position - RightController.transform.position).normalized);
+                            float angle = Vector3.Angle(-RightController.transform.up, (collisions [ i ].transform.position - RightController.transform.position).normalized);
                             Debug.Log("Angle = " + angle.ToString());
 
                             if (angle < 90) {

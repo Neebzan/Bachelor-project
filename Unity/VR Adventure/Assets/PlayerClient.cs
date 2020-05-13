@@ -4,18 +4,36 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class PlayerClient : MonoBehaviour
-{
+public class PlayerClient : MonoBehaviour {
 
-    public XRController LeftHand;
-    public XRController RightHand;
+    public HandPresence LeftHand;
+    public HandPresence RightHand;
     public GameObject Head;
 
-    // Start is called before the first frame update
-    private void FixedUpdate()
-    {
-        ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
-        HandDataPacket tempLeft = new HandDataPacket();
+    public bool Connected = false;
 
+
+
+
+    private void FixedUpdate () {
+        if (!Connected) {
+            return;
+        }
+
+        ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
+        ClientPacketSender.VRLeftHandData(GetHandData(LeftHand));
+        ClientPacketSender.VRRightHandData(GetHandData(RightHand)); 
+    }
+
+
+    HandDataPacket GetHandData(HandPresence hand) {
+        HandDataPacket data = new HandDataPacket() {
+            HandPosition = hand.transform.position,
+            HandRotation = hand.transform.rotation,
+            Trigger = hand.TriggerValue,
+            Grip = hand.GripValue,
+            Velocity = hand.Velocity
+        };
+        return data;
     }
 }
