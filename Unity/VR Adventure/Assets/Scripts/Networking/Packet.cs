@@ -190,7 +190,7 @@ public class Packet : IDisposable
             float _value = BitConverter.ToSingle(readableBuffer, readPos);
             if (_moveReadPos)
             {
-                readPos += 4; //Size of int
+                readPos += 4; //Size of float
             }
             return _value;
         }

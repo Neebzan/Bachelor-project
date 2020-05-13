@@ -78,7 +78,7 @@ public static class ClientPacketSender
 
     public static void HeadData(Vector3 pos, Quaternion rot)
     {
-        using (Packet _packet = new Packet((int)ClientPackets.VRLeftHandData))
+        using (Packet _packet = new Packet((int)ClientPackets.VRHeadData))
         {
             _packet.Write(Client.instance.id);
             _packet.Write(pos);
