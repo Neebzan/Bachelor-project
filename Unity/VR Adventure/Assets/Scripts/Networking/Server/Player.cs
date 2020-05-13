@@ -67,7 +67,10 @@ public class Player : MonoBehaviour
     public void FixedUpdate()
     {
         //Send player information
-        //ServerPacketSender
+        ServerPacketSender.HeadData(vrPlayer);
+        ServerPacketSender.VRRightHandData(vrPlayer);
+        ServerPacketSender.VRLeftHandData(vrPlayer);
+
 
         //Vector2 _inputDirection = Vector2.zero;
         //if (inputs[0])

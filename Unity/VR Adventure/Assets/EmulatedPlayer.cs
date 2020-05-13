@@ -32,6 +32,7 @@ public class EmulatedPlayer : MonoBehaviour {
         hand.Trigger = data.Trigger;
         hand.Grip = data.Grip;
     }
+    //Yo
 }
 
 [Serializable]
