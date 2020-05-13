@@ -11,7 +11,8 @@ public enum ServerPackets
     UdpTestReceived,
     SpawnPlayer,
     PlayerPosition,
-    PlayerRotation
+    PlayerRotation,
+    PlayerDisconnected
 }
 
 public enum ClientPackets
@@ -37,7 +38,8 @@ public static class PacketHandlers
             {(int)ServerPackets.Welcome, ClientPacketHandler.WelcomeMessage },
             {(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
             {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
-            {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition }
+            {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
+            {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
 
         };
 }

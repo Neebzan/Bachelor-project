@@ -55,13 +55,31 @@ public class ServerPacketSender
             SendTCPPacket(targetClient, packet);
         }
     }
+    public static void PlayerDisonnected(int id)
+    {
+        using (Packet packet = new Packet((int)ServerPackets.PlayerDisconnected))
+        {
+            packet.Write(id);
 
+            SendTCPPacketAll(packet, id);
+        }
+    }
 
 
     private static void SendTCPPacket(int _clientId, Packet _packet)
     {
         _packet.WriteLength();
         Server.clients[_clientId].tcp.SendData(_packet);
+    }
+
+    private static void SendTCPPacketAll(Packet _packet, int excludeId = -1)
+    {
+        _packet.WriteLength();
+        foreach (var client in Server.clients.Values)
+        {
+            if (client.id != excludeId)
+                client.tcp.SendData(_packet);
+        }
     }
 
     private static void SendUDPPacket(int _clientId, Packet _packet)
@@ -77,9 +95,8 @@ public class ServerPacketSender
         {
             if (client.id != excludeId)
                 Server.SendUDPData(client.udp.endPoint, _packet);
-
         }
-        
+
     }
 }
 

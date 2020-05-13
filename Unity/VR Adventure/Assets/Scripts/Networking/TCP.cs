@@ -205,7 +205,7 @@ public class TCP
         client.Close();
         //udp.socket.Close();
 
-        Debug.Log("Disconnected from server.");
+        //Debug.Log("Disconnected from server.");        
 
     }
 }

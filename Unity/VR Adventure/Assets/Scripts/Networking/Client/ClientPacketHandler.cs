@@ -51,4 +51,18 @@ public class ClientPacketHandler : MonoBehaviour
             GameManager.players[_id].transform.position = _pos;
         //Debug.Log($"{_pos} is new position for player {_id}");
     }
+
+    public static void PlayerDisconnected(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+            PlayerManager player;
+            if (GameManager.players.TryGetValue(_id, out player))
+            {
+                Destroy(player.gameObject);
+                GameManager.players.Remove(_id);
+            }
+        });
+    }
 }

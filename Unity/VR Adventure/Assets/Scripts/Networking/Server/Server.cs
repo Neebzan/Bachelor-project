@@ -166,5 +166,6 @@ public class Server
     public static void Stop()
     {
         tcpListener.Stop();
+        udpListener.Close();
     }
 }

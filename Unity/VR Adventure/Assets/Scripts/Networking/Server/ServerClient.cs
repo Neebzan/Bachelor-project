@@ -19,12 +19,12 @@ public class ServerClient
     {
         id = _id;
         tcp = new TCP(id);
-        udp = new UDP(id);     
+        udp = new UDP(id);
     }
 
     ~ServerClient()
     {
-       
+
     }
 
     public void Connect(TcpClient tcpClient)
@@ -67,7 +67,15 @@ public class ServerClient
         {
             tcp.Disconnected -= Server.DisconnectClient;
             isConnected = false;
-            player = null;
+
+            ThreadManager.ExecuteOnMainThread(() =>
+            {
+                UnityEngine.Object.Destroy(player.gameObject);
+                player = null;
+            });
+
+            ServerPacketSender.PlayerDisonnected(id);
+
             tcp.Disconnect();
             udp.Disconnect();
             Debug.Log("Disconnected from server.");
