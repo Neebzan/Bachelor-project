@@ -21,9 +21,9 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_27B1464A: 0.4
-    - Vector1_417B252A: 0.1
-    - Vector1_EE3E2A7D: 1
+    - Vector1_27B1464A: 1.64
+    - Vector1_417B252A: 0.33
+    - Vector1_EE3E2A7D: 0.74
     m_Colors: []
 --- !u!114 &340643131054034221
 MonoBehaviour:
