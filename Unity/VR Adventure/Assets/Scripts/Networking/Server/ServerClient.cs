@@ -55,7 +55,9 @@ public class ServerClient
         foreach (var client in Server.clients.Values)
         {
             if (client.player != null)
-                ServerPacketSender.SpawnPlayer(client.id, player);
+                //If not this player
+                if (client.id != id)
+                    ServerPacketSender.SpawnPlayer(client.id, player);
 
         }
 

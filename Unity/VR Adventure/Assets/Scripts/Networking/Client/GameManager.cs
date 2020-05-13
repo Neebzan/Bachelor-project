@@ -27,10 +27,11 @@ public class GameManager : MonoBehaviour
     {
         GameObject _player;
         //Check if spawning local player or remote player
-        if (_id == Client.instance.id)
-            _player = Instantiate(localPlayerPrefab, _position, _rotation);
-        else
-            _player = Instantiate(playerPrefab, _position, _rotation);
+        //if (_id == Client.instance.id)
+        //    _player = Instantiate(localPlayerPrefab, _position, _rotation);
+        //else
+
+        _player = Instantiate(playerPrefab, _position, _rotation);
 
         _player.GetComponent<PlayerManager>().Initialize(_id, _username);
         //_player.GetComponent<PlayerManager>().username = _username;

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public class ClientPacketHandler : MonoBehaviour
+public static class ClientPacketHandler
 {
+    public static event Action OnConnectedToServer;
+
     public static void WelcomeMessage(Packet packet)
     {
         string msg = packet.ReadString();
@@ -20,6 +22,7 @@ public class ClientPacketHandler : MonoBehaviour
 
         //Setup udp client on same port as TCP client
         Client.instance.udp.Connect(Client.instance.ip, Client.instance.port, ((IPEndPoint)Client.instance.tcp.client.Client.LocalEndPoint).Port);
+        OnConnectedToServer?.Invoke();
     }
 
     public static void SpawnPlayer(Packet packet)
