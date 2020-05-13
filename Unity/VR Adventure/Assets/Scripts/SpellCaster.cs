@@ -47,7 +47,7 @@ public class SpellCaster : MonoBehaviour {
                 case Spell.Fireball:
                     _castFireball.transform.position = _pointBetween;
                     float distance = Vector3.Distance(RightController.Hand.IndexFinger.position, LeftController.Hand.IndexFinger.position);
-                    _castFireball.Size = distance - .1f;
+                    _castFireball.Size = distance - .01f;
 
                     break;
                 case Spell.ForcePush:
