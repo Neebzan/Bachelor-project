@@ -12,7 +12,9 @@ public class EmulatedHand : MonoBehaviour
     [Range(0, 1)]
     public float Trigger;
 
-    private void Update () {
+
+    public void Animate()
+    {
         HandAnimator.SetFloat("Trigger", Trigger);
         HandAnimator.SetFloat("Grip", Grip);
     }

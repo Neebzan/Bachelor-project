@@ -25,7 +25,7 @@ public class TestUI : MonoBehaviour
     public void ConnectToServer()
     {
         startMenu.SetActive(false);
-        usernameField.interactable = false;
+        //usernameField.interactable = false;
         Client.instance.ConnectToServer(usernameField.text);
     }
 }

@@ -15,34 +15,7 @@ public class EmulatedPlayer : MonoBehaviour {
     public EmulatedHand RightHand;
     public GameObject Head;
 
-    private void Test () {
-
-        float posMultiplier = 0.1f;
-
-        PlayerDataPacket TestData = new PlayerDataPacket {
-            HeadPosition = new Vector3(Mathf.Sin(Time.time), Mathf.Sin(Time.time), Mathf.Sin(Time.time)) * posMultiplier + new Vector3(0, 1.5f, 0),
-            HeadRotation = new Quaternion(Mathf.Sin(Time.time), Mathf.Cos(Time.time), Mathf.Sin(Time.time), Mathf.Cos(Time.time)),
-            LeftHandDataPacket = new HandDataPacket() {
-                HandPosition = new Vector3(Mathf.Sin(Time.time), Mathf.Sin(Time.time), Mathf.Sin(Time.time)) * posMultiplier + new Vector3(-.3f, 0, 0),
-                HandRotation = new Quaternion(Mathf.Sin(Time.time), Mathf.Cos(Time.time), Mathf.Sin(Time.time), Mathf.Cos(Time.time)),
-                Grip = Mathf.Sin(Time.time),
-                Trigger = Mathf.Cos(Time.time)
-            },
-            RightHandDataPacket = new HandDataPacket() {
-                HandPosition = new Vector3(Mathf.Sin(Time.time), Mathf.Sin(Time.time), Mathf.Sin(Time.time)) * posMultiplier + new Vector3(.3f, 0, 0),
-                HandRotation = new Quaternion(Mathf.Sin(Time.time), Mathf.Cos(Time.time), Mathf.Sin(Time.time), Mathf.Cos(Time.time)),
-                Grip = Mathf.Sin(Time.time),
-                Trigger = Mathf.Cos(Time.time)
-            },
-        };
-
-        Emulate(TestData);
-    }
-
-    private void Update () {
-        Test();
-    }
-
+    
     void Emulate (PlayerDataPacket data) {
         // Head simulation
         Head.transform.position = data.HeadPosition;
@@ -53,7 +26,7 @@ public class EmulatedPlayer : MonoBehaviour {
         EmulateHand(RightHand, data.RightHandDataPacket);
     }
 
-    void EmulateHand (EmulatedHand hand, HandDataPacket data) {
+    public void EmulateHand (EmulatedHand hand, HandDataPacket data) {
         hand.transform.position = data.HandPosition;
         hand.transform.rotation = data.HandRotation;
         hand.Trigger = data.Trigger;
@@ -67,6 +40,8 @@ public class PlayerDataPacket {
     public Quaternion HeadRotation { get; set; }
     public HandDataPacket LeftHandDataPacket { get; set; }
     public HandDataPacket RightHandDataPacket { get; set; }
+    public bool PrimaryButtonPressed { get; set; }
+    public bool SecondaryButtonPressed { get; set; }
 }
 
 [Serializable]
@@ -75,4 +50,5 @@ public class HandDataPacket {
     public Quaternion HandRotation { get; set; }
     public float Trigger { get; set; }
     public float Grip { get; set; }
+    public Vector3 Velocity { get; set; }
 }

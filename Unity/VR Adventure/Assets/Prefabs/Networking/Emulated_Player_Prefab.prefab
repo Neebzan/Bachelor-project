@@ -320,8 +320,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2766297617080247980}
   - component: {fileID: 2766297617080247981}
+  - component: {fileID: 9086174976077719944}
   m_Layer: 0
-  m_Name: Emulated_Player
+  m_Name: Emulated_Player_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,6 +360,21 @@ MonoBehaviour:
   LeftHand: {fileID: 5889106731485816753}
   RightHand: {fileID: 7387249523210707952}
   Head: {fileID: 2766297618224435849}
+--- !u!114 &9086174976077719944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766297617080247987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed6dbceb1c555747a89d3591044d090, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  username: 
+  emulatedPlayer: {fileID: 2766297617080247981}
 --- !u!1 &2766297617574794268
 GameObject:
   m_ObjectHideFlags: 0

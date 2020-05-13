@@ -12,6 +12,9 @@ public enum ServerPackets
     SpawnPlayer,
     PlayerPosition,
     PlayerRotation,
+    VRRightHandData,
+    VRLeftHandData,
+    VRHeadData,
     PlayerDisconnected
 }
 
@@ -19,6 +22,9 @@ public enum ClientPackets
 {
     WelcomeReceived,
     PlayerMovement,
+    VRRightHandData,
+    VRLeftHandData,
+    VRHeadData,
     UdpTestSent,
     UdpTestReceived
 }
@@ -29,7 +35,10 @@ public static class PacketHandlers
         {
             {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
             {(int)ClientPackets.UdpTestReceived, ServerPacketHandler.UdpTestReceived },
-            {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement }
+            {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
+            {(int)ClientPackets.VRRightHandData, ServerPacketHandler.VRRightHandData },
+            {(int)ClientPackets.VRLeftHandData, ServerPacketHandler.VRLeftHandData },
+            {(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData }
 
         };
 
@@ -40,6 +49,10 @@ public static class PacketHandlers
             {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
             {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
             {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
+            {(int)ServerPackets.VRRightHandData, ClientPacketHandler.VRRightHandData },
+            {(int)ServerPackets.VRLeftHandData, ClientPacketHandler.VRLeftHandData },
+            {(int)ServerPackets.VRHeadData, ClientPacketHandler.VRHeadData },
+
 
         };
 }

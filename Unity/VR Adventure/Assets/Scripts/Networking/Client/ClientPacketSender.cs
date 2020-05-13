@@ -45,6 +45,49 @@ public class ClientPacketSender : MonoBehaviour
         }
     }
 
+    public static void VRRightHandData(HandDataPacket dataPacket)
+    {
+
+        using (Packet _packet = new Packet((int)ClientPackets.VRRightHandData))
+        {            
+            _packet.Write(Client.instance.id);
+            _packet.Write(dataPacket.HandPosition);
+            _packet.Write(dataPacket.HandRotation);
+            _packet.Write(dataPacket.Trigger);
+            _packet.Write(dataPacket.Grip);
+            _packet.Write(dataPacket.Velocity);
+
+            SendUDPData(_packet);
+        }
+    }
+
+    public static void VRLeftHandData(HandDataPacket dataPacket)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.VRLeftHandData))
+        {
+            _packet.Write(Client.instance.id);
+            _packet.Write(dataPacket.HandPosition);
+            _packet.Write(dataPacket.HandRotation);
+            _packet.Write(dataPacket.Trigger);
+            _packet.Write(dataPacket.Grip);
+            _packet.Write(dataPacket.Velocity);
+
+            SendUDPData(_packet);
+        }
+    }
+
+    public static void HeadData(Vector3 pos, Quaternion rot)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.VRLeftHandData))
+        {
+            _packet.Write(Client.instance.id);
+            _packet.Write(pos);
+            _packet.Write(rot);
+            
+            SendUDPData(_packet);
+        }
+    }
+
     private static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength(); //Add a length to the packet

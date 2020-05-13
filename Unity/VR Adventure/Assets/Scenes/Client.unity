@@ -287,7 +287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPlayerPrefab: {fileID: 1434501984515764273, guid: 9bdd061f63295ee49b8997b3204402ed,
     type: 3}
-  playerPrefab: {fileID: 1434501984515764273, guid: e5f80dbc85ac33c4c8d23b12cda68444,
+  playerPrefab: {fileID: 2766297617080247987, guid: b4f593ed5d14b2d44b2cd3a8dca16cb2,
     type: 3}
 --- !u!4 &457754562
 Transform:
@@ -942,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 603460f2728b0e7449d6cd426e3f110d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMenu: {fileID: 395775957}
+  startMenu: {fileID: 1725831212}
   usernameField: {fileID: 1252157183}
   connectedText: {fileID: 0}
 --- !u!114 &1725831214

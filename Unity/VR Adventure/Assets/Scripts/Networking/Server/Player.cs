@@ -12,17 +12,8 @@ public class Player : MonoBehaviour
     private float speed = 2.0f;
     private bool[] inputs;
 
-    public bool ServerSide;
+    VrPlayerServer vrPlayer = new VrPlayerServer();
 
-    //public Player(string _userName)
-    //{
-    //    UserName = _userName;
-    //    position = Vector3.zero;
-    //    inputs = new bool[4];
-
-
-    //    inputs = new bool[5];
-    //}
 
     private void Start()
     {
@@ -32,6 +23,20 @@ public class Player : MonoBehaviour
     public void SetInput(bool[] _inputs)
     {
         inputs = _inputs;
+    }
+
+    public void SetHand(HandDataPacket packet, bool left = false)
+    {
+        if (left)
+            vrPlayer.LeftHand = packet;
+        else
+            vrPlayer.RightHand = packet;
+    }    
+
+    public void SetHead(Vector3 pos, Quaternion rot)
+    {
+        vrPlayer.HeadPos = pos;
+        vrPlayer.HeadRot = rot;
     }
 
     private void Move(Vector2 _inputDirection)
@@ -54,55 +59,35 @@ public class Player : MonoBehaviour
     {
         UserName = userName;
         this.id = id;
+        vrPlayer.id = id;
         //position = Vector3.zero;
-        inputs = new bool[4];
+        //inputs = new bool[4];
     }
 
     public void FixedUpdate()
     {
-        Vector2 _inputDirection = Vector2.zero;
-        if (inputs[0])
-        {
-            _inputDirection.y += 1;
-        }
-        if (inputs[1])
-        {
-            _inputDirection.y -= 1;
-        }
-        if (inputs[2])
-        {
-            _inputDirection.x += 1;
-        }
-        if (inputs[3])
-        {
-            _inputDirection.x -= 1;
-        }
-        //Console.WriteLine($"Inputdir is: {_inputDirection.x},{_inputDirection.y}");
-        Move(_inputDirection);
+        //Send player information
+        //ServerPacketSender
+
+        //Vector2 _inputDirection = Vector2.zero;
+        //if (inputs[0])
+        //{
+        //    _inputDirection.y += 1;
+        //}
+        //if (inputs[1])
+        //{
+        //    _inputDirection.y -= 1;
+        //}
+        //if (inputs[2])
+        //{
+        //    _inputDirection.x += 1;
+        //}
+        //if (inputs[3])
+        //{
+        //    _inputDirection.x -= 1;
+        //}
+        //Move(_inputDirection);
     }
 
-    //private void Update()
-    //{
-    //    //transform.Translate(NormalSpeed * Input.GetAxis("Horizontal") * Time.deltaTime,
-    //    //0f, NormalSpeed * Input.GetAxis("Vertical") * Time.deltaTime);
-    //    //if (!ServerSide)
-    //    //{
-    //    //    if (Input.GetKey(KeyCode.D))
-    //    //    {
-    //    //        transform.position += Vector3.right * speed * Time.deltaTime;
-    //    //    }
-    //    //    if (Input.GetKey(KeyCode.A))
-    //    //    {
-    //    //        transform.position += Vector3.left * speed * Time.deltaTime;
-    //    //    }
-    //    //    if (Input.GetKey(KeyCode.W))
-    //    //    {
-    //    //        transform.position += Vector3.forward * speed * Time.deltaTime;
-    //    //    }
-    //    //    if (Input.GetKey(KeyCode.S))
-    //    //    {
-    //    //        transform.position += Vector3.back * speed * Time.deltaTime;
-    //    //    }
-    //    //}
-    //}
+
 }

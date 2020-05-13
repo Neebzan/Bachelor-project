@@ -65,4 +65,49 @@ public class ClientPacketHandler : MonoBehaviour
             }
         });
     }
+
+    public static void VRHeadData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+        Quaternion rot = _packet.ReadQuaternion();
+
+        if (GameManager.players.ContainsKey(id))
+        {
+            GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
+            GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
+        }
+    }
+
+    public static void VRLeftHandData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        HandDataPacket leftHand = new HandDataPacket()
+        {
+            HandPosition = _packet.ReadVector3(),
+            HandRotation = _packet.ReadQuaternion(),
+            Trigger = _packet.ReadFloat(),
+            Grip = _packet.ReadFloat(),
+            Velocity = _packet.ReadVector3()
+        };
+
+        if (GameManager.players.ContainsKey(id))
+            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
+    }
+
+    public static void VRRightHandData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        HandDataPacket rightHand = new HandDataPacket()
+        {
+            HandPosition = _packet.ReadVector3(),
+            HandRotation = _packet.ReadQuaternion(),
+            Trigger = _packet.ReadFloat(),
+            Grip = _packet.ReadFloat(),
+            Velocity = _packet.ReadVector3()
+        };
+
+        if (GameManager.players.ContainsKey(id))
+            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
+    }
 }

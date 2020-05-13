@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 
 public class ServerPacketSender
 {
@@ -42,6 +42,50 @@ public class ServerPacketSender
             SendUDPPacketAll(packet);
         }
     }
+
+    public static void VRRightHandData(VrPlayerServer vrPlayer)
+    {
+
+        using (Packet _packet = new Packet((int)ServerPackets.VRRightHandData))
+        {
+            _packet.Write(vrPlayer.id);
+            _packet.Write(vrPlayer.RightHand.HandPosition);
+            _packet.Write(vrPlayer.RightHand.HandRotation);
+            _packet.Write(vrPlayer.RightHand.Trigger);
+            _packet.Write(vrPlayer.RightHand.Grip);
+            _packet.Write(vrPlayer.RightHand.Velocity);
+
+            SendUDPPacketAll(_packet, vrPlayer.id);
+        }
+    }
+
+    public static void VRLeftHandData(VrPlayerServer vrPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.VRLeftHandData))
+        {
+            _packet.Write(vrPlayer.id);
+            _packet.Write(vrPlayer.LeftHand.HandPosition);
+            _packet.Write(vrPlayer.LeftHand.HandRotation);
+            _packet.Write(vrPlayer.LeftHand.Trigger);
+            _packet.Write(vrPlayer.LeftHand.Grip);
+            _packet.Write(vrPlayer.LeftHand.Velocity);
+
+            SendUDPPacketAll(_packet, vrPlayer.id);
+        }
+    }
+
+    public static void HeadData(VrPlayerServer vrPlayer)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.VRHeadData))
+        {
+            _packet.Write(vrPlayer.id);
+            _packet.Write(vrPlayer.HeadPos);
+            _packet.Write(vrPlayer.HeadRot);
+
+            SendUDPPacketAll(_packet, vrPlayer.id);
+        }
+    }
+
 
     public static void SpawnPlayer(int targetClient, Player player)
     {

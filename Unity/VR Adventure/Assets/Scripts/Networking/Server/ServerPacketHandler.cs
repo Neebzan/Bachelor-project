@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,43 @@ public class ServerPacketHandler
         //System.Console.WriteLine($"Input received for playerid: {_playerId}!");
         Server.clients[_playerId].player.SetInput(inputs);
 
+    }
+
+    public static void VRHeadData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+        Quaternion rot = _packet.ReadQuaternion();
+        Server.clients[id].player.SetHead(pos, rot);
+    }
+
+    public static void VRLeftHandData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        HandDataPacket leftHand = new HandDataPacket()
+        {
+            HandPosition = _packet.ReadVector3(),
+            HandRotation = _packet.ReadQuaternion(),
+            Trigger = _packet.ReadFloat(),
+            Grip = _packet.ReadFloat(),
+            Velocity = _packet.ReadVector3()
+        };
+        Server.clients[id].player.SetHand(leftHand, true);
+    }
+
+    public static void VRRightHandData(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        HandDataPacket rightHand = new HandDataPacket()
+        {
+            HandPosition = _packet.ReadVector3(),
+            HandRotation = _packet.ReadQuaternion(),
+            Trigger = _packet.ReadFloat(),
+            Grip = _packet.ReadFloat(),
+            Velocity = _packet.ReadVector3()
+        };
+
+        Server.clients[id].player.SetHand(rightHand);
     }
 
     public static void UdpTestReceived(Packet packet)
