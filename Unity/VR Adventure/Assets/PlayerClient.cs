@@ -10,10 +10,18 @@ public class PlayerClient : MonoBehaviour {
     public HandPresence RightHand;
     public GameObject Head;
 
+    [HideInInspector]
     public bool Connected = false;
 
 
+    private void Start () {
+        ClientPacketHandler.OnConnectedToServer += ClientPacketHandler_OnConnectedToServer;
+        Client.instance.ConnectToServer("Placeholder");
+    }
 
+    private void ClientPacketHandler_OnConnectedToServer () {
+        Connected = true;
+    }
 
     private void FixedUpdate () {
         if (!Connected) {
@@ -22,11 +30,11 @@ public class PlayerClient : MonoBehaviour {
 
         ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
         ClientPacketSender.VRLeftHandData(GetHandData(LeftHand));
-        ClientPacketSender.VRRightHandData(GetHandData(RightHand)); 
+        ClientPacketSender.VRRightHandData(GetHandData(RightHand));
     }
 
 
-    HandDataPacket GetHandData(HandPresence hand) {
+    HandDataPacket GetHandData (HandPresence hand) {
         HandDataPacket data = new HandDataPacket() {
             HandPosition = hand.transform.position,
             HandRotation = hand.transform.rotation,

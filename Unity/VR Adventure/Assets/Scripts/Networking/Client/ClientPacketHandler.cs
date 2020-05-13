@@ -63,7 +63,7 @@ public static class ClientPacketHandler
             PlayerManager player;
             if (GameManager.players.TryGetValue(_id, out player))
             {
-                Destroy(player.gameObject);
+                UnityEngine.Object.Destroy(player.gameObject);
                 GameManager.players.Remove(_id);
             }
         });

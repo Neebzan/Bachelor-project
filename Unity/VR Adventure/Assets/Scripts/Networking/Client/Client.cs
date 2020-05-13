@@ -6,8 +6,7 @@ using System.Net.Sockets;
 using UnityEngine;
 
 
-public class Client : MonoBehaviour
-{
+public class Client : MonoBehaviour {
     public static Client instance;
 
     public string ip = "127.0.0.1";
@@ -21,37 +20,33 @@ public class Client : MonoBehaviour
 
     public bool isConnected = false;
 
-    private void Awake()
-    {
+    private void Awake () {
         if (instance == null)
             instance = this;
-        else if (instance != this)
-        {
+        else if (instance != this) {
             Debug.Log("Instance already exists!");
             Destroy(this);
         }
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start () {
         //InitClientData();
-        tcp = new TCP();
-        udp = new UDP(PacketHandlers.Client);
+        //tcp = new TCP();
+        //udp = new UDP(PacketHandlers.Client);
     }
 
-    public void ConnectToServer(string _userName)
-    {
+    public void ConnectToServer (string _userName) {
+        tcp = new TCP();
+        udp = new UDP(PacketHandlers.Client);
         isConnected = true;
         userName = _userName;
         tcp.Connect(ip, port, PacketHandlers.Client);
     }
 
 
-    private void Disconnect()
-    {
-        if (isConnected)
-        {
+    private void Disconnect () {
+        if (isConnected) {
             isConnected = false;
             tcp.client.Close();
             udp.client.Close();
@@ -60,8 +55,7 @@ public class Client : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
-    {
+    private void OnApplicationQuit () {
         Disconnect();
     }
 }

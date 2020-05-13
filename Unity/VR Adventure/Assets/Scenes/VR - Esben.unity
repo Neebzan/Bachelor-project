@@ -8096,7 +8096,6 @@ GameObject:
   - component: {fileID: 2029990377}
   - component: {fileID: 2029990376}
   - component: {fileID: 2029990375}
-  - component: {fileID: 2029990374}
   - component: {fileID: 2029990373}
   m_Layer: 0
   m_Name: ClientNetworking
@@ -8104,7 +8103,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2029990373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8122,21 +8121,6 @@ MonoBehaviour:
   id: 0
   userName: NotSet
   isConnected: 0
---- !u!114 &2029990374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029990372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bed6dbceb1c555747a89d3591044d090, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  username: 
-  emulatedPlayer: {fileID: 0}
 --- !u!114 &2029990375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13410,6 +13394,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2001544760000219180, guid: 5f950623b22c26547aa01a6056debbd9,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8267503131438263689, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
