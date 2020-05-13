@@ -14,25 +14,16 @@ public class EmulatedPlayer : MonoBehaviour {
     public EmulatedHand LeftHand;
     public EmulatedHand RightHand;
     public GameObject Head;
-
     
-    void Emulate (PlayerDataPacket data) {
-        // Head simulation
-        Head.transform.position = data.HeadPosition;
-        Head.transform.rotation = data.HeadRotation;
-
-        // Hand simulation
-        EmulateHand(LeftHand, data.LeftHandDataPacket);
-        EmulateHand(RightHand, data.RightHandDataPacket);
-    }
 
     public void EmulateHand (EmulatedHand hand, HandDataPacket data) {
         hand.transform.position = data.HandPosition;
         hand.transform.rotation = data.HandRotation;
         hand.Trigger = data.Trigger;
         hand.Grip = data.Grip;
+
+        hand.Animate();
     }
-    //Yo
 }
 
 [Serializable]

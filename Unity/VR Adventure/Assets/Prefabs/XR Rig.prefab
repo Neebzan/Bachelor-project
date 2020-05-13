@@ -1264,13 +1264,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090247720074647265}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db1164e7296a1dd4b9e55bc0f44e70ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftHand: {fileID: 0}
-  RightHand: {fileID: 0}
+  LeftHand: {fileID: 8307223246676468134}
+  RightHand: {fileID: 8980869553907739448}
   Head: {fileID: 1090247719979241208}
   Connected: 0
 --- !u!1 &8267503131438263689
