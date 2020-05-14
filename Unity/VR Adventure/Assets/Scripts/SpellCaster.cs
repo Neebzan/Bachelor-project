@@ -26,7 +26,8 @@ public class SpellCaster : MonoBehaviour {
     private Fireball _castFireball;
     private Spell _currentSpell = Spell.None;
 
-
+    private readonly float _fireballHandOffset = 0.15f;
+    private readonly float _fireballMaxSize = 0.2f;
 
 
     private Vector3 _pointBetween {
@@ -77,41 +78,26 @@ public class SpellCaster : MonoBehaviour {
         float delta = intermediateRightValue + intermediateLeftValue + .5f;
 
 
-        fireballPosition = Vector3.Lerp(LeftController.transform.position - LeftController.transform.up * .2f + -LeftController.transform.right * .07f, RightController.transform.position - RightController.transform.up * .2f + RightController.transform.right * .07f, delta);
+        fireballPosition = Vector3.Lerp(LeftController.transform.position - LeftController.transform.up * (.05f + _castFireball.Size) + -LeftController.transform.right * .07f, RightController.transform.position - RightController.transform.up * (.05f + _castFireball.Size) + RightController.transform.right * .07f, delta);
         _castFireball.FollowTarget(fireballPosition);
 
         float distance = Vector3.Distance(RightController.Hand.transform.position, LeftController.Hand.transform.position);
-        float offset = 0.15f;
-        float maxSize = 0.2f;
-        distance = Mathf.Clamp(distance - offset, 0, maxSize);
 
-        if (RightSpellController.HandState == HandState.Fire &&  LeftSpellController.HandState == HandState.Fire) {
-            if (_castFireball.Size != distance) {
-                float newSize = 0.0f;
-                if (_castFireball.Size < distance) {
-                    newSize = _castFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
-                }
-                if (_castFireball.Size > distance) {
-                    newSize = distance;
-                }
+        distance = Mathf.Clamp(distance - _fireballHandOffset, 0, _fireballMaxSize);
 
-                _castFireball.Size = newSize;
+        if (RightSpellController.HandState == HandState.Fire && LeftSpellController.HandState == HandState.Fire) {
+            float newSize = _castFireball.Size;
+            if (_castFireball.Size < distance) {
+                newSize = _castFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
             }
+            if (_castFireball.Size > distance) {
+                newSize = distance;
+            }
+
+            _castFireball.Size = newSize;
+
         }
-
-        //if (LeftSpellController.FireCharge == 0.0f) {
-        //    if (true) {
-
-        //    }
-        //}
-
-        //intermediateRightValue = RightSpellController.FireCharge * .5f;
-        //intermediateLeftValue = LeftSpellController.FireCharge * .5f;
-        //delta = intermediateRightValue + intermediateLeftValue;
-
-        //_castFireball.Size *= delta;
     }
-
 
     HandState CheckHandPowerState (HandPresence hand) {
         if (hand.SecondaryButtonPressed)
@@ -127,5 +113,6 @@ public class SpellCaster : MonoBehaviour {
         GameObject instans = Instantiate(FireballPrefab);
         instans.transform.position = _pointBetween;
         _castFireball = instans.GetComponent<Fireball>();
+        _castFireball.Size = 0.0f;
     }
 }

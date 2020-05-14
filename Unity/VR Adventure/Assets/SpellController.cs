@@ -50,43 +50,50 @@ public class SpellController : MonoBehaviour {
     }
 
     private void Update () {
-
-
         switch (HandState) {
             case HandState.Default:
+                if (FireCharge != 0) {
+                    DechargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
+                }
+                if (ForceCharge != 0) {
+                    DechargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
+                }
+
                 break;
+
+
             case HandState.Fire:
                 if (ForceCharge <= 0) {
                     if (FireCharge < 1.0f) {
                         ChargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
+                        StatePower = _firePercentageCharged;
                     }
                 }
-                StatePower = _firePercentageCharged;
+                else
+                    DechargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
                 break;
+
+
             case HandState.Force:
                 if (FireCharge <= 0) {
                     if (ForceCharge < 1.0f) {
                         ChargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
+                        StatePower = _forcePercentageCharged;
                     }
                 }
-                StatePower = _forcePercentageCharged;
+                else
+                    DechargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
+
                 break;
             default:
                 break;
         }
 
-        if (HandState != HandState.Force && ForceCharge > 0.0f)
-            DechargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
-
-        else if (HandState != HandState.Fire && FireCharge > 0.0f)
-            DechargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
         if (ForceCharge > 0) {
             _handMaterial.SetColor(_glowColorId, ForceColor);
         }
         else if (FireCharge > 0)
             _handMaterial.SetColor(_glowColorId, FireColor);
-
-
     }
 
 
