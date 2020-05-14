@@ -6,10 +6,15 @@ using UnityEngine;
 
 
 public class EmulatedHand : MonoBehaviour {
+
     public Animator HandAnimator;
+    [HideInInspector]
     public float Grip;
+    [HideInInspector]
     public float Trigger;
+    [HideInInspector]
     public HandState HandState;
+    [HideInInspector]
     public float StatePower;
 
     [ColorUsage(true, true)]

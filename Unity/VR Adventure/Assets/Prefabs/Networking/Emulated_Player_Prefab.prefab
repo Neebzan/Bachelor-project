@@ -1653,6 +1653,11 @@ MonoBehaviour:
   HandAnimator: {fileID: 5889106731476423686}
   Grip: 0
   Trigger: 0
+  HandState: 0
+  StatePower: 0
+  FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
+  ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
+  SkinnedMeshRenderer: {fileID: 5889106731480541894}
 --- !u!1 &5889106731485816754
 GameObject:
   m_ObjectHideFlags: 0
@@ -3299,3 +3304,8 @@ MonoBehaviour:
   HandAnimator: {fileID: 7387249523220058177}
   Grip: 0
   Trigger: 0
+  HandState: 0
+  StatePower: 0
+  FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
+  ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
+  SkinnedMeshRenderer: {fileID: 7387249523224309377}
