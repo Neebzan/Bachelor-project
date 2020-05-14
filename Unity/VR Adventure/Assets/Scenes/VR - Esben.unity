@@ -11552,77 +11552,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.r
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.g
-      value: 0.3764706
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.g
-      value: 1.254902
-      objectReference: {fileID: 0}
-    - target: {fileID: 588824744, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.b
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.r
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.g
-      value: 0.3764706
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: FireColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.g
-      value: 1.254902
-      objectReference: {fileID: 0}
-    - target: {fileID: 1100004122, guid: 5f950623b22c26547aa01a6056debbd9, type: 3}
-      propertyPath: ForceColor.b
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247718326729528, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 13
-      objectReference: {fileID: 0}
     - target: {fileID: 1090247719149840812, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 390233908}
-    - target: {fileID: 1090247719551414129, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: m_Layer
-      value: 13
-      objectReference: {fileID: 0}
     - target: {fileID: 1090247719644820993, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
       propertyPath: m_InteractionManager
@@ -11633,36 +11567,6 @@ PrefabInstance:
       propertyPath: UI
       value: 
       objectReference: {fileID: 1719701969}
-    - target: {fileID: 1090247720074647256, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247720074647257, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: FireballExpandOverTime.m_Curve.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247720074647257, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: FireballExpandOverTime.m_Curve.Array.data[0].inSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247720074647257, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: FireballExpandOverTime.m_Curve.Array.data[0].outSlope
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247720074647257, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: FireballExpandOverTime.m_Curve.Array.data[1].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1090247720074647257, guid: 5f950623b22c26547aa01a6056debbd9,
-        type: 3}
-      propertyPath: FireballExpandOverTime.m_Curve.Array.data[1].value
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1090247720074647265, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
       propertyPath: m_Name

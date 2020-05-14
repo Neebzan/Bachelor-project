@@ -42,14 +42,13 @@ public class Fireball : MonoBehaviour {
 
 
 
-    public void Create (Vector3 rightControllerVelocity, Vector3 leftControllerVelocity) {
+    public void Create (Vector3 velocity) {
         _physicalCollider.radius = Size * .5f;
         Active = true;
 
-        Vector3 velocity = rightControllerVelocity + leftControllerVelocity;
         if (velocity.magnitude > 1.0f) {
             Armed = true;
-            ApplyForce(velocity * .5f);
+            ApplyForce(velocity);
         }
     }
 

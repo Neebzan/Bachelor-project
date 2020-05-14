@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1090247718326729529}
   - component: {fileID: 1090247718326729525}
   - component: {fileID: 1090247718326729530}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: LeftHand Controller
   m_TagString: Controller
   m_Icon: {fileID: 0}
@@ -459,7 +459,7 @@ GameObject:
   - component: {fileID: 1090247719551414130}
   - component: {fileID: 1090247719551414126}
   - component: {fileID: 1090247719551414131}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: RightHand Controller
   m_TagString: Controller
   m_Icon: {fileID: 0}
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   - {fileID: 1090247719149840812}
   - {fileID: 1090247719644820993}
   Controllers:
-  - {fileID: 1090247719551414126}
+  - {fileID: 1090247719149840813}
   - {fileID: 1090247719644820994}
   StartInMenu: 0
   UI: {fileID: 0}
@@ -3536,8 +3536,8 @@ MonoBehaviour:
   FireCharge: 0
   UsingForce: 0
   UsingFire: 0
-  FireColor: {r: 0, g: 0, b: 0, a: 0}
-  ForceColor: {r: 0, g: 0, b: 0, a: 0}
+  FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
+  ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
 --- !u!1 &8307223246676468145
 GameObject:
   m_ObjectHideFlags: 0
@@ -4649,8 +4649,8 @@ MonoBehaviour:
   FireCharge: 0
   UsingForce: 0
   UsingFire: 0
-  FireColor: {r: 0, g: 0, b: 0, a: 0}
-  ForceColor: {r: 0, g: 0, b: 0, a: 0}
+  FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
+  ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
 --- !u!1 &8980869553907739451
 GameObject:
   m_ObjectHideFlags: 0

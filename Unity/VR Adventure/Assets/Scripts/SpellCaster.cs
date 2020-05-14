@@ -63,7 +63,10 @@ public class SpellCaster : MonoBehaviour {
 
         if (_currentSpell == Spell.Fireball) {
             if (!RightSpellController.UsingFire && !LeftSpellController.UsingFire) {
-                _castFireball.Create(RightController.Velocity, LeftController.Velocity);
+                Vector3 velocity = RightController.Velocity * RightSpellController.FireCharge + LeftController.Velocity * LeftSpellController.FireCharge;
+                velocity /= RightSpellController.FireCharge + LeftSpellController.FireCharge;
+
+                _castFireball.Create(velocity);
                 _currentSpell = Spell.None;
             }
             else {
@@ -75,18 +78,12 @@ public class SpellCaster : MonoBehaviour {
     void CastFireball () {
         Vector3 fireballPosition = _pointBetween;
 
+        float intermediateRightValue = RightSpellController.FireCharge * .5f;
+        float intermediateLeftValue = (LeftSpellController.FireCharge * .5f) * -1;
+        float delta = intermediateRightValue + intermediateLeftValue + .5f;
 
 
-        //float intermediateRightValue = RightSpellController.FireCharge * .5f;
-        //float intermediateLeftValue = (LeftSpellController.FireCharge * .5f) * -1;
-        //float delta = intermediateRightValue + intermediateLeftValue + .5f;
-
-        //fireballPosition = Vector3.Lerp(LeftController.transform.position, RightController.transform.position, delta);
-
-
-
-
-
+        fireballPosition = Vector3.Lerp(LeftController.transform.position - LeftController.transform.up * .2f + -LeftController.transform.right * .07f, RightController.transform.position - RightController.transform.up * .2f + RightController.transform.right * .07f, delta);
         _castFireball.FollowTarget(fireballPosition);
 
         float distance = Vector3.Distance(RightController.Hand.transform.position, LeftController.Hand.transform.position);
@@ -94,16 +91,18 @@ public class SpellCaster : MonoBehaviour {
         float maxSize = 0.2f;
         distance = Mathf.Clamp(distance - offset, 0, maxSize);
 
-        if (_castFireball.Size != distance) {
-            float newSize = 0.0f;
-            if (_castFireball.Size < distance) {
-                newSize = _castFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
-            }
-            if (_castFireball.Size > distance) {
-                newSize = distance;
-            }
+        if (RightSpellController.UsingFire == LeftSpellController.UsingFire) {
+            if (_castFireball.Size != distance) {
+                float newSize = 0.0f;
+                if (_castFireball.Size < distance) {
+                    newSize = _castFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
+                }
+                if (_castFireball.Size > distance) {
+                    newSize = distance;
+                }
 
-            _castFireball.Size = newSize;
+                _castFireball.Size = newSize;
+            }
         }
 
         //if (LeftSpellController.FireCharge == 0.0f) {

@@ -35,12 +35,12 @@ public class UIProvider : MonoBehaviour {
     }
 
     private void CheckForMenuOpen (InputDevice inputDevice) {
-        if (inputDevice.TryGetFeatureValue(CommonUsages.primaryButton, out bool primaryButtonPressed)) {
-            if (!_isPressingButton && primaryButtonPressed) {
+        if (inputDevice.TryGetFeatureValue(CommonUsages.menuButton, out bool menuButtonPressed)) {
+            if (!_isPressingButton && menuButtonPressed) {
                 _isPressingButton = true;
                 SetMenu(!_menuOpened);
             }
-            else if (_isPressingButton && !primaryButtonPressed) {
+            else if (_isPressingButton && !menuButtonPressed) {
                 _isPressingButton = false;
             }
         }
