@@ -41,17 +41,11 @@ public class SpellCaster : MonoBehaviour {
     }
 
     void Update () {
-        if (!RightSpellController.UsingFire)
-            RightSpellController.UsingForce = CheckHandUsingForce(RightController);
-        if (!RightSpellController.UsingForce)
-            RightSpellController.UsingFire = CheckHandUsingFire(RightController);
+        RightSpellController.HandState = CheckHandPowerState(RightController);
+        LeftSpellController.HandState = CheckHandPowerState(LeftController);
 
-        if (!LeftSpellController.UsingFire)
-            LeftSpellController.UsingForce = CheckHandUsingForce(LeftController);
-        if (!LeftSpellController.UsingForce)
-            LeftSpellController.UsingFire = CheckHandUsingFire(LeftController);
 
-        if (_currentSpell == Spell.None && RightSpellController.UsingFire && LeftSpellController.UsingFire) {
+        if (_currentSpell == Spell.None && RightSpellController.HandState == HandState.Fire && LeftSpellController.HandState == HandState.Fire) {
             if (RightSpellController.FireCharge >= 1.0f && LeftSpellController.FireCharge >= 1.0f) {
                 if (RightController.CurrentGesture == HandGesture.Open && LeftController.CurrentGesture == HandGesture.Open) {
                     _currentSpell = Spell.Fireball;
@@ -62,7 +56,7 @@ public class SpellCaster : MonoBehaviour {
         }
 
         if (_currentSpell == Spell.Fireball) {
-            if (!RightSpellController.UsingFire && !LeftSpellController.UsingFire) {
+            if (RightSpellController.HandState != HandState.Fire && LeftSpellController.HandState != HandState.Fire) {
                 Vector3 velocity = RightController.Velocity * RightSpellController.FireCharge + LeftController.Velocity * LeftSpellController.FireCharge;
                 velocity /= RightSpellController.FireCharge + LeftSpellController.FireCharge;
 
@@ -91,7 +85,7 @@ public class SpellCaster : MonoBehaviour {
         float maxSize = 0.2f;
         distance = Mathf.Clamp(distance - offset, 0, maxSize);
 
-        if (RightSpellController.UsingFire == LeftSpellController.UsingFire) {
+        if (RightSpellController.HandState == HandState.Fire &&  LeftSpellController.HandState == HandState.Fire) {
             if (_castFireball.Size != distance) {
                 float newSize = 0.0f;
                 if (_castFireball.Size < distance) {
@@ -119,18 +113,13 @@ public class SpellCaster : MonoBehaviour {
     }
 
 
-    bool CheckHandUsingForce (HandPresence hand) {
+    HandState CheckHandPowerState (HandPresence hand) {
         if (hand.SecondaryButtonPressed)
-            return true;
-
-        return false;
-    }
-
-    bool CheckHandUsingFire (HandPresence hand) {
-        if (hand.PrimaryButtonPressed)
-            return true;
-
-        return false;
+            return HandState.Force;
+        else if (hand.PrimaryButtonPressed)
+            return HandState.Fire;
+        else
+            return HandState.Default;
     }
 
 

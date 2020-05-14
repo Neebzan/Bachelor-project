@@ -4,6 +4,11 @@ using UnityEngine;
 
 public delegate void PacketHandler(Packet _packet);
 
+public enum HandState {
+    Default = 0,
+    Fire = 1,
+    Force = 2
+}
 public enum ServerPackets
 {
     Welcome,
