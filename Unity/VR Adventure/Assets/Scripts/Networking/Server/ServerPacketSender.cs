@@ -32,6 +32,7 @@ public class ServerPacketSender
         Console.WriteLine($"UdpTest message sent to client {client}");
     }
 
+
     public static void PlayerPostion(Player player)
     {
         using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
@@ -74,6 +75,37 @@ public class ServerPacketSender
         }
     }
 
+    public static void SpawnProjectile(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.SpawnProjectile))
+        {
+            _packet.Write(projectile.id);
+            _packet.Write(projectile.transform.position);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+    public static void DespawnProjectile(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.DespawnProjectile))
+        {
+            _packet.Write(projectile.id);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+    public static void ProjectilePosition(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.ProjectilePosition))
+        {
+            _packet.Write(projectile.id);
+            _packet.Write(projectile.transform.position);
+            _packet.Write(projectile.transform.rotation);
+
+            SendUDPPacketAll(_packet);
+        }
+    }
+
     public static void HeadData(VrPlayerServer vrPlayer)
     {
         using (Packet _packet = new Packet((int)ServerPackets.VRHeadData))
@@ -109,6 +141,16 @@ public class ServerPacketSender
         }
     }
 
+    public static void TimeSync(int id, int clientTime, int serverTime)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.TimeSync))
+        {
+            _packet.Write(clientTime);
+            _packet.Write(serverTime);
+            //Console.WriteLine("Sending TimeSync packet to client: "+ id);
+            SendTCPPacket(id, _packet);
+        }
+    }
 
     private static void SendTCPPacket(int _clientId, Packet _packet)
     {
@@ -125,6 +167,7 @@ public class ServerPacketSender
                 client.tcp.SendData(_packet);
         }
     }
+
 
     private static void SendUDPPacket(int _clientId, Packet _packet)
     {

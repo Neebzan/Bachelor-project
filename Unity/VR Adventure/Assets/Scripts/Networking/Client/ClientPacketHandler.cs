@@ -82,6 +82,45 @@ public static class ClientPacketHandler
         }
     }
 
+    internal static void ProjectilePosition(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+        Quaternion rot = _packet.ReadQuaternion();
+
+        Projectile.Projectiles[id].transform.position = pos;
+        Projectile.Projectiles[id].transform.rotation = rot;
+    }
+
+    internal static void TimeSync(Packet _packet)
+    {
+        int oldClientTime = _packet.ReadInt();
+        int serverTime = _packet.ReadInt();
+        float RTT = DateTime.UtcNow.Millisecond - oldClientTime;
+        float latency = RTT / 2f;
+
+        Debug.Log($"Packet RTT: {RTT}ms - Latency: {latency}");
+        Debug.Log($"Time sync diff would have been: {serverTime - (oldClientTime + latency)}ms");
+
+    }
+
+    public static void DespawnProjectile(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+            Projectile.Projectiles[id].Despawn();
+        });
+    }
+
+    internal static void SpawnProjectile(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+
+        GameManager.instance.SpawnProjectile(pos, id);
+    }
+
     public static void VRLeftHandData(Packet _packet)
     {
         int id = _packet.ReadInt();

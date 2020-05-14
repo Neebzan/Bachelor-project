@@ -23,19 +23,28 @@ public class ServerPacketHandler
         //}
     }
 
-    public static void PlayerMovement(Packet packet)
+    public static void ShootTestReceived(Packet _packet)
     {
-        //System.Console.WriteLine("Input received!");
-        bool[] inputs = new bool[packet.ReadInt()];
-        int _playerId = packet.ReadInt();
-        for (int i = 0; i < inputs.Length; i++)
-        {
-            inputs[i] = packet.ReadBool();
-        }
-        //System.Console.WriteLine($"Input received for playerid: {_playerId}!");
-        Server.clients[_playerId].player.SetInput(inputs);
-
+        int _clientId = _packet.ReadInt();
+        Vector3 dir = _packet.ReadVector3();
+        Server.clients[_clientId].player.SpawnTestProjectile(dir);
     }
+
+    //public static void PlayerMovement(Packet packet)
+    //{
+    //    //System.Console.WriteLine("Input received!");
+    //    bool[] inputs = new bool[packet.ReadInt()];
+    //    int _playerId = packet.ReadInt();
+    //    for (int i = 0; i < inputs.Length; i++)
+    //    {
+    //        inputs[i] = packet.ReadBool();
+    //    }
+    //    //System.Console.WriteLine($"Input received for playerid: {_playerId}!");
+    //    Server.clients[_playerId].player.SetInput(inputs);
+
+    //}
+
+
 
     public static void VRHeadData(Packet _packet)
     {
@@ -43,6 +52,14 @@ public class ServerPacketHandler
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
         Server.clients[id].player.SetHead(pos, rot);
+    }
+
+    public static void TimeSync(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        int clientTime = _packet.ReadInt();
+        //Console.WriteLine("TimeSync Received!");
+        ServerPacketSender.TimeSync(id, clientTime, DateTime.UtcNow.Millisecond);
     }
 
     public static void VRLeftHandData(Packet _packet)

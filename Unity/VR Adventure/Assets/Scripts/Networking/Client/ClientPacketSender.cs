@@ -45,6 +45,17 @@ public static class ClientPacketSender
         }
     }
 
+    internal static void ShootTest(Vector3 shootDir)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.ShootTest))
+        {
+            _packet.Write(Client.instance.id);
+            _packet.Write(shootDir);
+
+            SendTCPData(_packet);
+        }
+    }
+
     public static void VRRightHandData(HandDataPacket dataPacket)
     {
 
@@ -85,6 +96,17 @@ public static class ClientPacketSender
             _packet.Write(rot);
             
             SendUDPData(_packet);
+        }
+    }
+
+    public static void TimeSync()
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.TimeSync))
+        {
+            _packet.Write(Client.instance.id);
+            _packet.Write(DateTime.UtcNow.Millisecond); //Send current local time stamp
+
+            SendTCPData(_packet);
         }
     }
 

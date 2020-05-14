@@ -14,6 +14,10 @@ public class PlayerClient : MonoBehaviour {
     public bool Connected = false;
 
 
+    bool secondaryReleased = true;
+
+
+
     private void Start () {
         ClientPacketHandler.OnConnectedToServer += ClientPacketHandler_OnConnectedToServer;
         Client.instance.ConnectToServer("Placeholder");
@@ -30,9 +34,22 @@ public class PlayerClient : MonoBehaviour {
 
         ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
         ClientPacketSender.VRLeftHandData(GetHandData(LeftHand));
-        ClientPacketSender.VRRightHandData(GetHandData(RightHand));
+        ClientPacketSender.VRRightHandData(GetHandData(RightHand));        
     }
 
+    private void Update()
+    {
+        if(secondaryReleased && RightHand.SecondaryButtonPressed)
+        {
+            ClientPacketSender.ShootTest(RightHand.transform.forward);
+            secondaryReleased = false;
+        }
+        else if(!RightHand.SecondaryButtonPressed)
+        {
+            secondaryReleased = true;
+        }
+
+    }
 
     HandDataPacket GetHandData (HandPresence hand) {
         HandDataPacket data = new HandDataPacket() {
