@@ -109,7 +109,8 @@ public static class ClientPacketHandler
         int id = _packet.ReadInt();
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            Projectile.Projectiles[id].Despawn();
+            if (Projectile.Projectiles.ContainsKey(id))
+                Projectile.Projectiles[id].Despawn();
         });
     }
 
