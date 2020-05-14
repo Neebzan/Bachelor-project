@@ -67,6 +67,8 @@ public static class ClientPacketSender
             _packet.Write(dataPacket.Trigger);
             _packet.Write(dataPacket.Grip);
             _packet.Write(dataPacket.Velocity);
+            _packet.Write((int)dataPacket.HandState);
+            _packet.Write(dataPacket.StatePower);
 
             SendUDPData(_packet);
         }
@@ -82,6 +84,8 @@ public static class ClientPacketSender
             _packet.Write(dataPacket.Trigger);
             _packet.Write(dataPacket.Grip);
             _packet.Write(dataPacket.Velocity);
+            _packet.Write((int)dataPacket.HandState);
+            _packet.Write(dataPacket.StatePower);
 
             SendUDPData(_packet);
         }

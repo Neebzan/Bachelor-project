@@ -130,7 +130,9 @@ public static class ClientPacketHandler
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
             Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3()
+            Velocity = _packet.ReadVector3(),
+            HandState = (HandState)_packet.ReadInt(),
+            StatePower = _packet.ReadFloat()
         };
 
         if (GameManager.players.ContainsKey(id))
@@ -146,7 +148,9 @@ public static class ClientPacketHandler
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
             Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3()
+            Velocity = _packet.ReadVector3(),
+            HandState = (HandState)_packet.ReadInt(),
+            StatePower = _packet.ReadFloat()
         };
 
         if (GameManager.players.ContainsKey(id))

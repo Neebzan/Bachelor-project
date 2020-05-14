@@ -63,8 +63,11 @@ public class PlayerClient : MonoBehaviour {
             HandRotation = hand.transform.rotation,
             Trigger = hand.TriggerValue,
             Grip = hand.GripValue,
-            Velocity = hand.Velocity
+            Velocity = hand.Velocity,
+            HandState = spellController.HandState,
+            StatePower = spellController.StatePower
         };
+
         return data;
     }
 }

@@ -21,6 +21,8 @@ public class EmulatedPlayer : MonoBehaviour {
         hand.transform.rotation = data.HandRotation;
         hand.Trigger = data.Trigger;
         hand.Grip = data.Grip;
+        hand.HandState = data.HandState;
+        hand.StatePower = data.StatePower;
 
         hand.Animate();
     }

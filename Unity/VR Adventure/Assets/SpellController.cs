@@ -61,7 +61,7 @@ public class SpellController : MonoBehaviour {
                         ChargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
                     }
                 }
-                StatePower = FireCharge;
+                StatePower = _firePercentageCharged;
                 break;
             case HandState.Force:
                 if (FireCharge <= 0) {
@@ -69,7 +69,7 @@ public class SpellController : MonoBehaviour {
                         ChargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
                     }
                 }
-                StatePower = ForceCharge;
+                StatePower = _forcePercentageCharged;
                 break;
             default:
                 break;

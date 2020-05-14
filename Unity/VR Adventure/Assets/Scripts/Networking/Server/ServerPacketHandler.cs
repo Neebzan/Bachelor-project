@@ -71,7 +71,9 @@ public class ServerPacketHandler
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
             Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3()
+            Velocity = _packet.ReadVector3(),
+            HandState = (HandState)_packet.ReadInt(),
+            StatePower = _packet.ReadFloat(),
         };
         Server.clients[id].player.SetHand(leftHand, true);
     }
@@ -85,7 +87,9 @@ public class ServerPacketHandler
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
             Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3()
+            Velocity = _packet.ReadVector3(),
+            HandState = (HandState)_packet.ReadInt(),
+            StatePower = _packet.ReadFloat(),
         };
 
         Server.clients[id].player.SetHand(rightHand);
