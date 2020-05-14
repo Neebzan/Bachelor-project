@@ -8,6 +8,10 @@ public class PlayerClient : MonoBehaviour {
 
     public HandPresence LeftHand;
     public HandPresence RightHand;
+
+    private SpellController _leftHandSpellController;
+    private SpellController _rightHandSpellController;
+
     public GameObject Head;
 
     [HideInInspector]
@@ -21,6 +25,8 @@ public class PlayerClient : MonoBehaviour {
     private void Start () {
         ClientPacketHandler.OnConnectedToServer += ClientPacketHandler_OnConnectedToServer;
         Client.instance.ConnectToServer("Placeholder");
+        _leftHandSpellController = LeftHand.GetComponent<SpellController>();
+        _rightHandSpellController = RightHand.GetComponent<SpellController>();
     }
 
     private void ClientPacketHandler_OnConnectedToServer () {
@@ -33,8 +39,8 @@ public class PlayerClient : MonoBehaviour {
         }
 
         ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
-        ClientPacketSender.VRLeftHandData(GetHandData(LeftHand));
-        ClientPacketSender.VRRightHandData(GetHandData(RightHand));        
+        ClientPacketSender.VRLeftHandData(GetHandData(LeftHand, _leftHandSpellController));
+        ClientPacketSender.VRRightHandData(GetHandData(RightHand, _rightHandSpellController));        
     }
 
     private void Update()
@@ -51,14 +57,17 @@ public class PlayerClient : MonoBehaviour {
 
     }
 
-    HandDataPacket GetHandData (HandPresence hand) {
+    HandDataPacket GetHandData (HandPresence hand, SpellController spellController) {
         HandDataPacket data = new HandDataPacket() {
             HandPosition = hand.transform.position,
             HandRotation = hand.transform.rotation,
             Trigger = hand.TriggerValue,
             Grip = hand.GripValue,
-            Velocity = hand.Velocity
+            Velocity = hand.Velocity,
+            HandState = spellController.HandState,
+            StatePower = spellController.StatePower
         };
+
         return data;
     }
 }

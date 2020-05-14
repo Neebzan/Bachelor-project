@@ -21,6 +21,8 @@ public class EmulatedPlayer : MonoBehaviour {
         hand.transform.rotation = data.HandRotation;
         hand.Trigger = data.Trigger;
         hand.Grip = data.Grip;
+        hand.HandState = data.HandState;
+        hand.StatePower = data.StatePower;
 
         hand.Animate();
     }
@@ -43,4 +45,6 @@ public class HandDataPacket {
     public float Trigger { get; set; }
     public float Grip { get; set; }
     public Vector3 Velocity { get; set; }
+    public HandState HandState { get; set; }
+    public float StatePower { get; set; }
 }

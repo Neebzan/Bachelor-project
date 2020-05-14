@@ -17,10 +17,16 @@ public class SpellController : MonoBehaviour {
     public float FireCharge = 0.0f;
     private float _firePercentageCharged = 0.0f;
 
-    [HideInInspector]
-    public bool UsingForce = false;
-    [HideInInspector]
-    public bool UsingFire = false;
+    public float StatePower { get; private set; }
+
+    private HandState _handState;
+    public HandState HandState {
+        get { return _handState; }
+        set {
+            _handState = value;
+        }
+    }
+
 
     private float _forcePower = 2.5f;
     private float _minimumVelocity = 0.0f;
@@ -36,37 +42,53 @@ public class SpellController : MonoBehaviour {
     public Color ForceColor;
 
 
+
+
     private void Start () {
         _handMaterial = GetComponent<Hand>().SkinnedMeshRenderer.material;
         _collider = GetComponent<SphereCollider>();
     }
 
     private void Update () {
-        if (UsingForce && FireCharge <= 0) {
-            if (ForceCharge < 1.0f) {
-                ChargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
-            }
-        }
-        else if (UsingFire && ForceCharge <= 0) {
-            if (FireCharge < 1.0f) {
-                ChargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
-            }
+
+
+        switch (HandState) {
+            case HandState.Default:
+                break;
+            case HandState.Fire:
+                if (ForceCharge <= 0) {
+                    if (FireCharge < 1.0f) {
+                        ChargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
+                    }
+                }
+                StatePower = _firePercentageCharged;
+                break;
+            case HandState.Force:
+                if (FireCharge <= 0) {
+                    if (ForceCharge < 1.0f) {
+                        ChargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
+                    }
+                }
+                StatePower = _forcePercentageCharged;
+                break;
+            default:
+                break;
         }
 
-        else if (!UsingForce && ForceCharge > 0.0f) {
+        if (HandState != HandState.Force && ForceCharge > 0.0f)
             DechargePower(ref ForceCharge, ref _forceChargeupMax, ref _forcePercentageCharged);
-        }
-        else if (!UsingFire && FireCharge > 0.0f) {
-            DechargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
-        }
 
+        else if (HandState != HandState.Fire && FireCharge > 0.0f)
+            DechargePower(ref FireCharge, ref _fireChargeupMax, ref _firePercentageCharged);
         if (ForceCharge > 0) {
             _handMaterial.SetColor(_glowColorId, ForceColor);
         }
-
         else if (FireCharge > 0)
             _handMaterial.SetColor(_glowColorId, FireColor);
+
+
     }
+
 
     public void ChargePower (ref float charge, ref float maxCharge, ref float percentageCharged) {
         if (charge < maxCharge) {
