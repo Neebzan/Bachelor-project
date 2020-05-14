@@ -141,6 +141,16 @@ public class ServerPacketSender
         }
     }
 
+    public static void TimeSync(int id, int clientTime, int serverTime)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.TimeSync))
+        {
+            _packet.Write(clientTime);
+            _packet.Write(serverTime);
+            //Console.WriteLine("Sending TimeSync packet to client: "+ id);
+            SendTCPPacket(id, _packet);
+        }
+    }
 
     private static void SendTCPPacket(int _clientId, Packet _packet)
     {
@@ -157,6 +167,7 @@ public class ServerPacketSender
                 client.tcp.SendData(_packet);
         }
     }
+
 
     private static void SendUDPPacket(int _clientId, Packet _packet)
     {

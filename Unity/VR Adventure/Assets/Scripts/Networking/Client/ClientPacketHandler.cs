@@ -92,6 +92,18 @@ public static class ClientPacketHandler
         Projectile.Projectiles[id].transform.rotation = rot;
     }
 
+    internal static void TimeSync(Packet _packet)
+    {
+        int oldClientTime = _packet.ReadInt();
+        int serverTime = _packet.ReadInt();
+        float RTT = DateTime.UtcNow.Millisecond - oldClientTime;
+        float latency = RTT / 2f;
+
+        Debug.Log($"Packet RTT: {RTT}ms - Latency: {latency}");
+        Debug.Log($"Time sync diff would have been: {serverTime - (oldClientTime + latency)}ms");
+
+    }
+
     public static void DespawnProjectile(Packet _packet)
     {
         int id = _packet.ReadInt();

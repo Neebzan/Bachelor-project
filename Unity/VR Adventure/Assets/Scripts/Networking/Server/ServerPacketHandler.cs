@@ -54,6 +54,14 @@ public class ServerPacketHandler
         Server.clients[id].player.SetHead(pos, rot);
     }
 
+    public static void TimeSync(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        int clientTime = _packet.ReadInt();
+        //Console.WriteLine("TimeSync Received!");
+        ServerPacketSender.TimeSync(id, clientTime, DateTime.UtcNow.Millisecond);
+    }
+
     public static void VRLeftHandData(Packet _packet)
     {
         int id = _packet.ReadInt();

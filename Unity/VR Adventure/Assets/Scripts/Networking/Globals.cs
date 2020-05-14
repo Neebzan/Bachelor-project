@@ -23,7 +23,9 @@ public enum ServerPackets
 
     SpawnProjectile,
     ProjectilePosition,
-    DespawnProjectile
+    DespawnProjectile,
+
+    TimeSync
 }
 
 public enum ClientPackets
@@ -39,7 +41,9 @@ public enum ClientPackets
     VRLeftHandData,
     VRHeadData,
     UdpTestSent,
-    UdpTestReceived
+    UdpTestReceived,
+
+    TimeSync
 }
 
 public static class PacketHandlers
@@ -56,7 +60,9 @@ public static class PacketHandlers
 
             {(int)ClientPackets.VRRightHandData, ServerPacketHandler.VRRightHandData },
             {(int)ClientPackets.VRLeftHandData, ServerPacketHandler.VRLeftHandData },
-            {(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData }
+            {(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData },
+
+            {(int)ClientPackets.TimeSync, ServerPacketHandler.TimeSync },
 
         };
 
@@ -79,5 +85,6 @@ public static class PacketHandlers
             {(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
             {(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
 
+            {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
         };
 }
