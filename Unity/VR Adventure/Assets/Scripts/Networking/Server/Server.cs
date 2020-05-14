@@ -118,51 +118,9 @@ public class Server
             return;
         }
 
-        //for (int i = 1; i <= MaxPlayers; i++)
-        //{
-        //    if (clients[i].tcp.client == null)
-        //    {
-        //        //clients[i].tcp.Connect(_client, PacketHandlers.Server);
-        //        clients[i].Connect(_client);
-        //        return;
-        //    }
-        //}
-
         Console.WriteLine("Server is full!");
 
     }
-
-    //public static void DisconnectClient(string id)
-    //{
-    //    Client _client;
-    //    if(clients.TryGetValue(id, out _client))
-    //    {
-    //        _client.tcp.Disconnect();
-    //        clients.Remove(id);
-    //        Debug.Log($"Client: {id} - Disconnected successfully!");
-    //    }
-    //    else
-    //    {
-    //        Debug.Log($"Attempted to disconnect client: {id} - but the client wasen't found!");
-    //    }
-    //}
-
-    //private static void InitServer()
-    //{
-        //for (int i = 1; i <= MaxPlayers; i++)
-        //{
-        //    clients.Add(i, new ServerClient(i));
-        //}
-
-        //packetHandlers = new Dictionary<int, PacketHandler>()
-        //{
-        //    {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
-        //    {(int)ClientPackets.UdpTestReceived, ServerPacketHandler.UdpTestReceived },
-        //    {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement }
-
-        //};
-    //}
-
     public static void Stop()
     {
         tcpListener.Stop();

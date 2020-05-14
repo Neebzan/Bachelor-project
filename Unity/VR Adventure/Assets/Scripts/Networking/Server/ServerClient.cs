@@ -36,7 +36,7 @@ public class ServerClient
 
     public void SpawnPlayer(string _userName)
     {
-        player = ServerManager.instance.InstantiatePlayer();
+        player = ServerManager.instance.SpawnPlayer();
         player.Initialize(id, _userName);
 
         //Send all existing players to the client

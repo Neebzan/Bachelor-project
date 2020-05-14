@@ -82,6 +82,33 @@ public static class ClientPacketHandler
         }
     }
 
+    internal static void ProjectilePosition(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+        Quaternion rot = _packet.ReadQuaternion();
+
+        Projectile.Projectiles[id].transform.position = pos;
+        Projectile.Projectiles[id].transform.rotation = rot;
+    }
+
+    public static void DespawnProjectile(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        ThreadManager.ExecuteOnMainThread(() =>
+        {
+            Projectile.Projectiles[id].Despawn();
+        });
+    }
+
+    internal static void SpawnProjectile(Packet _packet)
+    {
+        int id = _packet.ReadInt();
+        Vector3 pos = _packet.ReadVector3();
+
+        GameManager.instance.SpawnProjectile(pos, id);
+    }
+
     public static void VRLeftHandData(Packet _packet)
     {
         int id = _packet.ReadInt();

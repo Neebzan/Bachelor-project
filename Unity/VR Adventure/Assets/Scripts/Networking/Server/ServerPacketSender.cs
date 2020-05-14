@@ -32,6 +32,7 @@ public class ServerPacketSender
         Console.WriteLine($"UdpTest message sent to client {client}");
     }
 
+
     public static void PlayerPostion(Player player)
     {
         using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
@@ -71,6 +72,37 @@ public class ServerPacketSender
             _packet.Write(vrPlayer.LeftHand.Velocity);
 
             SendUDPPacketAll(_packet, vrPlayer.id);
+        }
+    }
+
+    public static void SpawnProjectile(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.SpawnProjectile))
+        {
+            _packet.Write(projectile.id);
+            _packet.Write(projectile.transform.position);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+    public static void DespawnProjectile(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.DespawnProjectile))
+        {
+            _packet.Write(projectile.id);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+    public static void ProjectilePosition(Projectile projectile)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.ProjectilePosition))
+        {
+            _packet.Write(projectile.id);
+            _packet.Write(projectile.transform.position);
+            _packet.Write(projectile.transform.rotation);
+
+            SendUDPPacketAll(_packet);
         }
     }
 

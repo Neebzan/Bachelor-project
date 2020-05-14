@@ -8,6 +8,7 @@ public class ServerManager : MonoBehaviour
 
     public GameObject playerPrefab;
     public GameObject vrPlayerPrefab;
+    public GameObject projectilePrefab;
 
     private void Awake()
     {
@@ -33,7 +34,12 @@ public class ServerManager : MonoBehaviour
         Server.Stop();
     }
 
-    public Player InstantiatePlayer()
+    public Projectile SpawnProjectile(Vector3 pos)
+    {
+        return Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>();
+    }
+
+    public Player SpawnPlayer()
     {
         return Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
         //return Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();

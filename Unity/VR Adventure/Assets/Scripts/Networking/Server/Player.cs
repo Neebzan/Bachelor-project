@@ -10,19 +10,17 @@ public class Player : MonoBehaviour
     public Vector3 position;
 
     private float speed = 2.0f;
-    private bool[] inputs;
 
     VrPlayerServer vrPlayer = new VrPlayerServer();
-
 
     private void Start()
     {
         speed *= Time.fixedDeltaTime;
     }
 
-    public void SetInput(bool[] _inputs)
+    public void SetInput(bool input)
     {
-        inputs = _inputs;
+ 
     }
 
     public void SetHand(HandDataPacket packet, bool left = false)
@@ -60,8 +58,6 @@ public class Player : MonoBehaviour
         UserName = userName;
         this.id = id;
         vrPlayer.id = id;
-        //position = Vector3.zero;
-        //inputs = new bool[4];
     }
 
     public void FixedUpdate()
@@ -70,29 +66,11 @@ public class Player : MonoBehaviour
         ServerPacketSender.HeadData(vrPlayer);
         ServerPacketSender.VRRightHandData(vrPlayer);
         ServerPacketSender.VRLeftHandData(vrPlayer);
+    }
 
-        Console.WriteLine("LeftHand pos: " + vrPlayer.LeftHand.HandPosition);
-        Console.WriteLine("RightHand pos: " + vrPlayer.RightHand.HandPosition);
-
-
-        //Vector2 _inputDirection = Vector2.zero;
-        //if (inputs[0])
-        //{
-        //    _inputDirection.y += 1;
-        //}
-        //if (inputs[1])
-        //{
-        //    _inputDirection.y -= 1;
-        //}
-        //if (inputs[2])
-        //{
-        //    _inputDirection.x += 1;
-        //}
-        //if (inputs[3])
-        //{
-        //    _inputDirection.x -= 1;
-        //}
-        //Move(_inputDirection);
+    public void SpawnTestProjectile(Vector3 dir)
+    {
+        ServerManager.instance.SpawnProjectile(vrPlayer.RightHand.HandPosition).Init(dir);
     }
 
 

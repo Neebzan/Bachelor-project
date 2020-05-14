@@ -8,9 +8,12 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
+    //public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
+
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
+    public GameObject projectilePrefab;
 
     private void Awake()
     {
@@ -38,5 +41,10 @@ public class GameManager : MonoBehaviour
 
         players.Add(_id, _player.GetComponent<PlayerManager>());
 
+    }
+
+    public void SpawnProjectile(Vector3 pos, int id)
+    {
+        Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>().Init(id);
     }
 }
