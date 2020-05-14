@@ -21,6 +21,9 @@ public class Client : MonoBehaviour
 
     public bool isConnected = false;
 
+
+
+
     private void Awake()
     {
         if (instance == null)
