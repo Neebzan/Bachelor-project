@@ -20,6 +20,9 @@ public class HandPresence : MonoBehaviour {
     public bool SecondaryButtonPressed;
 
     [HideInInspector]
+    public bool PrimaryButtonPressed;
+
+    [HideInInspector]
     public Vector3 Velocity;
 
     [HideInInspector]
@@ -44,6 +47,7 @@ public class HandPresence : MonoBehaviour {
         _targetDevice.TryGetFeatureValue(CommonUsages.grip, out GripValue);
         _targetDevice.TryGetFeatureValue(CommonUsages.trigger, out TriggerValue);
         _targetDevice.TryGetFeatureValue(CommonUsages.secondaryButton, out SecondaryButtonPressed);
+        _targetDevice.TryGetFeatureValue(CommonUsages.primaryButton, out PrimaryButtonPressed);
         
 
         if (_targetDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 value)) {
