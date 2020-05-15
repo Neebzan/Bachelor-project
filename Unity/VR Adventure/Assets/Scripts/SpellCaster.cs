@@ -42,12 +42,14 @@ public class SpellCaster : MonoBehaviour {
     }
 
     void Update () {
-        RightSpellController.HandState = CheckHandPowerState(RightController);
-        LeftSpellController.HandState = CheckHandPowerState(LeftController);
+        RightSpellController.UpdateHandState(RightController);
+        LeftSpellController.UpdateHandState(LeftController);
+        //RightSpellController.HandState = CheckHandPowerState(RightController);
+        //LeftSpellController.HandState = CheckHandPowerState(LeftController);
 
 
         if (_currentSpell == Spell.None && RightSpellController.HandState == HandState.Fire && LeftSpellController.HandState == HandState.Fire) {
-            if (RightSpellController.FireCharge >= 1.0f && LeftSpellController.FireCharge >= 1.0f) {
+            if (RightSpellController.FirePercentageCharged >= 1.0f && LeftSpellController.FirePercentageCharged >= 1.0f) {
                 if (RightController.CurrentGesture == HandGesture.Open && LeftController.CurrentGesture == HandGesture.Open) {
                     _currentSpell = Spell.Fireball;
                     castingSpell = true;
@@ -57,9 +59,9 @@ public class SpellCaster : MonoBehaviour {
         }
 
         if (_currentSpell == Spell.Fireball) {
-            if (RightSpellController.HandState != HandState.Fire && LeftSpellController.HandState != HandState.Fire) {
-                Vector3 velocity = RightController.Velocity * RightSpellController.FireCharge + LeftController.Velocity * LeftSpellController.FireCharge;
-                velocity /= RightSpellController.FireCharge + LeftSpellController.FireCharge;
+            if (RightSpellController.InputState != HandState.Fire && LeftSpellController.InputState != HandState.Fire) {
+                Vector3 velocity = RightController.Velocity * RightSpellController.FirePercentageCharged + LeftController.Velocity * LeftSpellController.FirePercentageCharged;
+                velocity /= RightSpellController.FirePercentageCharged + LeftSpellController.FirePercentageCharged;
 
                 _castFireball.Create(velocity);
                 _currentSpell = Spell.None;
@@ -73,8 +75,8 @@ public class SpellCaster : MonoBehaviour {
     void CastFireball () {
         Vector3 fireballPosition = _pointBetween;
 
-        float intermediateRightValue = RightSpellController.FireCharge * .5f;
-        float intermediateLeftValue = (LeftSpellController.FireCharge * .5f) * -1;
+        float intermediateRightValue = RightSpellController.FirePercentageCharged * .5f;
+        float intermediateLeftValue = (LeftSpellController.FirePercentageCharged * .5f) * -1;
         float delta = intermediateRightValue + intermediateLeftValue + .5f;
 
 
@@ -101,7 +103,7 @@ public class SpellCaster : MonoBehaviour {
 
     HandState CheckHandPowerState (HandPresence hand) {
         if (hand.SecondaryButtonPressed)
-            return HandState.Force;
+            return HandState.Force;        
         else if (hand.PrimaryButtonPressed)
             return HandState.Fire;
         else

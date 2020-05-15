@@ -3533,7 +3533,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   ForceCharge: 0
+  ForcePercentageCharged: 0
   FireCharge: 0
+  FirePercentageCharged: 0
+  InputState: 0
   FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
   ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
 --- !u!1 &8307223246676468145
@@ -4644,7 +4647,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   ForceCharge: 0
+  ForcePercentageCharged: 0
   FireCharge: 0
+  FirePercentageCharged: 0
+  InputState: 0
   FireColor: {r: 4, g: 0.3764706, b: 0, a: 0}
   ForceColor: {r: 0, g: 1.254902, b: 4, a: 0}
 --- !u!1 &8980869553907739451
