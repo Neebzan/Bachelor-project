@@ -67,7 +67,6 @@ public class Fireball : MonoBehaviour {
 
     public void FollowTarget (Vector3 target) {
         Vector3 oldPos = transform.position;
-        Vector3 between = target - transform.position;
 
         transform.position = Vector3.Lerp(transform.position, target, 0.3f);
         Vector3 newPos = transform.position;
@@ -102,12 +101,12 @@ public class Fireball : MonoBehaviour {
         }
 
         if (destroy) {
-            Despawn();
+            Despawn(true);
         }
     }
 
-    public void Despawn () {
-        ServerPacketSender.DespawnFireball(ID);
+    public void Despawn (bool explode) {
+        ServerPacketSender.DespawnFireball(ID, explode);
         Destroy(this.gameObject);
     }
 }

@@ -90,7 +90,7 @@ public class Player : MonoBehaviour {
 
     void ReleaseFireball (ServerVRHand hand) {
         if (hand.Fireball.Size <= _fireballMinSize) {
-            hand.Fireball.Despawn();
+            hand.Fireball.Despawn(false);
         }
         else {
             float rightFirePower = hand.HandDataPacket.StatePower;
@@ -257,9 +257,9 @@ public class Player : MonoBehaviour {
 
                 // Despawn the smallest
                 if (vrPlayer.RightHand.Fireball == _largeFireball)
-                    vrPlayer.LeftHand.Fireball.Despawn();
+                    vrPlayer.LeftHand.Fireball.Despawn(false);
                 else
-                    vrPlayer.RightHand.Fireball.Despawn();
+                    vrPlayer.RightHand.Fireball.Despawn(false);
 
                 vrPlayer.LeftHand.CurrentSpell = Spell.LargeFireball;
                 vrPlayer.RightHand.CurrentSpell = Spell.LargeFireball;

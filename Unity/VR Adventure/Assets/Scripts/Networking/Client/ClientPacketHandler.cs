@@ -117,13 +117,14 @@ public static class ClientPacketHandler
     internal static void DespawnFireball(Packet _packet)
     {
         int id = _packet.ReadInt();
+        bool explode = _packet.ReadBool();
 
         if (GameManager.EmulatedFireballs.ContainsKey(id))
         {
             ThreadManager.ExecuteOnMainThread(() =>
             {
                 lock (GameManager.EmulatedFireballs)
-                    GameManager.EmulatedFireballs[id].Despawn();
+                    GameManager.EmulatedFireballs[id].Despawn(explode);
             });
 
         }

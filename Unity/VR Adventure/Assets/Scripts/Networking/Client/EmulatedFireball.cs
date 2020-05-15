@@ -25,9 +25,10 @@ public class EmulatedFireball : MonoBehaviour {
         _material.SetFloat(_sizeProperty, _size);
     }
 
-    public void Despawn()
-    {
-        GameObject.Instantiate(ParticleSystem, transform.position, Quaternion.identity);
+    public void Despawn (bool explode) {
+        if (explode) {
+            GameObject.Instantiate(ParticleSystem, transform.position, Quaternion.identity);
+        }
         GameManager.EmulatedFireballs.Remove(ID);
         Destroy(gameObject);
     }

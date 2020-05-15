@@ -121,11 +121,12 @@ public class ServerPacketSender
         }
     }
 
-    internal static void DespawnFireball(int id)
+    internal static void DespawnFireball(int id, bool explode)
     {
         using (Packet _packet = new Packet((int)ServerPackets.DespawnFireball))
         {
             _packet.Write(id);
+            _packet.Write(explode);
             ServerManager.instance.Fireballs.Remove(id);
 
             SendTCPPacketAll(_packet);
