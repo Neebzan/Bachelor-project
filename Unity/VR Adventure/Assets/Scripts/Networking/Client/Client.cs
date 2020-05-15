@@ -11,7 +11,7 @@ public class Client : MonoBehaviour
     public static Client instance;
 
     public string ip = "127.0.0.1";
-    public int port = 13000;
+    public int port = 27000;
     public int id;
     [HideInInspector]
     public string userName = "NotSet";
