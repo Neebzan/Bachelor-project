@@ -3,15 +3,10 @@ using JetBrains.Annotations;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider), typeof(MeshRenderer), typeof(Rigidbody))]
+[RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
 public class Fireball : MonoBehaviour {
     public LayerMask ExplodeOnCollide;
 
-    private string _sizeProperty = "Vector1_EE3E2A7D";
-    private string _wobbleSpeedProperty = "Vector1_27B1464A";
-    private string _wobbleSizeProperty = "Vector1_417B252A";
-
-    private MeshRenderer _meshRenderer;
     private SphereCollider _physicalCollider;
     private Rigidbody _rigidBody;
 
@@ -31,7 +26,6 @@ public class Fireball : MonoBehaviour {
 
         set {
             _size = value;
-            Expand();
         }
     }
 
@@ -39,7 +33,6 @@ public class Fireball : MonoBehaviour {
 
     private void Awake () {
         ID = IdIndexer++;
-        _meshRenderer = GetComponent<MeshRenderer>();
         _rigidBody = GetComponent<Rigidbody>();
         _physicalCollider = GetComponent<SphereCollider>();
         if (isServer) {
@@ -57,9 +50,6 @@ public class Fireball : MonoBehaviour {
         }
     }
 
-    private void Expand () {
-        _meshRenderer.material.SetFloat(_sizeProperty, Size);
-    }
 
     public void Create (Vector3 velocity) {
         _physicalCollider.radius = Size * .5f;
