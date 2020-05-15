@@ -76,7 +76,7 @@ public class SpellController : MonoBehaviour {
         }
 
 
-        else if (controller.PrimaryButtonPressed) {
+        else if (controller.CurrentGesture == HandGesture.Pinch) {
             TargetHandState = HandState.Fire;
             if (HandState != HandState.Fire) {
                 if (ForcePercentageCharged > 0) {

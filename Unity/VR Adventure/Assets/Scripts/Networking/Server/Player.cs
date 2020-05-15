@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
     void CheckSpellInput () {
         if (_currentSpell == Spell.None) {
             if (vrPlayer.LeftHand.HandState == HandState.Fire && vrPlayer.RightHand.HandState == HandState.Fire) {
-                if (vrPlayer.LeftHand.CurrentGesture == HandGesture.Open && vrPlayer.RightHand.CurrentGesture == HandGesture.Open) {
+                if (vrPlayer.LeftHand.CurrentGesture == HandGesture.Pinch && vrPlayer.RightHand.CurrentGesture == HandGesture.Pinch) {
                     if (vrPlayer.LeftHand.StatePower >= 1.0f && vrPlayer.RightHand.StatePower >= 1.0f) {
                         CastFireball();
                     }

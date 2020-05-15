@@ -104,7 +104,7 @@ public class SpellCaster : MonoBehaviour {
     HandState CheckHandPowerState (HandPresence hand) {
         if (hand.SecondaryButtonPressed)
             return HandState.Force;        
-        else if (hand.PrimaryButtonPressed)
+        else if (hand.CurrentGesture == HandGesture.Pinch)
             return HandState.Fire;
         else
             return HandState.Default;
