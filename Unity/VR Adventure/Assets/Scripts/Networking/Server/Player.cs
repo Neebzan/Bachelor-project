@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
     public Vector3 position;
     //private Fireball _castFireball;
     private readonly float _fireballHandOffset = 0.15f;
-    private readonly float _fireballMaxSize = 0.2f;
+    private readonly float _fireballMaxSize = 0.4f;
     private Fireball _largeFireball;
 
     private float _fireballMergeProgress = 0.0f;
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour {
     void ControlFireball (ServerVRHand hand) {
         hand.CastFireball.FollowTarget(hand.DesiredFireballPosition);
 
-        float targetSize = _fireballMaxSize * .5f;
+        float targetSize = _fireballMaxSize * .3f;
 
         if (hand.HandDataPacket.HandState == HandState.Fire) {
             float newSize = hand.CastFireball.Size;
