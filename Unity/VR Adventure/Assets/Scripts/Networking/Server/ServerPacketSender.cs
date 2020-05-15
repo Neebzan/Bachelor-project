@@ -72,8 +72,8 @@ public class ServerPacketSender
             _packet.Write(vrPlayer.LeftHand.Trigger);
             _packet.Write(vrPlayer.LeftHand.Grip);
             _packet.Write(vrPlayer.LeftHand.Velocity);
-            _packet.Write((int)vrPlayer.RightHand.HandState);
-            _packet.Write(vrPlayer.RightHand.StatePower);
+            _packet.Write((int)vrPlayer.LeftHand.HandState);
+            _packet.Write(vrPlayer.LeftHand.StatePower);
 
             SendUDPPacketAll(_packet, vrPlayer.id);
         }

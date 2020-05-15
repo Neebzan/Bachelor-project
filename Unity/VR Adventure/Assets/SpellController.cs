@@ -102,6 +102,13 @@ public class SpellController : MonoBehaviour {
                 DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
             }
         }
+
+        if (HandState == HandState.Fire) {
+            StatePower = FirePercentageCharged;
+        }
+        else if (HandState == HandState.Force) {
+            StatePower = ForcePercentageCharged;
+        }
     }
 
     //private void Update () {
