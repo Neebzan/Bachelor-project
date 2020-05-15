@@ -136,6 +136,4 @@ public class Player : MonoBehaviour {
     public void SpawnTestProjectile (Vector3 dir) {
         ServerManager.instance.SpawnProjectile(vrPlayer.RightHand.HandPosition).Init(dir);
     }
-
-
 }
