@@ -32,6 +32,11 @@ public class ServerManager : MonoBehaviour
         Server.Start(10, 27000);
     }
 
+    private void FixedUpdate()
+    {
+        ServerPacketSender.UpdateFireballsCollection();
+    }
+
     private void OnApplicationQuit()
     {
         Server.Stop();

@@ -28,10 +28,10 @@ public class Projectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        ServerPacketSender.ProjectilePosition(this);
-    }
+    //void FixedUpdate()
+    //{
+    //    ServerPacketSender.ProjectilePosition(this);
+    //}
 
     public IEnumerator Remove()
     {

@@ -91,10 +91,12 @@ public static class ClientPacketHandler
         lock (Projectile.Projectiles)
             if (Projectile.Projectiles.ContainsKey(id))
             {
-                try {
-                    Projectile.Projectiles [ id ].Emulate(pos, rot);
+                try
+                {
+                    Projectile.Projectiles[id].Emulate(pos, rot);
                 }
-                catch {
+                catch
+                {
                     Debug.Log("waaa");
                 }
             }
@@ -136,13 +138,40 @@ public static class ClientPacketHandler
         lock (GameManager.EmulatedFireballs)
             if (GameManager.EmulatedFireballs.ContainsKey(id))
             {
-                try {
-                GameManager.EmulatedFireballs[id].Emulate(position, size);
+                try
+                {
+                    GameManager.EmulatedFireballs[id].Emulate(position, size);
                 }
-                catch {
+                catch
+                {
                     Debug.Log("whaa");
                 }
             }
+    }
+
+    public static void UpdateFireballs(Packet _packet)
+    {
+        int fireballCount = _packet.ReadInt();
+
+        for (int i = 0; i < fireballCount; i++)
+        {
+            int id = _packet.ReadInt();
+            Vector3 position = _packet.ReadVector3();
+            float size = _packet.ReadFloat();
+
+            lock (GameManager.EmulatedFireballs)
+                if (GameManager.EmulatedFireballs.ContainsKey(id))
+                {
+                    try
+                    {
+                        GameManager.EmulatedFireballs[id].Emulate(position, size);
+                    }
+                    catch
+                    {
+                        Debug.Log("whaa");
+                    }
+                }
+        }
     }
 
     internal static void SpawnFireball(Packet _packet)

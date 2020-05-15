@@ -44,11 +44,11 @@ public class Fireball : MonoBehaviour {
         ServerPacketSender.SpawnFireball(this);
     }
 
-    private void FixedUpdate () {
-        if (isServer) {
-            ServerPacketSender.UpdateFireball(this);
-        }
-    }
+    //private void FixedUpdate () {
+    //    if (isServer) {
+    //        ServerPacketSender.UpdateFireball(this);
+    //    }
+    //}
 
 
     public void Create (Vector3 velocity) {

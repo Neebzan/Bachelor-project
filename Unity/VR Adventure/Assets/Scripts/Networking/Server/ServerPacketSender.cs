@@ -44,8 +44,10 @@ public class ServerPacketSender
         }
     }
 
-    public static void SpawnFireball (Fireball fireball) {
-        using (Packet _packet = new Packet((int)ServerPackets.SpawnFireball)) {
+    public static void SpawnFireball(Fireball fireball)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.SpawnFireball))
+        {
             _packet.Write(fireball.ID);
             _packet.Write(fireball.transform.position);
             _packet.Write(fireball.Size);
@@ -54,8 +56,10 @@ public class ServerPacketSender
         }
     }
 
-    public static void UpdateFireball(Fireball fireball) {
-        using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball)) {
+    public static void UpdateFireball(Fireball fireball)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball))
+        {
             _packet.Write(fireball.ID);
             _packet.Write(fireball.transform.position);
             _packet.Write(fireball.Size);
@@ -63,6 +67,41 @@ public class ServerPacketSender
             SendUDPPacketAll(_packet);
         }
     }
+
+    public static void UpdateFireballsCollection()
+    {
+
+        //+4 bytes from enum
+        //16 bytes pr fireball
+        //Max 30 fireballs pr packet
+        int count = 0;
+
+        Packet _packet = new Packet((int)ServerPackets.UpdateFireballs);
+        if (ServerManager.instance.Fireballs.Count >= 30)
+            _packet.Write(30);
+        else
+            _packet.Write(ServerManager.instance.Fireballs.Count);
+
+        foreach (var fireball in ServerManager.instance.Fireballs.Values)
+        {
+            _packet.Write(fireball.ID);
+            _packet.Write(fireball.transform.position);
+            _packet.Write(fireball.Size);
+            count++;
+            if (count % 30 == 0)
+            {
+                SendUDPPacketAll(_packet);
+                _packet = new Packet((int)ServerPackets.UpdateFireballs);
+                if (ServerManager.instance.Fireballs.Count-count >= 30)
+                    _packet.Write(30);
+                else
+                    _packet.Write(ServerManager.instance.Fireballs.Count - count);
+            }
+        }
+        SendUDPPacketAll(_packet);
+
+    }
+
 
     public static void VRRightHandData(ServerPlayer vrPlayer)
     {
@@ -82,8 +121,10 @@ public class ServerPacketSender
         }
     }
 
-    internal static void DespawnFireball (int id) {
-        using (Packet _packet = new Packet((int)ServerPackets.DespawnFireball)) {
+    internal static void DespawnFireball(int id)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.DespawnFireball))
+        {
             _packet.Write(id);
             ServerManager.instance.Fireballs.Remove(id);
 

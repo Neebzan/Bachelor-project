@@ -34,6 +34,7 @@ public enum ServerPackets
 
     SpawnFireball,
     UpdateFireball,
+    UpdateFireballs,
     DespawnFireball
 }
 
@@ -96,6 +97,7 @@ public static class PacketHandlers
 
             {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
             {(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},
+            {(int)ServerPackets.UpdateFireballs, ClientPacketHandler.UpdateFireballs},
             {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
 
             {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
