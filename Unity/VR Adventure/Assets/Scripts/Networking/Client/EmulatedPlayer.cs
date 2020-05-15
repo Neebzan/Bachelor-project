@@ -43,28 +43,6 @@ public class HandDataPacket {
     public float Grip { get; set; }
     public Vector3 Velocity { get; set; }
     public HandState HandState { get; set; }
-
     public HandState TargetHandState { get; set; }
     public float StatePower { get; set; }
-    public HandGesture CurrentGesture {
-        get {
-            return Grip > .5f ? HandGesture.Grip : Trigger > .5f ? HandGesture.Pinch : HandGesture.Open;
-        }
     }
-
-    public Vector3 Up {
-        get {
-            return HandRotation * Vector3.up;
-        }
-    }
-    public Vector3 Right {
-        get {
-            return HandRotation * Vector3.right;
-        }
-    }
-    public Vector3 Forward {
-        get {
-            return HandRotation * Vector3.forward;
-        }
-    }
-}

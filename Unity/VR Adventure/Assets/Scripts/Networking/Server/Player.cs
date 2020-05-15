@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum Spell { None, Fireball, ForcePush }
+public enum Spell { None, Fireball, ForcePush, LargeFireball }
 public class Player : MonoBehaviour {
     public int id;
     public string UserName;
     public Vector3 position;
-    private Spell _currentSpell = Spell.None;
-    private Fireball _castFireball;
+    //private Fireball _castFireball;
     private readonly float _fireballHandOffset = 0.15f;
     private readonly float _fireballMaxSize = 0.2f;
+    private Fireball _largeFireball;
+
+    private float _fireballMergeProgress = 0.0f;
+    private bool _mergingFireballs = false;
 
     private float speed = 2.0f;
 
@@ -28,9 +31,9 @@ public class Player : MonoBehaviour {
 
     public void SetHand (HandDataPacket packet, bool left = false) {
         if (left)
-            vrPlayer.LeftHand = packet;
+            vrPlayer.LeftHand.HandDataPacket = packet;
         else
-            vrPlayer.RightHand = packet;
+            vrPlayer.RightHand.HandDataPacket = packet;
     }
 
     public void SetHead (Vector3 pos, Quaternion rot) {
@@ -45,87 +48,190 @@ public class Player : MonoBehaviour {
         vrPlayer.id = id;
     }
 
-    void CheckSpellInput () {
-        if (_currentSpell == Spell.None) {
-            if (vrPlayer.LeftHand.HandState == HandState.Fire && vrPlayer.RightHand.HandState == HandState.Fire) {
-                if (vrPlayer.LeftHand.CurrentGesture == HandGesture.Pinch && vrPlayer.RightHand.CurrentGesture == HandGesture.Pinch) {
-                    if (vrPlayer.LeftHand.StatePower >= 1.0f && vrPlayer.RightHand.StatePower >= 1.0f) {
-                        CastFireball();
+    void HandleFireballSpell (ServerVRHand hand) {
+        if (hand.CurrentSpell == Spell.None) {
+            if (hand.HandDataPacket.HandState == HandState.Fire) {
+                if (hand.CurrentGesture == HandGesture.Pinch) {
+                    if (hand.HandDataPacket.StatePower >= 1.0f) {
+                        CastFireball(hand);
                     }
                 }
             }
         }
-        if (_currentSpell == Spell.Fireball) {
-            if (vrPlayer.RightHand.TargetHandState != HandState.Fire && vrPlayer.LeftHand.TargetHandState != HandState.Fire) {
+        if (hand.CurrentSpell == Spell.Fireball) {
+            if (hand.HandDataPacket.TargetHandState != HandState.Fire) {
                 float rightFirePower = 0.0f;
-                float leftFirePower = 0.0f;
 
-                if (vrPlayer.RightHand.HandState == HandState.Fire) {
-                    rightFirePower = vrPlayer.RightHand.StatePower;
-                }
-                if (vrPlayer.LeftHand.HandState == HandState.Fire) {
-                    leftFirePower = vrPlayer.LeftHand.StatePower;
+                if (hand.HandDataPacket.HandState == HandState.Fire) {
+                    rightFirePower = hand.HandDataPacket.StatePower;
                 }
 
-                Vector3 velocity = vrPlayer.RightHand.Velocity * rightFirePower + vrPlayer.LeftHand.Velocity * leftFirePower;
-                velocity /= rightFirePower + leftFirePower;
+                Vector3 velocity = hand.HandDataPacket.Velocity * rightFirePower;
+                velocity /= rightFirePower;
 
-                _castFireball.Create(velocity);
-                _currentSpell = Spell.None;
+                hand.CastFireball.Create(velocity);
+                hand.CurrentSpell = Spell.None;
             }
             else {
-                ControlFireball();
+                ControlFireball(hand);
             }
         }
     }
 
-    void CastFireball () {
-        _castFireball = ServerManager.instance.SpawnFireball();
-        _castFireball.transform.position = vrPlayer.PointBetween;
-        _castFireball.Size = 0.0f;
-        _currentSpell = Spell.Fireball;
+    void HandleSingleFireballSpell () {
+        if (vrPlayer.RightHand.HandDataPacket.TargetHandState != HandState.Fire && vrPlayer.LeftHand.HandDataPacket.TargetHandState != HandState.Fire) {
+            float rightFirePower = 0.0f;
+            float leftFirePower = 0.0f;
+
+            if (vrPlayer.RightHand.HandDataPacket.HandState == HandState.Fire) {
+                rightFirePower = vrPlayer.RightHand.HandDataPacket.StatePower;
+            }
+            if (vrPlayer.LeftHand.HandDataPacket.HandState == HandState.Fire) {
+                leftFirePower = vrPlayer.LeftHand.HandDataPacket.StatePower;
+            }
+
+            Vector3 velocity = vrPlayer.RightHand.HandDataPacket.Velocity * rightFirePower + vrPlayer.LeftHand.HandDataPacket.Velocity * leftFirePower;
+            velocity /= rightFirePower + leftFirePower;
+
+            _largeFireball.Create(velocity);
+            vrPlayer.LeftHand.CurrentSpell = Spell.None;
+            vrPlayer.RightHand.CurrentSpell = Spell.None;
+        }
+        else {
+            ControlSingleFireball();
+        }
+
     }
 
-    void ControlFireball () {
+    void CastFireball (ServerVRHand hand) {
+        hand.CastFireball = ServerManager.instance.SpawnFireball();
+        hand.CastFireball.Size = 0.0f;
+        hand.CastFireball.transform.position = hand.DesiredFireballPosition;
+        hand.CurrentSpell = Spell.Fireball;
+    }
+
+    void ControlFireball (ServerVRHand hand) {
+        hand.CastFireball.FollowTarget(hand.DesiredFireballPosition);
+
+        float targetSize = _fireballMaxSize * .5f;
+
+        if (hand.HandDataPacket.HandState == HandState.Fire) {
+            float newSize = hand.CastFireball.Size;
+            if (hand.CastFireball.Size < targetSize) {
+                newSize = hand.CastFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, targetSize);
+            }
+            if (hand.CastFireball.Size > targetSize) {
+                newSize = targetSize;
+            }
+
+            hand.CastFireball.Size = newSize;
+        }
+    }
+
+    void ControlSingleFireball () {
         Vector3 fireballPosition = vrPlayer.PointBetween;
 
         float intermediateRightValue = 0;
         float intermediateLeftValue = 0;
 
-        if (vrPlayer.RightHand.HandState == HandState.Fire) {
-            intermediateRightValue = vrPlayer.RightHand.StatePower * .5f;
+        if (vrPlayer.RightHand.HandDataPacket.HandState == HandState.Fire) {
+            intermediateRightValue = vrPlayer.RightHand.HandDataPacket.StatePower * .5f;
         }
-        if (vrPlayer.LeftHand.HandState == HandState.Fire) {
-            intermediateLeftValue = (vrPlayer.LeftHand.StatePower * .5f) * -1;
+        if (vrPlayer.LeftHand.HandDataPacket.HandState == HandState.Fire) {
+            intermediateLeftValue = (vrPlayer.LeftHand.HandDataPacket.StatePower * .5f) * -1;
         }
 
         float delta = intermediateRightValue + intermediateLeftValue + .5f;
 
 
-        fireballPosition = Vector3.Lerp(vrPlayer.LeftHand.HandPosition - vrPlayer.LeftHand.Up * (.05f + _castFireball.Size) + -vrPlayer.LeftHand.Right * .07f, vrPlayer.RightHand.HandPosition - vrPlayer.RightHand.Up * (.05f + _castFireball.Size) + vrPlayer.RightHand.Right * .07f, delta);
-        _castFireball.FollowTarget(fireballPosition);
+        fireballPosition = Vector3.Lerp(vrPlayer.LeftHand.HandDataPacket.HandPosition - vrPlayer.LeftHand.Up * (.05f + _largeFireball.Size) + -vrPlayer.LeftHand.Right * .07f, vrPlayer.RightHand.HandDataPacket.HandPosition - vrPlayer.RightHand.Up * (.05f + _largeFireball.Size) + vrPlayer.RightHand.Right * .07f, delta);
+        _largeFireball.FollowTarget(fireballPosition);
 
-        float distance = Vector3.Distance(vrPlayer.RightHand.HandPosition, vrPlayer.LeftHand.HandPosition);
+        float distance = Vector3.Distance(vrPlayer.RightHand.HandDataPacket.HandPosition, vrPlayer.LeftHand.HandDataPacket.HandPosition);
 
         distance = Mathf.Clamp(distance - _fireballHandOffset, 0, _fireballMaxSize);
 
-        if (vrPlayer.RightHand.HandState == HandState.Fire && vrPlayer.LeftHand.HandState == HandState.Fire) {
-            float newSize = _castFireball.Size;
-            if (_castFireball.Size < distance) {
-                newSize = _castFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
+        if (vrPlayer.RightHand.HandDataPacket.HandState == HandState.Fire && vrPlayer.LeftHand.HandDataPacket.HandState == HandState.Fire) {
+            float newSize = _largeFireball.Size;
+            if (_largeFireball.Size < distance) {
+                newSize = _largeFireball.Size += Mathf.Clamp(Time.deltaTime * 0.1f, 0, distance);
             }
-            if (_castFireball.Size > distance) {
+            if (_largeFireball.Size > distance) {
                 newSize = distance;
             }
 
-            _castFireball.Size = newSize;
+            _largeFireball.Size = newSize;
 
         }
     }
 
     public void FixedUpdate () {
-        // Handle fireball manipulation
-        CheckSpellInput();
+        // If hands are close
+        if (Vector3.Distance(vrPlayer.LeftHand.HandDataPacket.HandPosition, vrPlayer.RightHand.HandDataPacket.HandPosition) < .5f) {
+            if (!_mergingFireballs && vrPlayer.LeftHand.CurrentSpell == Spell.Fireball && vrPlayer.RightHand.CurrentSpell == Spell.Fireball) {
+                // Begin merge
+                _mergingFireballs = true;
+            }
+        }
+        else {
+            // Demerge, and spawn two smaller fireballs
+        }
+
+
+        // If merge has begun
+        if (_mergingFireballs) {
+            // If fireballs are not at the same position
+            // Move closer
+            if (_fireballMergeProgress < 1.0f) {
+                Console.WriteLine("Player begin merge");
+                vrPlayer.LeftHand.CastFireball.FollowTarget(Vector3.Lerp(vrPlayer.LeftHand.DesiredFireballPosition, vrPlayer.PointBetween, _fireballMergeProgress));
+                vrPlayer.RightHand.CastFireball.FollowTarget(Vector3.Lerp(vrPlayer.RightHand.DesiredFireballPosition, vrPlayer.PointBetween, _fireballMergeProgress));
+                _fireballMergeProgress += Time.fixedDeltaTime;
+            }
+            // If they are close enough
+            // Merge
+            else {
+                // Fireballs are close, so despawn and spawn a larger one
+                float largestSize = 0.0f;
+                if (vrPlayer.LeftHand.CastFireball.Size > largestSize) {
+                    largestSize = vrPlayer.LeftHand.CastFireball.Size;
+                }
+                if (vrPlayer.RightHand.CastFireball.Size > largestSize) {
+                    largestSize = vrPlayer.RightHand.CastFireball.Size;
+                }
+
+
+                vrPlayer.LeftHand.CastFireball.Despawn();
+                vrPlayer.RightHand.CastFireball.Despawn();
+
+                _largeFireball = ServerManager.instance.SpawnFireball();
+                _largeFireball.Size = largestSize;
+                _largeFireball.transform.position = vrPlayer.PointBetween;
+
+                vrPlayer.LeftHand.CurrentSpell = Spell.LargeFireball;
+                vrPlayer.RightHand.CurrentSpell = Spell.LargeFireball;
+
+                // We are no longer merging
+                _mergingFireballs = false;
+            }
+        }
+
+        //If not merging fireballs
+        else {
+            // If controlling large fireball
+            if (vrPlayer.RightHand.CurrentSpell == Spell.LargeFireball) {
+                Console.WriteLine("Spawn large fireball");
+                HandleSingleFireballSpell();
+            }
+            // If not
+            else {
+                Console.WriteLine("Default fireball logic");
+                _fireballMergeProgress = 0.0f;
+                HandleFireballSpell(vrPlayer.LeftHand);
+                HandleFireballSpell(vrPlayer.RightHand);
+            }
+        }
+
 
         //Send player information
         ServerPacketSender.HeadData(vrPlayer);
@@ -134,6 +240,6 @@ public class Player : MonoBehaviour {
     }
 
     public void SpawnTestProjectile (Vector3 dir) {
-        ServerManager.instance.SpawnProjectile(vrPlayer.RightHand.HandPosition).Init(dir);
+        ServerManager.instance.SpawnProjectile(vrPlayer.RightHand.HandDataPacket.HandPosition).Init(dir);
     }
 }

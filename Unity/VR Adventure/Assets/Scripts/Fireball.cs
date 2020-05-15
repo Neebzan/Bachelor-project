@@ -13,6 +13,8 @@ public class Fireball : MonoBehaviour {
     public static int IdIndexer = 0;
     public int ID { get; private set; }
 
+    public Vector3 FireballVelocity { get; set; }
+
     [HideInInspector]
     public bool Active = false;
     [HideInInspector]
@@ -58,13 +60,18 @@ public class Fireball : MonoBehaviour {
         Armed = true;
 
         if (velocity.magnitude > .3f) {
-            ApplyForce(velocity * 1.5f);
+            //ApplyForce(velocity * 1.5f);
+            ApplyForce(FireballVelocity * 1.5f);
         }
     }
 
     public void FollowTarget (Vector3 target) {
+        Vector3 oldPos = transform.position;
         Vector3 between = target - transform.position;
-        transform.position = Vector3.Lerp(transform.position, target, 0.1f);
+        transform.position = Vector3.Lerp(transform.position, target, 0.3f);
+        Vector3 newPos = transform.position;
+
+        FireballVelocity = (newPos - oldPos) / Time.fixedDeltaTime;
     }
 
     public void ApplyForce (Vector3 relativeVelocity) {
@@ -94,8 +101,12 @@ public class Fireball : MonoBehaviour {
         }
 
         if (destroy) {
-            ServerPacketSender.DespawnFireball(ID);
-            Destroy(this.gameObject);
+            Despawn();
         }
+    }
+
+    public void Despawn () {
+        ServerPacketSender.DespawnFireball(ID);
+        Destroy(this.gameObject);
     }
 }

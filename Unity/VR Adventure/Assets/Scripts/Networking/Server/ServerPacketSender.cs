@@ -109,13 +109,13 @@ public class ServerPacketSender
         using (Packet _packet = new Packet((int)ServerPackets.VRRightHandData))
         {
             _packet.Write(vrPlayer.id);
-            _packet.Write(vrPlayer.RightHand.HandPosition);
-            _packet.Write(vrPlayer.RightHand.HandRotation);
-            _packet.Write(vrPlayer.RightHand.Trigger);
-            _packet.Write(vrPlayer.RightHand.Grip);
-            _packet.Write(vrPlayer.RightHand.Velocity);
-            _packet.Write((int)vrPlayer.RightHand.HandState);
-            _packet.Write(vrPlayer.RightHand.StatePower);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.HandPosition);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.HandRotation);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.Trigger);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.Grip);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.Velocity);
+            _packet.Write((int)vrPlayer.RightHand.HandDataPacket.HandState);
+            _packet.Write(vrPlayer.RightHand.HandDataPacket.StatePower);
 
             SendUDPPacketAll(_packet, vrPlayer.id);
         }
@@ -137,13 +137,13 @@ public class ServerPacketSender
         using (Packet _packet = new Packet((int)ServerPackets.VRLeftHandData))
         {
             _packet.Write(vrPlayer.id);
-            _packet.Write(vrPlayer.LeftHand.HandPosition);
-            _packet.Write(vrPlayer.LeftHand.HandRotation);
-            _packet.Write(vrPlayer.LeftHand.Trigger);
-            _packet.Write(vrPlayer.LeftHand.Grip);
-            _packet.Write(vrPlayer.LeftHand.Velocity);
-            _packet.Write((int)vrPlayer.LeftHand.HandState);
-            _packet.Write(vrPlayer.LeftHand.StatePower);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandPosition);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandRotation);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Trigger);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Grip);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Velocity);
+            _packet.Write((int)vrPlayer.LeftHand.HandDataPacket.HandState);
+            _packet.Write(vrPlayer.LeftHand.HandDataPacket.StatePower);
 
             SendUDPPacketAll(_packet, vrPlayer.id);
         }
