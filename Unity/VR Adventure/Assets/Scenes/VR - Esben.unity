@@ -6489,6 +6489,8 @@ MonoBehaviour:
     type: 3}
   projectilePrefab: {fileID: 1525993473585009942, guid: 91f06122b41130546983079868bb5227,
     type: 3}
+  EmulatedFireballPrefab: {fileID: 63224456552569735, guid: 1475a772fa4133a41896de23820d9bf1,
+    type: 3}
 --- !u!114 &2029990376
 MonoBehaviour:
   m_ObjectHideFlags: 0
