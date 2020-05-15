@@ -72,8 +72,4 @@ public class HandPresence : MonoBehaviour {
         UpdateHandAnimation();
         UpdateHandGesture();
     }
-
-    private void OnDrawGizmos () {
-        Gizmos.DrawLine(transform.position, transform.position + Velocity.normalized * 2.0f);
-    }
 }
