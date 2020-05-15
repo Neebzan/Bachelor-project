@@ -9,6 +9,9 @@ public class ServerManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject vrPlayerPrefab;
     public GameObject projectilePrefab;
+    public GameObject FireballPrefab;
+
+    public Dictionary<int, Fireball> Fireballs = new Dictionary<int, Fireball>();
 
     private void Awake()
     {
@@ -45,4 +48,9 @@ public class ServerManager : MonoBehaviour
         //return Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
     }
 
+    public Fireball SpawnFireball () {
+        Fireball fireball = Instantiate(FireballPrefab).GetComponent<Fireball>();
+        Fireballs.Add(fireball.ID, fireball);
+        return fireball;
+    }
 }

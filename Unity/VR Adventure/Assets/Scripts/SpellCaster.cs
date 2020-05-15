@@ -8,7 +8,6 @@ using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
 
-public enum Spell { None, Fireball, ForcePush }
 
 public class SpellCaster : MonoBehaviour {
     public HandPresence LeftController;
@@ -48,28 +47,28 @@ public class SpellCaster : MonoBehaviour {
         //LeftSpellController.HandState = CheckHandPowerState(LeftController);
 
 
-        if (_currentSpell == Spell.None && RightSpellController.HandState == HandState.Fire && LeftSpellController.HandState == HandState.Fire) {
-            if (RightSpellController.FirePercentageCharged >= 1.0f && LeftSpellController.FirePercentageCharged >= 1.0f) {
-                if (RightController.CurrentGesture == HandGesture.Open && LeftController.CurrentGesture == HandGesture.Open) {
-                    _currentSpell = Spell.Fireball;
-                    castingSpell = true;
-                    SpawnFireball();
-                }
-            }
-        }
+        //if (_currentSpell == Spell.None && RightSpellController.HandState == HandState.Fire && LeftSpellController.HandState == HandState.Fire) {
+        //    if (RightSpellController.FirePercentageCharged >= 1.0f && LeftSpellController.FirePercentageCharged >= 1.0f) {
+        //        if (RightController.CurrentGesture == HandGesture.Open && LeftController.CurrentGesture == HandGesture.Open) {
+        //            _currentSpell = Spell.Fireball;
+        //            castingSpell = true;
+        //            SpawnFireball();
+        //        }
+        //    }
+        //}
 
-        if (_currentSpell == Spell.Fireball) {
-            if (RightSpellController.InputState != HandState.Fire && LeftSpellController.InputState != HandState.Fire) {
-                Vector3 velocity = RightController.Velocity * RightSpellController.FirePercentageCharged + LeftController.Velocity * LeftSpellController.FirePercentageCharged;
-                velocity /= RightSpellController.FirePercentageCharged + LeftSpellController.FirePercentageCharged;
+        //if (_currentSpell == Spell.Fireball) {
+        //    if (RightSpellController.TargetHandState != HandState.Fire && LeftSpellController.TargetHandState != HandState.Fire) {
+        //        Vector3 velocity = RightController.Velocity * RightSpellController.FirePercentageCharged + LeftController.Velocity * LeftSpellController.FirePercentageCharged;
+        //        velocity /= RightSpellController.FirePercentageCharged + LeftSpellController.FirePercentageCharged;
 
-                _castFireball.Create(velocity);
-                _currentSpell = Spell.None;
-            }
-            else {
-                CastFireball();
-            }
-        }
+        //        _castFireball.Create(velocity);
+        //        _currentSpell = Spell.None;
+        //    }
+        //    else {
+        //        CastFireball();
+        //    }
+        //}
     }
 
     void CastFireball () {
@@ -79,8 +78,9 @@ public class SpellCaster : MonoBehaviour {
         float intermediateLeftValue = (LeftSpellController.FirePercentageCharged * .5f) * -1;
         float delta = intermediateRightValue + intermediateLeftValue + .5f;
 
-
-        fireballPosition = Vector3.Lerp(LeftController.transform.position - LeftController.transform.up * (.05f + _castFireball.Size) + -LeftController.transform.right * .07f, RightController.transform.position - RightController.transform.up * (.05f + _castFireball.Size) + RightController.transform.right * .07f, delta);
+        Vector3 leftUp = LeftController.transform.rotation * Vector3.up;
+        Vector3 rightUp = RightController.transform.rotation * Vector3.up;
+        fireballPosition = Vector3.Lerp(LeftController.transform.position - leftUp * (.05f + _castFireball.Size) + -LeftController.transform.right * .07f, RightController.transform.position - rightUp * (.05f + _castFireball.Size) + RightController.transform.right * .07f, delta);
         _castFireball.FollowTarget(fireballPosition);
 
         float distance = Vector3.Distance(RightController.Hand.transform.position, LeftController.Hand.transform.position);

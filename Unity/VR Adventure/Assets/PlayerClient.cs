@@ -65,6 +65,7 @@ public class PlayerClient : MonoBehaviour {
             Grip = hand.GripValue,
             Velocity = hand.Velocity,
             HandState = spellController.HandState,
+            TargetHandState = spellController.TargetHandState,
             StatePower = spellController.StatePower
         };
 

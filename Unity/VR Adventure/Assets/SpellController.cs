@@ -34,7 +34,7 @@ public class SpellController : MonoBehaviour {
     }
 
     [HideInInspector]
-    public HandState InputState;
+    public HandState TargetHandState;
 
 
     private float _forcePower = 2.5f;
@@ -59,9 +59,9 @@ public class SpellController : MonoBehaviour {
     }
 
     internal void UpdateHandState (HandPresence controller) {
-        InputState = HandState.Default;
+        TargetHandState = HandState.Default;
         if (controller.SecondaryButtonPressed) {
-            InputState = HandState.Force;
+            TargetHandState = HandState.Force;
             if (HandState != HandState.Force) {
                 if (FirePercentageCharged > 0) {
                     DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
@@ -77,7 +77,7 @@ public class SpellController : MonoBehaviour {
 
 
         else if (controller.PrimaryButtonPressed) {
-            InputState = HandState.Fire;
+            TargetHandState = HandState.Fire;
             if (HandState != HandState.Fire) {
                 if (ForcePercentageCharged > 0) {
                     DechargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);

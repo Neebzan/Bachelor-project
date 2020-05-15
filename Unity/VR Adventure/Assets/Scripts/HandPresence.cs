@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
-public enum HandGesture { Open, Pinch, Punch, Grip }
+
 public class HandPresence : MonoBehaviour {
     public XRController Controller;
 
@@ -61,11 +61,7 @@ public class HandPresence : MonoBehaviour {
     }
 
     void UpdateHandGesture () {
-        CurrentGesture = GripValue > .5f ? HandGesture.Grip : HandGesture.Open;
-
-        if (TriggerValue > .5f)
-            CurrentGesture = CurrentGesture == HandGesture.Grip ? HandGesture.Punch : HandGesture.Pinch;
-        
+        CurrentGesture = GripValue > .5f ? HandGesture.Grip : TriggerValue > .5f ? HandGesture.Pinch : HandGesture.Open;
     }
 
     void Update () {

@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public static class ClientPacketHandler
-{
+public static class ClientPacketHandler {
     public static event Action OnConnectedToServer;
 
-    public static void WelcomeMessage(Packet packet)
-    {
+    public static void WelcomeMessage (Packet packet) {
         string msg = packet.ReadString();
         int id = packet.ReadInt();
 
@@ -25,8 +23,7 @@ public static class ClientPacketHandler
         OnConnectedToServer?.Invoke();
     }
 
-    public static void SpawnPlayer(Packet packet)
-    {
+    public static void SpawnPlayer (Packet packet) {
         Debug.Log("Attempting to spawn player!");
 
         int _id = packet.ReadInt();
@@ -36,8 +33,7 @@ public static class ClientPacketHandler
         GameManager.instance.SpawnPlayer(_id, _username, _position, Quaternion.identity);
     }
 
-    public static void UdpReceiveMessageTest(Packet _packet)
-    {
+    public static void UdpReceiveMessageTest (Packet _packet) {
         string msg = _packet.ReadString();
 
         ClientPacketSender.UdpTestReceived();
@@ -45,55 +41,49 @@ public static class ClientPacketHandler
         Debug.Log(msg);
     }
 
-    public static void PlayerPosition(Packet _packet)
-    {
+    public static void PlayerPosition (Packet _packet) {
         int _id = _packet.ReadInt();
         Vector3 _pos = _packet.ReadVector3();
 
         if (GameManager.players.ContainsKey(_id))
-            GameManager.players[_id].transform.position = _pos;
+            GameManager.players [ _id ].transform.position = _pos;
         //Debug.Log($"{_pos} is new position for player {_id}");
     }
 
-    public static void PlayerDisconnected(Packet _packet)
-    {
+    public static void PlayerDisconnected (Packet _packet) {
         int _id = _packet.ReadInt();
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
+        ThreadManager.ExecuteOnMainThread(() => {
             PlayerManager player;
-            if (GameManager.players.TryGetValue(_id, out player))
-            {
+            if (GameManager.players.TryGetValue(_id, out player)) {
                 UnityEngine.Object.Destroy(player.gameObject);
                 GameManager.players.Remove(_id);
             }
         });
     }
 
-    public static void VRHeadData(Packet _packet)
-    {
+    public static void VRHeadData (Packet _packet) {
         int id = _packet.ReadInt();
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
 
-        if (GameManager.players.ContainsKey(id))
-        {
-            GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
-            GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
+        if (GameManager.players.ContainsKey(id)) {
+            GameManager.players [ id ].emulatedPlayer.Head.transform.position = pos;
+            GameManager.players [ id ].emulatedPlayer.Head.transform.rotation = rot;
         }
     }
 
-    internal static void ProjectilePosition(Packet _packet)
-    {
+    internal static void ProjectilePosition (Packet _packet) {
         int id = _packet.ReadInt();
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
 
-        Projectile.Projectiles[id].transform.position = pos;
-        Projectile.Projectiles[id].transform.rotation = rot;
+        if (Projectile.Projectiles.ContainsKey(id)) {
+            Projectile.Projectiles [ id ].transform.position = pos;
+            Projectile.Projectiles [ id ].transform.rotation = rot;
+        }
     }
 
-    internal static void TimeSync(Packet _packet)
-    {
+    internal static void TimeSync (Packet _packet) {
         int oldClientTime = _packet.ReadInt();
         int serverTime = _packet.ReadInt();
         float RTT = DateTime.UtcNow.Millisecond - oldClientTime;
@@ -104,29 +94,50 @@ public static class ClientPacketHandler
 
     }
 
-    public static void DespawnProjectile(Packet _packet)
-    {
+    internal static void DespawnFireball (Packet _packet) {
         int id = _packet.ReadInt();
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
+
+        if (GameManager.EmulatedFireballs.ContainsKey(id)) {
+            ThreadManager.ExecuteOnMainThread(() => GameManager.EmulatedFireballs.Remove(id));
+        }
+    }
+
+    internal static void UpdateFireball (Packet _packet) {
+        int id = _packet.ReadInt();
+        Vector3 position = _packet.ReadVector3();
+        float size = _packet.ReadFloat();
+
+        if (GameManager.EmulatedFireballs.ContainsKey(id)) {
+            GameManager.EmulatedFireballs [ id ].Emulate(position, size);
+        }
+    }
+
+    internal static void SpawnFireball (Packet _packet) {
+        int id = _packet.ReadInt();
+        Vector3 position = _packet.ReadVector3();
+        float size = _packet.ReadFloat();
+
+        GameManager.instance.SpawnEmulatedFireball(id, position, size);
+    }
+
+    public static void DespawnProjectile (Packet _packet) {
+        int id = _packet.ReadInt();
+        ThreadManager.ExecuteOnMainThread(() => {
             if (Projectile.Projectiles.ContainsKey(id))
-                Projectile.Projectiles[id].Despawn();
+                Projectile.Projectiles [ id ].Despawn();
         });
     }
 
-    internal static void SpawnProjectile(Packet _packet)
-    {
+    internal static void SpawnProjectile (Packet _packet) {
         int id = _packet.ReadInt();
         Vector3 pos = _packet.ReadVector3();
 
         GameManager.instance.SpawnProjectile(pos, id);
     }
 
-    public static void VRLeftHandData(Packet _packet)
-    {
+    public static void VRLeftHandData (Packet _packet) {
         int id = _packet.ReadInt();
-        HandDataPacket leftHand = new HandDataPacket()
-        {
+        HandDataPacket leftHand = new HandDataPacket() {
             HandPosition = _packet.ReadVector3(),
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
@@ -137,14 +148,12 @@ public static class ClientPacketHandler
         };
 
         if (GameManager.players.ContainsKey(id))
-            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
+            GameManager.players [ id ].emulatedPlayer.EmulateHand(GameManager.players [ id ].emulatedPlayer.LeftHand, leftHand);
     }
 
-    public static void VRRightHandData(Packet _packet)
-    {
+    public static void VRRightHandData (Packet _packet) {
         int id = _packet.ReadInt();
-        HandDataPacket rightHand = new HandDataPacket()
-        {
+        HandDataPacket rightHand = new HandDataPacket() {
             HandPosition = _packet.ReadVector3(),
             HandRotation = _packet.ReadQuaternion(),
             Trigger = _packet.ReadFloat(),
@@ -155,6 +164,6 @@ public static class ClientPacketHandler
         };
 
         if (GameManager.players.ContainsKey(id))
-            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
+            GameManager.players [ id ].emulatedPlayer.EmulateHand(GameManager.players [ id ].emulatedPlayer.RightHand, rightHand);
     }
 }

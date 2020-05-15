@@ -2442,6 +2442,8 @@ MonoBehaviour:
     type: 3}
   projectilePrefab: {fileID: 7898102119027416242, guid: 31bb0b63450cffd4b8bbc467267bc712,
     type: 3}
+  FireballPrefab: {fileID: 7691268142325897640, guid: aba00bfda32f65448b7fbfd76abd006d,
+    type: 3}
 --- !u!4 &487935518
 Transform:
   m_ObjectHideFlags: 0

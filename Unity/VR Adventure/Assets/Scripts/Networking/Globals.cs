@@ -30,7 +30,11 @@ public enum ServerPackets
     ProjectilePosition,
     DespawnProjectile,
 
-    TimeSync
+    TimeSync,
+
+    SpawnFireball,
+    UpdateFireball,
+    DespawnFireball
 }
 
 public enum ClientPackets
@@ -89,6 +93,10 @@ public static class PacketHandlers
             {(int)ServerPackets.SpawnProjectile, ClientPacketHandler.SpawnProjectile },
             {(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
             {(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
+
+            {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
+            {(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},
+            {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
 
             {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
         };

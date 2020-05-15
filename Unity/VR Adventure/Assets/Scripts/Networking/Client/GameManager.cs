@@ -8,12 +8,14 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
+    public static Dictionary<int, EmulatedFireball> EmulatedFireballs = new Dictionary<int, EmulatedFireball>();
     //public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
 
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject projectilePrefab;
+    public GameObject EmulatedFireballPrefab;
 
     private void Awake()
     {
@@ -46,5 +48,11 @@ public class GameManager : MonoBehaviour
     public void SpawnProjectile(Vector3 pos, int id)
     {
         Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>().Init(id);
+    }
+
+    public void SpawnEmulatedFireball(int id, Vector3 position, float size) {
+        EmulatedFireball emulatedFireball = Instantiate(EmulatedFireballPrefab, position, Quaternion.identity).GetComponent<EmulatedFireball>();
+        emulatedFireball.Init(id, size);
+       EmulatedFireballs.Add(id, emulatedFireball);
     }
 }

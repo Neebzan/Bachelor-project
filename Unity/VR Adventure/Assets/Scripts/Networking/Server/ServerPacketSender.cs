@@ -44,7 +44,27 @@ public class ServerPacketSender
         }
     }
 
-    public static void VRRightHandData(VrPlayerServer vrPlayer)
+    public static void SpawnFireball (Fireball fireball) {
+        using (Packet _packet = new Packet((int)ServerPackets.SpawnFireball)) {
+            _packet.Write(fireball.ID);
+            _packet.Write(fireball.transform.position);
+            _packet.Write(fireball.Size);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+
+    public static void UpdateFireball(Fireball fireball) {
+        using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball)) {
+            _packet.Write(fireball.ID);
+            _packet.Write(fireball.transform.position);
+            _packet.Write(fireball.Size);
+
+            SendUDPPacketAll(_packet);
+        }
+    }
+
+    public static void VRRightHandData(ServerPlayer vrPlayer)
     {
 
         using (Packet _packet = new Packet((int)ServerPackets.VRRightHandData))
@@ -62,7 +82,16 @@ public class ServerPacketSender
         }
     }
 
-    public static void VRLeftHandData(VrPlayerServer vrPlayer)
+    internal static void DespawnFireball (int id) {
+        using (Packet _packet = new Packet((int)ServerPackets.DespawnFireball)) {
+            _packet.Write(id);
+            ServerManager.instance.Fireballs.Remove(id);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+
+    public static void VRLeftHandData(ServerPlayer vrPlayer)
     {
         using (Packet _packet = new Packet((int)ServerPackets.VRLeftHandData))
         {
@@ -110,7 +139,7 @@ public class ServerPacketSender
         }
     }
 
-    public static void HeadData(VrPlayerServer vrPlayer)
+    public static void HeadData(ServerPlayer vrPlayer)
     {
         using (Packet _packet = new Packet((int)ServerPackets.VRHeadData))
         {

@@ -73,6 +73,7 @@ public class ServerPacketHandler
             Grip = _packet.ReadFloat(),
             Velocity = _packet.ReadVector3(),
             HandState = (HandState)_packet.ReadInt(),
+            TargetHandState = (HandState)_packet.ReadInt(),
             StatePower = _packet.ReadFloat(),
         };
         Server.clients[id].player.SetHand(leftHand, true);
@@ -89,6 +90,7 @@ public class ServerPacketHandler
             Grip = _packet.ReadFloat(),
             Velocity = _packet.ReadVector3(),
             HandState = (HandState)_packet.ReadInt(),
+            TargetHandState = (HandState)_packet.ReadInt(),
             StatePower = _packet.ReadFloat(),
         };
 
