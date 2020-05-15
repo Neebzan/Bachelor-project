@@ -91,9 +91,13 @@ public static class ClientPacketHandler
         lock (Projectile.Projectiles)
             if (Projectile.Projectiles.ContainsKey(id))
             {
-                Projectile.Projectiles[id].Emulate(pos, rot);
+                try {
+                    Projectile.Projectiles [ id ].Emulate(pos, rot);
+                }
+                catch {
+                    Debug.Log("waaa");
+                }
             }
-
     }
 
     internal static void TimeSync(Packet _packet)
@@ -132,7 +136,12 @@ public static class ClientPacketHandler
         lock (GameManager.EmulatedFireballs)
             if (GameManager.EmulatedFireballs.ContainsKey(id))
             {
+                try {
                 GameManager.EmulatedFireballs[id].Emulate(position, size);
+                }
+                catch {
+                    Debug.Log("whaa");
+                }
             }
     }
 
