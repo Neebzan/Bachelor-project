@@ -67,8 +67,7 @@ public class Fireball : MonoBehaviour {
 
     public void FollowTarget (Vector3 target) {
         Vector3 oldPos = transform.position;
-
-        transform.position = Vector3.Lerp(transform.position, target, 0.3f);
+        transform.position = Vector3.Lerp(transform.position, target, 0.1f);
         Vector3 newPos = transform.position;
 
         FireballVelocity = (newPos - oldPos) / Time.fixedDeltaTime;
