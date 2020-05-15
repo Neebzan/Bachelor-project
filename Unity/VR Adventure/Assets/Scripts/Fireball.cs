@@ -44,19 +44,20 @@ public class Fireball : MonoBehaviour {
         ServerPacketSender.SpawnFireball(this);
     }
 
-    private void FixedUpdate () {
-        if (isServer) {
-            ServerPacketSender.UpdateFireball(this);
-        }
-    }
+    //private void FixedUpdate () {
+    //    if (isServer) {
+    //        ServerPacketSender.UpdateFireball(this);
+    //    }
+    //}
 
 
     public void Create (Vector3 velocity) {
         _physicalCollider.radius = Size * .5f;
+
         Active = true;
+        Armed = true;
 
         if (velocity.magnitude > .3f) {
-            Armed = true;
             ApplyForce(velocity * 1.5f);
         }
     }
@@ -76,11 +77,25 @@ public class Fireball : MonoBehaviour {
     }
 
     private void OnTriggerEnter (Collider other) {
+        bool destroy = false;
         if (Armed) {
             if (ExplodeOnCollide == (ExplodeOnCollide | (1 << other.gameObject.layer))) {
-                ServerPacketSender.DespawnFireball(ID);
-                Destroy(this.gameObject);
+                if (other.tag == "Projectile") {
+                    Fireball otherFireball = other.GetComponent<Fireball>();
+                    if (otherFireball != null) {
+                        if (otherFireball.Armed) {
+                            destroy = true;
+                        }
+                    }
+                }
+                else
+                    destroy = true;
             }
+        }
+
+        if (destroy) {
+            ServerPacketSender.DespawnFireball(ID);
+            Destroy(this.gameObject);
         }
     }
 }

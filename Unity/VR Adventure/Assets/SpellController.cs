@@ -9,11 +9,11 @@ public class SpellController : MonoBehaviour {
     public LayerMask ProjectileMask;
 
 
-    private float _forceChargeupMax = 1.0f;
+
     public float ForceCharge = 0.0f;
     public float ForcePercentageCharged = 0.0f;
 
-    private float _fireChargeupMax = 1.0f;
+    private float _chargeupSeconds = .2f;
     public float FireCharge = 0.0f;
     public float FirePercentageCharged = 0.0f;
 
@@ -64,14 +64,14 @@ public class SpellController : MonoBehaviour {
             TargetHandState = HandState.Force;
             if (HandState != HandState.Force) {
                 if (FirePercentageCharged > 0) {
-                    DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
+                    DechargePower(ref FireCharge, ref _chargeupSeconds, ref FirePercentageCharged);
                 }
                 else {
                     HandState = HandState.Force;
                 }
             }
             else if (HandState == HandState.Force && ForcePercentageCharged < 1.0f) {
-                ChargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
+                ChargePower(ref ForceCharge, ref _chargeupSeconds, ref ForcePercentageCharged);
             }
         }
 
@@ -80,26 +80,26 @@ public class SpellController : MonoBehaviour {
             TargetHandState = HandState.Fire;
             if (HandState != HandState.Fire) {
                 if (ForcePercentageCharged > 0) {
-                    DechargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
+                    DechargePower(ref ForceCharge, ref _chargeupSeconds, ref ForcePercentageCharged);
                 }
                 else {
                     HandState = HandState.Fire;
                 }
             }
             else if (HandState == HandState.Fire && FirePercentageCharged < 1.0f) {
-                ChargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
+                ChargePower(ref FireCharge, ref _chargeupSeconds, ref FirePercentageCharged);
             }
         }
 
 
         else {
             if (ForcePercentageCharged != 0.0f) {
-                DechargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
+                DechargePower(ref ForceCharge, ref _chargeupSeconds, ref ForcePercentageCharged);
                 //decharge force
             }
             else if (FirePercentageCharged != 0.0f) {
                 //decharge fire
-                DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
+                DechargePower(ref FireCharge, ref _chargeupSeconds, ref FirePercentageCharged);
             }
             else {
                 HandState = HandState.Default;
@@ -113,54 +113,6 @@ public class SpellController : MonoBehaviour {
             StatePower = ForcePercentageCharged;
         }
     }
-
-    //private void Update () {
-    //    switch (HandState) {
-    //        case HandState.Default:
-    //            if (FireCharge != 0) {
-    //                DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
-    //            }
-    //            if (ForceCharge != 0) {
-    //                DechargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
-    //            }
-
-    //            break;
-
-
-    //        case HandState.Fire:
-    //            if (ForceCharge <= 0) {
-    //                if (FireCharge < 1.0f) {
-    //                    ChargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
-    //                    StatePower = FirePercentageCharged;
-    //                }
-    //            }
-    //            else
-    //                DechargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
-    //            break;
-
-
-    //        case HandState.Force:
-    //            if (FireCharge <= 0) {
-    //                if (ForceCharge < 1.0f) {
-    //                    ChargePower(ref ForceCharge, ref _forceChargeupMax, ref ForcePercentageCharged);
-    //                    StatePower = ForcePercentageCharged;
-    //                }
-    //            }
-    //            else
-    //                DechargePower(ref FireCharge, ref _fireChargeupMax, ref FirePercentageCharged);
-
-    //            break;
-    //        default:
-    //            break;
-    //    }
-
-    //    if (ForceCharge > 0) {
-    //        _handMaterial.SetColor(_glowColorId, ForceColor);
-    //    }
-    //    else if (FireCharge > 0)
-    //        _handMaterial.SetColor(_glowColorId, FireColor);
-    //}
-
 
     public void ChargePower (ref float charge, ref float maxCharge, ref float percentageCharged) {
         if (charge < maxCharge) {
