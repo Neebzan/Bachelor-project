@@ -33,7 +33,7 @@ public class ServerVRHand {
 
     public Vector3 DesiredFireballPosition {
         get {
-            return HandDataPacket.HandPosition - Up * (.05f + CastFireball.Size);
+            return HandDataPacket.HandPosition - Up * (.05f + Fireball.Size);
         }
     }
     
@@ -53,7 +53,7 @@ public class ServerVRHand {
             return HandDataPacket.HandRotation * Vector3.forward;
         }
     }
-    private Spell _currentSpell;
+    private Spell _currentSpell = Spell.None;
     public Spell CurrentSpell {
         get {
             return _currentSpell;
@@ -65,7 +65,7 @@ public class ServerVRHand {
 
     private Fireball castFireball = null;
 
-    public Fireball CastFireball {
+    public Fireball Fireball {
         get { return castFireball; }
         set { castFireball = value; }
     }
