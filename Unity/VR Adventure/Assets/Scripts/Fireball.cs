@@ -65,9 +65,9 @@ public class Fireball : MonoBehaviour {
         _physicalCollider.radius = Size * .5f;
         Active = true;
 
-        if (velocity.magnitude > 1.0f) {
+        if (velocity.magnitude > .3f) {
             Armed = true;
-            ApplyForce(velocity);
+            ApplyForce(velocity * 1.5f);
         }
     }
 
