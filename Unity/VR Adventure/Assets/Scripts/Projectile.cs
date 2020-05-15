@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
         idIndex++;
         Projectiles.Add(id, this);
 
-        GetComponent<Rigidbody>().AddForce(dir*300f);
+        GetComponent<Rigidbody>().AddForce(dir * 300f);
         ServerPacketSender.SpawnProjectile(this);
         StartCoroutine(Remove());
     }
@@ -38,11 +38,16 @@ public class Projectile : MonoBehaviour
         yield return new WaitForSeconds(5f);
         ServerPacketSender.DespawnProjectile(this);
         Despawn();
-        System.Console.WriteLine("Server - Despawning projectile!");
+    }
+
+    public void Emulate(Vector3 pos, Quaternion rot)
+    {
+        transform.position = pos;
+        transform.rotation = rot;
     }
 
     public void Despawn()
-    {        
+    {
         Projectiles.Remove(id);
         Destroy(gameObject);
     }
