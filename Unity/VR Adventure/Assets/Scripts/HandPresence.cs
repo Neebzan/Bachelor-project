@@ -11,6 +11,7 @@ public class HandPresence : MonoBehaviour {
 
     private InputDevice _targetDevice;
     private Animator _handAnimator;
+    private Transform _rootParent;
 
     #region public fields
     [HideInInspector]
@@ -39,6 +40,7 @@ public class HandPresence : MonoBehaviour {
         _targetDevice = Controller.inputDevice;
         _handAnimator = GetComponent<Animator>();
         Hand = GetComponent<Hand>();
+        _rootParent = transform.root;
     }
 
     void UpdateHandInputs () {
@@ -51,7 +53,8 @@ public class HandPresence : MonoBehaviour {
         
 
         if (_targetDevice.TryGetFeatureValue(CommonUsages.deviceVelocity, out Vector3 value)) {
-            Velocity = Quaternion.Euler(0, -90, 0) * value;
+            //Velocity = Quaternion.Euler(0, -90, 0) * value;
+            Velocity = _rootParent.rotation * value;
         }
     }
 
@@ -68,5 +71,9 @@ public class HandPresence : MonoBehaviour {
         UpdateHandInputs();
         UpdateHandAnimation();
         UpdateHandGesture();
+    }
+
+    private void OnDrawGizmos () {
+        Gizmos.DrawLine(transform.position, transform.position + Velocity.normalized * 2.0f);
     }
 }
