@@ -8,7 +8,6 @@ public class ThreadManager : MonoBehaviour
 {
     private static readonly List<Action> executeOnMainThread = new List<Action>();
     private static readonly List<Action> executeCopiedOnMainThread = new List<Action>();
-    private static List<Action> actionsToBeRemoved = new List<Action>();
     private static bool actionToExecuteOnMainThread = false;
 
     // Update is called once per frame
@@ -23,7 +22,7 @@ public class ThreadManager : MonoBehaviour
     /// <param name="_action"></param>
     public static void ExecuteOnMainThread(Action _action)
     {
-        if(_action != null)
+        if (_action != null)
         {
             lock (executeOnMainThread)
             {
@@ -38,28 +37,23 @@ public class ThreadManager : MonoBehaviour
     /// </summary>
     public static void UpdateMain()
     {
-        if(actionToExecuteOnMainThread)
+        if (actionToExecuteOnMainThread)
         {
             executeCopiedOnMainThread.Clear();
-            lock(executeOnMainThread)
+            lock (executeOnMainThread)
             {
                 executeCopiedOnMainThread.AddRange(executeOnMainThread);
                 executeOnMainThread.Clear();
                 actionToExecuteOnMainThread = false;
             }
+
+            for (int i = 0; i < executeCopiedOnMainThread.Count; i++)
+            {
+                executeCopiedOnMainThread[i]();
+
+            }
         }
 
-        for (int i = 0; i < executeCopiedOnMainThread.Count; i++)
-        {
-            executeCopiedOnMainThread[i]();
-            actionsToBeRemoved.Add(executeCopiedOnMainThread[i]);
-        }
-
-        //Remove actions that has aslready fired
-        for (int i = 0; i < actionsToBeRemoved.Count; i++)
-        {
-            executeCopiedOnMainThread.Remove(actionsToBeRemoved[i]);
-        }
     }
 
 }
