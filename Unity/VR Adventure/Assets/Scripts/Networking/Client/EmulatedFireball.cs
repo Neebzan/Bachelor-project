@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,7 +29,24 @@ public class EmulatedFireball : MonoBehaviour {
     public void Despawn (bool explode) {
         if (explode) {
             GameObject.Instantiate(ParticleSystem, transform.position, Quaternion.identity);
+            Remove();
         }
+        else {
+            StartCoroutine(Shrink());
+        }
+    }
+
+    IEnumerator Shrink () {
+        while (_size > 0.0f) {
+            _size -= Time.fixedDeltaTime * .1f;
+            _material.SetFloat(_sizeProperty, _size);
+            yield return new WaitForFixedUpdate();
+        }
+
+        Remove();
+    }
+
+    private void Remove () {
         GameManager.EmulatedFireballs.Remove(ID);
         Destroy(gameObject);
     }
