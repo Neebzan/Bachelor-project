@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9205780012694512028}
   - component: {fileID: 7565714454366544230}
   - component: {fileID: 8015574434111669952}
+  - component: {fileID: -9009024208205296676}
   m_Layer: 0
   m_Name: Fireball Explosion Particle System
   m_TagString: Untagged
@@ -4812,3 +4813,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &-9009024208205296676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6251556235599612406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 631471f18756aef48ad5324271812130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
