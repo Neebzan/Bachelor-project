@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43b99ca9bacaed40a0087f80a967aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ParticleSystem: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+  ParticleSystem: {fileID: 705678224002448366, guid: c864a33f5805b9443bb01300aa2bf99a,
     type: 3}
 --- !u!23 &1562390886688893720
 MeshRenderer:
