@@ -66,7 +66,7 @@ public class EmulatedFireball : MonoBehaviour {
 
     IEnumerator Shrink () {
         while (_size > 0.0f) {
-            _size -= Time.fixedDeltaTime * .1f;
+            _size -= Time.fixedDeltaTime * .3f;
             transform.localScale = new Vector3(_size, _size, _size);
             //_material.SetFloat(_sizeProperty, _size);
             yield return new WaitForFixedUpdate();

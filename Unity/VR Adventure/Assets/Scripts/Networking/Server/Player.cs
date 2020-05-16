@@ -17,7 +17,7 @@ public class Player : MonoBehaviour {
     private float _fireballMergeProgress = 0.0f;
     private bool _mergingFireballs = false;
     private float _fireballMinSize = 0.05f;
-    private float _fireballMergeDistance = 0.5f;
+    private float _fireballMergeDistance = 0.35f;
 
     private float speed = 2.0f;
 
