@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     public string username;
 
     public EmulatedPlayer emulatedPlayer;
+    public EmulatedPlayerUI EmulatedPlayerUI;
 
 
     public void Initialize(int _id, string _username)
