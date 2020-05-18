@@ -14,12 +14,9 @@ public class ServerPlayer {
         }
     }
 
-    //public HandDataPacket LeftHand = new HandDataPacket();
-    //public HandDataPacket RightHand = new HandDataPacket();
     public Vector3 HeadPos;
     public Quaternion HeadRot;
     public int id;
-
 }
 
 public class ServerVRHand {
@@ -33,10 +30,9 @@ public class ServerVRHand {
 
     public Vector3 DesiredFireballPosition {
         get {
-            return HandDataPacket.HandPosition - Up * (.05f + Fireball.Size);
+            return HandDataPacket.HandPosition + ((-Up) * (.1f + Fireball.Size * .5f));
         }
-    }
-    
+    }    
 
     public Vector3 Up {
         get {

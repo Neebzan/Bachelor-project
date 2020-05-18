@@ -12,12 +12,13 @@ public class Fireball : MonoBehaviour {
 
     public static int IdIndexer = 0;
     public static readonly float FireballMinSize = 0.05f;
-    public static readonly float FireballMaxSize = 0.4f;
+    public static readonly float FireballMaxSize = 0.2f;
+    public static readonly float LargeFireballMaxSize = 0.7f;
     private static readonly float FireballGrowthRate = 1.0f;
 
     private float sizePercentage {
         get {
-            return ((Size-FireballMinSize) / (FireballMaxSize-FireballMinSize));
+            return ((Size - FireballMinSize) / (LargeFireballMaxSize - FireballMinSize));
         }
     }
 
@@ -56,16 +57,13 @@ public class Fireball : MonoBehaviour {
         ServerPacketSender.SpawnFireball(this);
     }
 
-    public void Create (Vector3 velocity) {
+    public void Create () {
         _physicalCollider.radius = Size * .5f;
 
         Active = true;
         Armed = true;
 
-        if (velocity.magnitude > .3f) {
-            //ApplyForce(velocity * 1.5f);
-            ApplyForce(FireballVelocity * 1.5f);
-        }
+        ApplyForce(FireballVelocity * 1.5f);
     }
 
     public void SetSize (float targetSize) {
@@ -73,12 +71,12 @@ public class Fireball : MonoBehaviour {
 
         float changeInSize = Mathf.Clamp(newSize - Size, -(1.0f * Time.deltaTime), 0.5f * Time.deltaTime);
 
-        Size += changeInSize;
+        Size = Mathf.Clamp(Size + changeInSize, 0, LargeFireballMaxSize);
     }
 
     public void FollowTarget (Vector3 target) {
         Vector3 oldPos = transform.position;
-        transform.position = Vector3.Lerp(transform.position, target, 0.05f + 0.1f * (1 - sizePercentage) * .5f);
+        transform.position = Vector3.Lerp(transform.position, target, 0.05f + 0.1f * (1 - sizePercentage) * .1f);
         Vector3 newPos = transform.position;
 
         FireballVelocity = (newPos - oldPos) / Time.fixedDeltaTime;
@@ -91,6 +89,8 @@ public class Fireball : MonoBehaviour {
     public void Launch (Vector3 relativeVelocity) {
         ApplyForce(relativeVelocity);
         Armed = true;
+        _rigidBody.useGravity = true;
+        _rigidBody.isKinematic = false;
     }
 
     private void OnTriggerEnter (Collider other) {

@@ -64,13 +64,13 @@ public class PlayerClient : MonoBehaviour {
 
     }
 
-    HandDataPacket GetHandData (HandPresence hand, SpellController spellController) {
+    HandDataPacket GetHandData (HandPresence handPresence, SpellController spellController) {
         HandDataPacket data = new HandDataPacket() {
-            HandPosition = hand.transform.position,
-            HandRotation = hand.transform.rotation,
-            Trigger = hand.TriggerValue,
-            Grip = hand.GripValue,
-            Velocity = hand.Velocity,
+            HandPosition = handPresence.transform.position,
+            HandRotation = handPresence.transform.rotation,
+            Trigger = handPresence.TriggerValue,
+            Grip = handPresence.GripValue,
+            Velocity = handPresence.Velocity,
             HandState = spellController.HandState,
             TargetHandState = spellController.TargetHandState,
             StatePower = spellController.StatePower

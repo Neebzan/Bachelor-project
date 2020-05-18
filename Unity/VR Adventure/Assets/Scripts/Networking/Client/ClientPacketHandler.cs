@@ -134,9 +134,9 @@ public static class ClientPacketHandler
             Client.instance.pingHistory.Dequeue();
         //Client.instance.Latency = (int)RTT / 2;
 
-        Debug.Log($"Packet RTT/Latency: {Client.instance.Latency}ms");
-        TimeSpan ts =  serverTime - DateTime.UtcNow;
-        Debug.Log($"Time sync diff: {ts.TotalMilliseconds + (Client.instance.Latency/2)}ms");
+        //Debug.Log($"Packet RTT/Latency: {Client.instance.Latency}ms");
+        //TimeSpan ts =  serverTime - DateTime.UtcNow;
+        //Debug.Log($"Time sync diff: {ts.TotalMilliseconds + (Client.instance.Latency/2)}ms");
         //Debug.Log($"Time sync diff would have been: {serverTime - (oldTimeStamp + Client.instance.Latency)}ms");
 
     }

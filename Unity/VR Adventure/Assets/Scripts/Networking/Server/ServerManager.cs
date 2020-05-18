@@ -35,7 +35,6 @@ public class ServerManager : MonoBehaviour
     private void FixedUpdate()
     {
         ServerPacketSender.UpdateFireballsCollection();
-
         ServerPacketSender.PlayerPositions();
     }
 
@@ -52,7 +51,6 @@ public class ServerManager : MonoBehaviour
     public Player SpawnPlayer()
     {
         return Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
-        //return Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
     }
 
     public Fireball SpawnFireball () {
