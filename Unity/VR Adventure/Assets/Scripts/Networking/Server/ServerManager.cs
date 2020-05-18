@@ -35,6 +35,8 @@ public class ServerManager : MonoBehaviour
     private void FixedUpdate()
     {
         ServerPacketSender.UpdateFireballsCollection();
+
+        ServerPacketSender.PlayerPositions();
     }
 
     private void OnApplicationQuit()

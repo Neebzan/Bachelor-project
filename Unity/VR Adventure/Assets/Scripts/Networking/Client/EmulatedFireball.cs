@@ -18,6 +18,8 @@ public class EmulatedFireball : MonoBehaviour {
     private Vector3 _newPos;
     private Vector3 _velocity;
 
+    public int _lastUpdateTick = 0;
+
     private DateTime _lastTick;
     private float _tickTime;
     private Stopwatch stopwatch = new Stopwatch();

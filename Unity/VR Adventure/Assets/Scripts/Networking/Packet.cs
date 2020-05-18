@@ -46,6 +46,13 @@ public class Packet : IDisposable
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
     }
 
+    public void WriteLengthAndTimeStamp()
+    {
+        // Insert a timestamp (ms) and the total length of the packet at  the begining
+        buffer.InsertRange(0, BitConverter.GetBytes(DateTime.UtcNow.Millisecond));
+        buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
+    }
+
     public int Length()
     {
         return buffer.Count;

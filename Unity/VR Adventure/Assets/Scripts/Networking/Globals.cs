@@ -20,9 +20,9 @@ public enum ServerPackets
     PlayerPosition,
     PlayerRotation,
 
-    VRRightHandData,
-    VRLeftHandData,
-    VRHeadData,
+    //VRRightHandData,
+    //VRLeftHandData,
+    //VRHeadData,
 
     PlayerDisconnected,
 
@@ -33,7 +33,7 @@ public enum ServerPackets
     TimeSync,
 
     SpawnFireball,
-    UpdateFireball,
+    //UpdateFireball,
     UpdateFireballs,
     DespawnFireball
 }
@@ -43,13 +43,13 @@ public enum ClientPackets
     WelcomeReceived,
 
     PlayerMovement,
-    PlayerInput,
+    //PlayerInput,
 
     ShootTest,
 
-    VRRightHandData,
-    VRLeftHandData,
-    VRHeadData,
+    //VRRightHandData,
+    //VRLeftHandData,
+    //VRHeadData,
     UdpTestSent,
     UdpTestReceived,
 
@@ -65,12 +65,11 @@ public static class PacketHandlers
 
             {(int)ClientPackets.ShootTest, ServerPacketHandler.ShootTestReceived },
 
-            //{(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
-            //{(int)ClientPackets.PlayerInput, ServerPacketHandler.PlayerInput },
+            {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
 
-            {(int)ClientPackets.VRRightHandData, ServerPacketHandler.VRRightHandData },
-            {(int)ClientPackets.VRLeftHandData, ServerPacketHandler.VRLeftHandData },
-            {(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData },
+            //{(int)ClientPackets.VRRightHandData, ServerPacketHandler.VRRightHandData },
+            //{(int)ClientPackets.VRLeftHandData, ServerPacketHandler.VRLeftHandData },
+            //{(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData },
 
             {(int)ClientPackets.TimeSync, ServerPacketHandler.TimeSync },
 
@@ -87,16 +86,16 @@ public static class PacketHandlers
             {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
             {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
 
-            {(int)ServerPackets.VRRightHandData, ClientPacketHandler.VRRightHandData },
-            {(int)ServerPackets.VRLeftHandData, ClientPacketHandler.VRLeftHandData },
-            {(int)ServerPackets.VRHeadData, ClientPacketHandler.VRHeadData },
+            //{(int)ServerPackets.VRRightHandData, ClientPacketHandler.VRRightHandData },
+            //{(int)ServerPackets.VRLeftHandData, ClientPacketHandler.VRLeftHandData },
+            //{(int)ServerPackets.VRHeadData, ClientPacketHandler.VRHeadData },
 
             {(int)ServerPackets.SpawnProjectile, ClientPacketHandler.SpawnProjectile },
             {(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
             {(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
 
             {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
-            {(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},
+            //{(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},
             {(int)ServerPackets.UpdateFireballs, ClientPacketHandler.UpdateFireballs},
             {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
 
