@@ -5,8 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 
-public class Server
-{
+public class Server {
     public static int MaxPlayers { get; private set; }
     public static int Port { get; private set; }
 
@@ -17,8 +16,7 @@ public class Server
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
 
-    public static void Start(int _maxPlayers, int _port)
-    {
+    public static void Start (int _maxPlayers, int _port) {
         MaxPlayers = _maxPlayers;
         Port = _port;
         //InitServer();
@@ -33,87 +31,74 @@ public class Server
         Console.WriteLine("Server started!");
     }
 
-    private static void UDPReceiveCallback(IAsyncResult ar)
-    {
-        try
-        {
+    private static void UDPReceiveCallback (IAsyncResult ar) {
+        try {
             //No specific IP address or Port until set by EndReceive
             IPEndPoint _clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
-            byte[] _data = udpListener.EndReceive(ar, ref _clientEndPoint);
+            byte [ ] _data = udpListener.EndReceive(ar, ref _clientEndPoint);
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
-            if(_data.Length < 4)
-            {
+            if (_data.Length < 4) {
                 return;
             }
 
-            using(Packet _packet = new Packet(_data))
-            {
+            using (Packet _packet = new Packet(_data)) {
                 int _clientId = _packet.ReadInt();
 
-                if(_clientId == 0)
-                {
+                if (_clientId == 0) {
                     Console.WriteLine("Client ID did not match any existing clients! UDPReceiveCallback");
                     return;
                 }
 
                 //Check if this is new/first udp packet from client
-                if(clients[_clientId].udp.endPoint == null)
-                {
-                    clients[_clientId].udp.Connect(_clientEndPoint, PacketHandlers.Server);
+                if (clients [ _clientId ].udp.endPoint == null) {
+                    clients [ _clientId ].udp.Connect(_clientEndPoint, PacketHandlers.Server);
                     return;
                 }
 
                 //Check if the packet is coming from the correct client
-                if(clients[_clientId].udp.endPoint.ToString() == _clientEndPoint.ToString())
-                {
+                if (clients [ _clientId ].udp.endPoint.ToString() == _clientEndPoint.ToString()) {
                     //Handle the incoming data
-                    clients[_clientId].udp.HandleData(_packet);
+                    clients [ _clientId ].udp.HandleData(_packet);
                 }
             }
 
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Console.WriteLine(e);
         }
     }
 
-    public static void SendUDPData(IPEndPoint _clientEndPoint, Packet _packet)
-    {
-        try
-        {
-            udpListener.BeginSend(_packet.ToArray(), _packet.Length(), _clientEndPoint, null, null);
+    public static void SendUDPData (IPEndPoint _clientEndPoint, Packet _packet) {
+        try {
+            if (_clientEndPoint != null) {
+                udpListener.BeginSend(_packet.ToArray(), _packet.Length(), _clientEndPoint, null, null);
+            }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Console.WriteLine(e);
         }
     }
 
-    public static void DisconnectClient(object sender, int _id)
-    {
+    public static void DisconnectClient (object sender, int _id) {
         ServerClient _client;
-        if (clients.TryGetValue(_id, out _client))
-        {
+        if (clients.TryGetValue(_id, out _client)) {
             _client.Disconnect();
             clients.Remove(_id);
             Debug.Log($"Client: {_id} - Disconnected successfully!");
         }
     }
 
-    private static void TcpConnectCallback(IAsyncResult _result)
-    {
+    private static void TcpConnectCallback (IAsyncResult _result) {
         TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
         //Accept next client
         tcpListener.BeginAcceptTcpClient(TcpConnectCallback, null);
 
         Console.WriteLine("Incoming connection from " + _client.Client.RemoteEndPoint);
 
-        if(clients.Count < MaxPlayers)
-        {
+        if (clients.Count < MaxPlayers) {
             clients.Add(playerIndex, new ServerClient(playerIndex));
-            clients[playerIndex].Connect(_client);
+            clients [ playerIndex ].Connect(_client);
             playerIndex++;
             return;
         }
@@ -121,8 +106,7 @@ public class Server
         Console.WriteLine("Server is full!");
 
     }
-    public static void Stop()
-    {
+    public static void Stop () {
         tcpListener.Stop();
         udpListener.Close();
     }
