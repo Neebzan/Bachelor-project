@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GameLauncher"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="GameLauncher.Views.MainWindow"
         mc:Ignorable="d"
-        Title="VR Adventuretime" WindowStartupLocation="CenterScreen">
+        Title="Wizard Battle" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style x:Key="FocusVisual">
