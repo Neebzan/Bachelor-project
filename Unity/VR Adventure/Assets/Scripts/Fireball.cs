@@ -11,6 +11,15 @@ public class Fireball : MonoBehaviour {
     private Rigidbody _rigidBody;
 
     public static int IdIndexer = 0;
+    public static readonly float FireballMinSize = 0.05f;
+    public static readonly float FireballMaxSize = 0.4f;
+
+    private float sizePercentage {
+        get {
+            return ((Size-FireballMinSize) / (FireballMaxSize-FireballMinSize));
+        }
+    }
+
     public int ID { get; private set; }
 
     public Vector3 FireballVelocity { get; set; }
@@ -46,13 +55,6 @@ public class Fireball : MonoBehaviour {
         ServerPacketSender.SpawnFireball(this);
     }
 
-    //private void FixedUpdate () {
-    //    if (isServer) {
-    //        ServerPacketSender.UpdateFireball(this);
-    //    }
-    //}
-
-
     public void Create (Vector3 velocity) {
         _physicalCollider.radius = Size * .5f;
 
@@ -65,9 +67,17 @@ public class Fireball : MonoBehaviour {
         }
     }
 
+    public void SetSize (float targetSize) {
+        float newSize = Mathf.Lerp(Size, targetSize, .5f * Time.deltaTime);
+
+        float changeInSize = Mathf.Clamp(newSize - Size, -(1.0f * Time.deltaTime), 0.5f * Time.deltaTime);
+
+        Size += changeInSize;
+    }
+
     public void FollowTarget (Vector3 target) {
         Vector3 oldPos = transform.position;
-        transform.position = Vector3.Lerp(transform.position, target, 0.1f);
+        transform.position = Vector3.Lerp(transform.position, target, 0.05f + 0.1f * (1 - sizePercentage) * .5f);
         Vector3 newPos = transform.position;
 
         FireballVelocity = (newPos - oldPos) / Time.fixedDeltaTime;
@@ -99,9 +109,8 @@ public class Fireball : MonoBehaviour {
             }
         }
 
-        if (destroy) {
+        if (destroy)
             Despawn(true);
-        }
     }
 
     public void Despawn (bool explode) {
