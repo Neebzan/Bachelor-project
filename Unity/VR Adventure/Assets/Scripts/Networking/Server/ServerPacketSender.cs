@@ -96,6 +96,18 @@ public class ServerPacketSender
         }
     }
 
+    public static void SpawnFireball(int targetClient, Fireball fireball)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.SpawnFireball))
+        {
+            _packet.Write(fireball.ID);
+            _packet.Write(fireball.transform.position);
+            _packet.Write(fireball.Size);
+
+            SendTCPPacketAll(_packet);
+        }
+    }
+
     //public static void UpdateFireball(Fireball fireball)
     //{
     //    using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball))
@@ -213,11 +225,11 @@ public class ServerPacketSender
         }
     }
 
-    public static void TimeSync(int id, int clientTime, int serverTime)
+    public static void TimeSync(int id, long clientTimeStamp, long serverTime)
     {
         using (Packet _packet = new Packet((int)ServerPackets.TimeSync))
         {
-            _packet.Write(clientTime);
+            _packet.Write(clientTimeStamp);
             _packet.Write(serverTime);
             //Console.WriteLine("Sending TimeSync packet to client: "+ id);
             SendTCPPacket(id, _packet);

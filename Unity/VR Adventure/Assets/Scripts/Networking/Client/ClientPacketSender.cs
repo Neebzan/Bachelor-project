@@ -74,12 +74,12 @@ public static class ClientPacketSender
         }
     }
 
-    public static void TimeSync()
+    public static void TimeSync(long currentTimestamp)
     {
         using (Packet _packet = new Packet((int)ClientPackets.TimeSync))
         {
             _packet.Write(Client.instance.id);
-            _packet.Write(DateTime.UtcNow.Millisecond); //Send current local time stamp
+            _packet.Write(currentTimestamp); //Send current local time stamp
 
             SendTCPData(_packet);
         }

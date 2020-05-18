@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -21,7 +22,20 @@ public class Client : MonoBehaviour
 
     public bool isConnected = false;
 
-
+    public int Latency
+    {
+        get
+        {
+            int lat = 0;
+            foreach (var item in pingHistory)
+            {
+                lat += item;
+            }
+            return lat / pingHistory.Count;
+        }
+    }
+    public Queue<int> pingHistory = new Queue<int>();
+    public Stopwatch Timer = new Stopwatch();
 
 
     private void Awake()
@@ -30,14 +44,9 @@ public class Client : MonoBehaviour
             instance = this;
         else if (instance != this)
         {
-            Debug.Log("Instance already exists!");
+            UnityEngine.Debug.Log("Instance already exists!");
             Destroy(this);
         }
-    }
-
-    private void Start()
-    {
-        StartCoroutine(AutoTimeSync());
     }
 
     public void ConnectToServer(string _userName)
@@ -47,6 +56,7 @@ public class Client : MonoBehaviour
         isConnected = true;
         userName = _userName;
         tcp.Connect(ip, port, PacketHandlers.Client);
+        StartCoroutine(AutoTimeSync());
     }
 
     private void Disconnect()
@@ -57,7 +67,7 @@ public class Client : MonoBehaviour
             tcp.client.Close();
             udp.client.Close();
 
-            Debug.Log("Disconnected from server.");
+            UnityEngine.Debug.Log("Disconnected from server.");
         }
     }
     private void OnApplicationQuit()
@@ -67,11 +77,13 @@ public class Client : MonoBehaviour
 
     IEnumerator AutoTimeSync()
     {
-        while (true)
+        Timer.Start();
+        while (isConnected)
         {
-            yield return new WaitForSeconds(5);
-            ClientPacketSender.TimeSync();
+            yield return new WaitForSeconds(1);
+            ClientPacketSender.TimeSync(Timer.ElapsedMilliseconds);
         }
+        Timer.Stop();
     }
 }
 
