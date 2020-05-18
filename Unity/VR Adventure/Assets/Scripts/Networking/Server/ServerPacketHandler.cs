@@ -89,9 +89,9 @@ public class ServerPacketHandler
 
     public static void TimeSync(Packet _packet)
     {
-        int clientTime = _packet.ReadInt();
         int id = _packet.ReadInt();
-        //Console.WriteLine("TimeSync Received!");
+        int clientTime = _packet.ReadInt();
+        Console.WriteLine($"TimeSync Received! From id:{id}");
         ServerPacketSender.TimeSync(id, clientTime, DateTime.UtcNow.Millisecond);
     }
 
