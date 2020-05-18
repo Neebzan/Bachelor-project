@@ -69,8 +69,8 @@ public class Client : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(5);
             ClientPacketSender.TimeSync();
-            yield return new WaitForSeconds(3);
         }
     }
 }
