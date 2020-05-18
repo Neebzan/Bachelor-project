@@ -49,8 +49,9 @@ public class Packet : IDisposable
     public void WriteLengthAndTimeStamp()
     {
         // Insert a timestamp (ms) and the total length of the packet at  the begining
-        buffer.InsertRange(0, BitConverter.GetBytes(DateTime.UtcNow.Millisecond));
+        buffer.InsertRange(0, BitConverter.GetBytes(DateTime.UtcNow.Ticks));
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
+        //int test = BitConverter.ToInt32(buffer.ToArray(), 0);
     }
 
     public int Length()
@@ -114,6 +115,12 @@ public class Packet : IDisposable
         buffer.AddRange(BitConverter.GetBytes(_value));
     }
 
+    public void Write(long _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
+    }
+
+
     public void Write(Vector3 _value)
     {
         Write(_value.x);
@@ -169,6 +176,24 @@ public class Packet : IDisposable
         else
         {
             throw new Exception("Couldn't read value of type 'int'!");
+        }
+    }
+
+    public long ReadLong(bool _moveReadPos = true)
+    {
+        if (buffer.Count > readPos)
+        {
+            //When there's unread bytes
+            long _value = BitConverter.ToInt64(readableBuffer, readPos);
+            if (_moveReadPos)
+            {
+                readPos += 8; //Size of int
+            }
+            return _value;
+        }
+        else
+        {
+            throw new Exception("Couldn't read value of type 'long'!");
         }
     }
 
