@@ -98,7 +98,7 @@ CREATE TABLE wears(
 );
 
 CREATE TABLE Servers(
-	secret VARCHAR(255) NOT NULL
+	secret VARCHAR(255) NOT NULL,
     PRIMARY KEY(secret)
 );
 
