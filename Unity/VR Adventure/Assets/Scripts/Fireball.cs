@@ -13,6 +13,7 @@ public class Fireball : MonoBehaviour {
     public static int IdIndexer = 0;
     public static readonly float FireballMinSize = 0.05f;
     public static readonly float FireballMaxSize = 0.4f;
+    private static readonly float FireballGrowthRate = 1.0f;
 
     private float sizePercentage {
         get {
@@ -68,7 +69,7 @@ public class Fireball : MonoBehaviour {
     }
 
     public void SetSize (float targetSize) {
-        float newSize = Mathf.Lerp(Size, targetSize, .5f * Time.deltaTime);
+        float newSize = Mathf.Lerp(Size, targetSize, FireballGrowthRate * Time.deltaTime);
 
         float changeInSize = Mathf.Clamp(newSize - Size, -(1.0f * Time.deltaTime), 0.5f * Time.deltaTime);
 
