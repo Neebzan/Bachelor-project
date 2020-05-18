@@ -49,7 +49,7 @@ public class Packet : IDisposable
     public void WriteLengthAndTimeStamp()
     {
         // Insert a timestamp (ms) and the total length of the packet at  the begining
-        buffer.InsertRange(0, BitConverter.GetBytes(DateTime.UtcNow.Ticks));
+        buffer.InsertRange(4, BitConverter.GetBytes(DateTime.UtcNow.Ticks));
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         //int test = BitConverter.ToInt32(buffer.ToArray(), 0);
     }
