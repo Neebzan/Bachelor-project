@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 
     private float speed = 2.0f;
 
-    public int LastUpdateTick = 0;
+    public long LastUpdateTick = 0;
 
     public ServerPlayer vrPlayer = new ServerPlayer();
 

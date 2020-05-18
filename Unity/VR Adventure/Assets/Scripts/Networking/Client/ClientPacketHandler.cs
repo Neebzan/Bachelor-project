@@ -38,7 +38,7 @@ public static class ClientPacketHandler
 
     public static void UdpReceiveMessageTest(Packet _packet)
     {
-        int packetTick = _packet.ReadInt();
+        long packetTick = _packet.ReadLong();
         string msg = _packet.ReadString();
 
         ClientPacketSender.UdpTestReceived();
@@ -48,7 +48,7 @@ public static class ClientPacketHandler
 
     public static void PlayerPosition(Packet _packet)
     {
-        int packetTick = _packet.ReadInt();
+        long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
         if (GameManager.players.ContainsKey(id))
@@ -108,7 +108,7 @@ public static class ClientPacketHandler
 
     public static void ProjectilePosition(Packet _packet)
     {
-        int packetTick = _packet.ReadInt();
+        long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
@@ -177,7 +177,7 @@ public static class ClientPacketHandler
 
     public static void UpdateFireballs(Packet _packet)
     {
-        int packetTick = _packet.ReadInt();
+        long packetTick = _packet.ReadLong();
 
         int fireballCount = _packet.ReadInt();
         for (int i = 0; i < fireballCount; i++)
