@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
     public EmulatedPlayer emulatedPlayer;
     public EmulatedPlayerUI EmulatedPlayerUI;
 
+    public int LastPlayerUpdateTick = 0;
+
 
     public void Initialize(int _id, string _username)
     {

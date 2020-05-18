@@ -20,7 +20,9 @@ public class Player : MonoBehaviour {
 
     private float speed = 2.0f;
 
-    ServerPlayer vrPlayer = new ServerPlayer();
+    public int LastUpdateTick = 0;
+
+    public ServerPlayer vrPlayer = new ServerPlayer();
 
     private void Start () {
         speed *= Time.fixedDeltaTime;
@@ -289,9 +291,10 @@ public class Player : MonoBehaviour {
         FireballUpdate();
 
         //Send player information
-        ServerPacketSender.HeadData(vrPlayer);
-        ServerPacketSender.VRRightHandData(vrPlayer);
-        ServerPacketSender.VRLeftHandData(vrPlayer);
+
+        //ServerPacketSender.HeadData(vrPlayer);
+        //ServerPacketSender.VRRightHandData(vrPlayer);
+        //ServerPacketSender.VRLeftHandData(vrPlayer);
     }
 
     public void SpawnTestProjectile (Vector3 dir) {

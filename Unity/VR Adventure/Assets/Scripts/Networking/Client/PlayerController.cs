@@ -20,6 +20,6 @@ public class PlayerController : MonoBehaviour
         };
 
 
-        ClientPacketSender.PlayerMovement(inputs);
+        //ClientPacketSender.PlayerMovement(inputs);
     }
 }

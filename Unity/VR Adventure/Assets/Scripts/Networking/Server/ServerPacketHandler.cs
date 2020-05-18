@@ -30,25 +30,58 @@ public class ServerPacketHandler
         Server.clients[_clientId].player.SpawnTestProjectile(dir);
     }
 
-    //public static void PlayerMovement(Packet packet)
-    //{
-    //    //System.Console.WriteLine("Input received!");
-    //    bool[] inputs = new bool[packet.ReadInt()];
-    //    int _playerId = packet.ReadInt();
-    //    for (int i = 0; i < inputs.Length; i++)
-    //    {
-    //        inputs[i] = packet.ReadBool();
-    //    }
-    //    //System.Console.WriteLine($"Input received for playerid: {_playerId}!");
-    //    Server.clients[_playerId].player.SetInput(inputs);
+    public static void PlayerMovement(Packet _packet)
+    {
+        int packetTick = _packet.ReadInt();
+        int id = _packet.ReadInt();
 
-    //}
+        if (Server.clients[id].player.LastUpdateTick < packetTick)
+        {
+            Server.clients[id].player.LastUpdateTick = packetTick;
+            //Head
+            Vector3 pos = _packet.ReadVector3();
+            Quaternion rot = _packet.ReadQuaternion();
+
+            //Left hand
+            HandDataPacket leftHand = new HandDataPacket()
+            {
+                HandPosition = _packet.ReadVector3(),
+                HandRotation = _packet.ReadQuaternion(),
+                Trigger = _packet.ReadFloat(),
+                Grip = _packet.ReadFloat(),
+                Velocity = _packet.ReadVector3(),
+                HandState = (HandState)_packet.ReadInt(),
+                TargetHandState = (HandState)_packet.ReadInt(),
+                StatePower = _packet.ReadFloat(),
+            };
+
+            //Right hand
+            HandDataPacket rightHand = new HandDataPacket()
+            {
+                HandPosition = _packet.ReadVector3(),
+                HandRotation = _packet.ReadQuaternion(),
+                Trigger = _packet.ReadFloat(),
+                Grip = _packet.ReadFloat(),
+                Velocity = _packet.ReadVector3(),
+                HandState = (HandState)_packet.ReadInt(),
+                TargetHandState = (HandState)_packet.ReadInt(),
+                StatePower = _packet.ReadFloat(),
+            };
+
+
+            Server.clients[id].player.SetHead(pos, rot);
+            Server.clients[id].player.SetHand(leftHand, true);
+            Server.clients[id].player.SetHand(rightHand);
+        }
+    }
 
 
 
     public static void VRHeadData(Packet _packet)
     {
+        int packetTick = _packet.ReadInt();
         int id = _packet.ReadInt();
+
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
         Server.clients[id].player.SetHead(pos, rot);
@@ -56,15 +89,17 @@ public class ServerPacketHandler
 
     public static void TimeSync(Packet _packet)
     {
-        int id = _packet.ReadInt();
         int clientTime = _packet.ReadInt();
+        int id = _packet.ReadInt();
         //Console.WriteLine("TimeSync Received!");
         ServerPacketSender.TimeSync(id, clientTime, DateTime.UtcNow.Millisecond);
     }
 
     public static void VRLeftHandData(Packet _packet)
     {
+        int packetTick = _packet.ReadInt();
         int id = _packet.ReadInt();
+
         HandDataPacket leftHand = new HandDataPacket()
         {
             HandPosition = _packet.ReadVector3(),
@@ -77,11 +112,14 @@ public class ServerPacketHandler
             StatePower = _packet.ReadFloat(),
         };
         Server.clients[id].player.SetHand(leftHand, true);
+
     }
 
     public static void VRRightHandData(Packet _packet)
     {
+        int packetTick = _packet.ReadInt();
         int id = _packet.ReadInt();
+
         HandDataPacket rightHand = new HandDataPacket()
         {
             HandPosition = _packet.ReadVector3(),
@@ -95,10 +133,12 @@ public class ServerPacketHandler
         };
 
         Server.clients[id].player.SetHand(rightHand);
+
     }
 
     public static void UdpTestReceived(Packet packet)
     {
+        int packetTick = packet.ReadInt();
         int _id = packet.ReadInt();
         string _msg = packet.ReadString();
 

@@ -38,6 +38,7 @@ public static class ClientPacketHandler
 
     public static void UdpReceiveMessageTest(Packet _packet)
     {
+        int packetTick = _packet.ReadInt();
         string msg = _packet.ReadString();
 
         ClientPacketSender.UdpTestReceived();
@@ -47,12 +48,48 @@ public static class ClientPacketHandler
 
     public static void PlayerPosition(Packet _packet)
     {
-        int _id = _packet.ReadInt();
-        Vector3 _pos = _packet.ReadVector3();
+        int packetTick = _packet.ReadInt();
+        int id = _packet.ReadInt();
 
-        if (GameManager.players.ContainsKey(_id))
-            GameManager.players[_id].transform.position = _pos;
-        //Debug.Log($"{_pos} is new position for player {_id}");
+        if (GameManager.players.ContainsKey(id))
+            if (GameManager.players[id].LastPlayerUpdateTick < packetTick)
+            {
+                GameManager.players[id].LastPlayerUpdateTick = packetTick;
+                //Head
+                Vector3 pos = _packet.ReadVector3();
+                Quaternion rot = _packet.ReadQuaternion();
+
+                //Left hand
+                HandDataPacket leftHand = new HandDataPacket()
+                {
+                    HandPosition = _packet.ReadVector3(),
+                    HandRotation = _packet.ReadQuaternion(),
+                    Trigger = _packet.ReadFloat(),
+                    Grip = _packet.ReadFloat(),
+                    Velocity = _packet.ReadVector3(),
+                    HandState = (HandState)_packet.ReadInt(),
+                    TargetHandState = (HandState)_packet.ReadInt(),
+                    StatePower = _packet.ReadFloat(),
+                };
+
+                //Right hand
+                HandDataPacket rightHand = new HandDataPacket()
+                {
+                    HandPosition = _packet.ReadVector3(),
+                    HandRotation = _packet.ReadQuaternion(),
+                    Trigger = _packet.ReadFloat(),
+                    Grip = _packet.ReadFloat(),
+                    Velocity = _packet.ReadVector3(),
+                    HandState = (HandState)_packet.ReadInt(),
+                    TargetHandState = (HandState)_packet.ReadInt(),
+                    StatePower = _packet.ReadFloat(),
+                };
+
+                GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
+                GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
+                GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
+                GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
+            }
     }
 
     public static void PlayerDisconnected(Packet _packet)
@@ -69,21 +106,9 @@ public static class ClientPacketHandler
         });
     }
 
-    public static void VRHeadData(Packet _packet)
+    public static void ProjectilePosition(Packet _packet)
     {
-        int id = _packet.ReadInt();
-        Vector3 pos = _packet.ReadVector3();
-        Quaternion rot = _packet.ReadQuaternion();
-
-        if (GameManager.players.ContainsKey(id))
-        {
-            GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
-            GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
-        }
-    }
-
-    internal static void ProjectilePosition(Packet _packet)
-    {
+        int packetTick = _packet.ReadInt();
         int id = _packet.ReadInt();
         Vector3 pos = _packet.ReadVector3();
         Quaternion rot = _packet.ReadQuaternion();
@@ -152,27 +177,35 @@ public static class ClientPacketHandler
 
     public static void UpdateFireballs(Packet _packet)
     {
-        int fireballCount = _packet.ReadInt();
+        int packetTick = _packet.ReadInt();
 
+        int fireballCount = _packet.ReadInt();
         for (int i = 0; i < fireballCount; i++)
         {
             int id = _packet.ReadInt();
-            Vector3 position = _packet.ReadVector3();
-            float size = _packet.ReadFloat();
 
             lock (GameManager.EmulatedFireballs)
                 if (GameManager.EmulatedFireballs.ContainsKey(id))
                 {
-                    try
+                    if (GameManager.EmulatedFireballs[id]._lastUpdateTick < packetTick)
                     {
-                        GameManager.EmulatedFireballs[id].Emulate(position, size);
-                    }
-                    catch
-                    {
-                        Debug.Log("whaa");
+                        GameManager.EmulatedFireballs[id]._lastUpdateTick = packetTick;
+
+                        Vector3 position = _packet.ReadVector3();
+                        float size = _packet.ReadFloat();
+
+                        try
+                        {
+                            GameManager.EmulatedFireballs[id].Emulate(position, size);
+                        }
+                        catch
+                        {
+                            Debug.Log("whaa");
+                        }
                     }
                 }
         }
+
     }
 
     internal static void SpawnFireball(Packet _packet)
@@ -204,40 +237,55 @@ public static class ClientPacketHandler
 
         GameManager.instance.SpawnProjectile(pos, id);
     }
-
-    public static void VRLeftHandData(Packet _packet)
-    {
-        int id = _packet.ReadInt();
-        HandDataPacket leftHand = new HandDataPacket()
-        {
-            HandPosition = _packet.ReadVector3(),
-            HandRotation = _packet.ReadQuaternion(),
-            Trigger = _packet.ReadFloat(),
-            Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3(),
-            HandState = (HandState)_packet.ReadInt(),
-            StatePower = _packet.ReadFloat()
-        };
-
-        if (GameManager.players.ContainsKey(id))
-            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
-    }
-
-    public static void VRRightHandData(Packet _packet)
-    {
-        int id = _packet.ReadInt();
-        HandDataPacket rightHand = new HandDataPacket()
-        {
-            HandPosition = _packet.ReadVector3(),
-            HandRotation = _packet.ReadQuaternion(),
-            Trigger = _packet.ReadFloat(),
-            Grip = _packet.ReadFloat(),
-            Velocity = _packet.ReadVector3(),
-            HandState = (HandState)_packet.ReadInt(),
-            StatePower = _packet.ReadFloat()
-        };
-
-        if (GameManager.players.ContainsKey(id))
-            GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
-    }
 }
+
+
+
+//public static void VRHeadData(Packet _packet)
+//{
+//    int id = _packet.ReadInt();
+//    Vector3 pos = _packet.ReadVector3();
+//    Quaternion rot = _packet.ReadQuaternion();
+
+//    if (GameManager.players.ContainsKey(id))
+//    {
+//        GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
+//        GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
+//    }
+//}
+
+//public static void VRLeftHandData(Packet _packet)
+//{
+//    int id = _packet.ReadInt();
+//    HandDataPacket leftHand = new HandDataPacket()
+//    {
+//        HandPosition = _packet.ReadVector3(),
+//        HandRotation = _packet.ReadQuaternion(),
+//        Trigger = _packet.ReadFloat(),
+//        Grip = _packet.ReadFloat(),
+//        Velocity = _packet.ReadVector3(),
+//        HandState = (HandState)_packet.ReadInt(),
+//        StatePower = _packet.ReadFloat()
+//    };
+
+//    if (GameManager.players.ContainsKey(id))
+//        GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
+//}
+
+//public static void VRRightHandData(Packet _packet)
+//{
+//    int id = _packet.ReadInt();
+//    HandDataPacket rightHand = new HandDataPacket()
+//    {
+//        HandPosition = _packet.ReadVector3(),
+//        HandRotation = _packet.ReadQuaternion(),
+//        Trigger = _packet.ReadFloat(),
+//        Grip = _packet.ReadFloat(),
+//        Velocity = _packet.ReadVector3(),
+//        HandState = (HandState)_packet.ReadInt(),
+//        StatePower = _packet.ReadFloat()
+//    };
+
+//    if (GameManager.players.ContainsKey(id))
+//        GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
+//}

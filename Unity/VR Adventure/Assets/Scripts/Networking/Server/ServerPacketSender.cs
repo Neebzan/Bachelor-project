@@ -33,15 +33,55 @@ public class ServerPacketSender
     }
 
 
-    public static void PlayerPostion(Player player)
-    {
-        using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
-        {
-            packet.Write(player.id);
-            packet.Write(player.transform.position);
+    //public static void PlayerPostion(Player player)
+    //{
+    //    using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
+    //    {
+    //        packet.Write(player.id);
+    //        packet.Write(player.transform.position);
 
-            SendUDPPacketAll(packet);
+    //        SendUDPPacketAll(packet);
+    //    }
+    //}
+
+    public static void PlayerPositions()
+    {
+
+        foreach (var client in Server.clients.Values)
+        {
+            if (client.player != null)
+            {                
+                using (Packet _packet = new Packet((int)ServerPackets.PlayerPosition))
+                {
+                    _packet.Write(client.player.vrPlayer.id);
+
+                    //Head
+                    _packet.Write(client.player.vrPlayer.HeadPos);
+                    _packet.Write(client.player.vrPlayer.HeadRot);
+
+                    //Left hand
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.HandPosition);
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.HandRotation);
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Trigger);
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Grip);
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Velocity);
+                    _packet.Write((int)client.player.vrPlayer.LeftHand.HandDataPacket.HandState);
+                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.StatePower);
+
+                    //Right hand
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.HandPosition);
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.HandRotation);
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Trigger);
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Grip);
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Velocity);
+                    _packet.Write((int)client.player.vrPlayer.RightHand.HandDataPacket.HandState);
+                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.StatePower);
+
+                    SendUDPPacketAll(_packet, client.player.vrPlayer.id);
+                }
+            }
         }
+
     }
 
     public static void SpawnFireball(Fireball fireball)
@@ -56,17 +96,17 @@ public class ServerPacketSender
         }
     }
 
-    public static void UpdateFireball(Fireball fireball)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball))
-        {
-            _packet.Write(fireball.ID);
-            _packet.Write(fireball.transform.position);
-            _packet.Write(fireball.Size);
+    //public static void UpdateFireball(Fireball fireball)
+    //{
+    //    using (Packet _packet = new Packet((int)ServerPackets.UpdateFireball))
+    //    {
+    //        _packet.Write(fireball.ID);
+    //        _packet.Write(fireball.transform.position);
+    //        _packet.Write(fireball.Size);
 
-            SendUDPPacketAll(_packet);
-        }
-    }
+    //        SendUDPPacketAll(_packet);
+    //    }
+    //}
 
     public static void UpdateFireballsCollection()
     {
@@ -92,7 +132,7 @@ public class ServerPacketSender
             {
                 SendUDPPacketAll(_packet);
                 _packet = new Packet((int)ServerPackets.UpdateFireballs);
-                if (ServerManager.instance.Fireballs.Count-count >= 30)
+                if (ServerManager.instance.Fireballs.Count - count >= 30)
                     _packet.Write(30);
                 else
                     _packet.Write(ServerManager.instance.Fireballs.Count - count);
@@ -103,23 +143,7 @@ public class ServerPacketSender
     }
 
 
-    public static void VRRightHandData(ServerPlayer vrPlayer)
-    {
 
-        using (Packet _packet = new Packet((int)ServerPackets.VRRightHandData))
-        {
-            _packet.Write(vrPlayer.id);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.HandPosition);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.HandRotation);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.Trigger);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.Grip);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.Velocity);
-            _packet.Write((int)vrPlayer.RightHand.HandDataPacket.HandState);
-            _packet.Write(vrPlayer.RightHand.HandDataPacket.StatePower);
-
-            SendUDPPacketAll(_packet, vrPlayer.id);
-        }
-    }
 
     internal static void DespawnFireball(int id, bool explode)
     {
@@ -133,22 +157,6 @@ public class ServerPacketSender
         }
     }
 
-    public static void VRLeftHandData(ServerPlayer vrPlayer)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.VRLeftHandData))
-        {
-            _packet.Write(vrPlayer.id);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandPosition);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandRotation);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Trigger);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Grip);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.Velocity);
-            _packet.Write((int)vrPlayer.LeftHand.HandDataPacket.HandState);
-            _packet.Write(vrPlayer.LeftHand.HandDataPacket.StatePower);
-
-            SendUDPPacketAll(_packet, vrPlayer.id);
-        }
-    }
 
     public static void SpawnProjectile(Projectile projectile)
     {
@@ -169,6 +177,7 @@ public class ServerPacketSender
             SendTCPPacketAll(_packet);
         }
     }
+
     public static void ProjectilePosition(Projectile projectile)
     {
         using (Packet _packet = new Packet((int)ServerPackets.ProjectilePosition))
@@ -178,18 +187,6 @@ public class ServerPacketSender
             _packet.Write(projectile.transform.rotation);
 
             SendUDPPacketAll(_packet);
-        }
-    }
-
-    public static void HeadData(ServerPlayer vrPlayer)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.VRHeadData))
-        {
-            _packet.Write(vrPlayer.id);
-            _packet.Write(vrPlayer.HeadPos);
-            _packet.Write(vrPlayer.HeadRot);
-
-            SendUDPPacketAll(_packet, vrPlayer.id);
         }
     }
 
@@ -243,16 +240,15 @@ public class ServerPacketSender
         }
     }
 
-
     private static void SendUDPPacket(int _clientId, Packet _packet)
     {
-        _packet.WriteLength();
+        _packet.WriteLengthAndTimeStamp();
         Server.SendUDPData(Server.clients[_clientId].udp.endPoint, _packet);
     }
 
     private static void SendUDPPacketAll(Packet _packet, int excludeId = -1)
     {
-        _packet.WriteLength();
+        _packet.WriteLengthAndTimeStamp();
         foreach (var client in Server.clients.Values)
         {
             if (client.id != excludeId)
@@ -262,3 +258,50 @@ public class ServerPacketSender
     }
 }
 
+
+//public static void VRRightHandData(ServerPlayer vrPlayer)
+//{
+
+//    using (Packet _packet = new Packet((int)ServerPackets.VRRightHandData))
+//    {
+//        _packet.Write(vrPlayer.id);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.HandPosition);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.HandRotation);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.Trigger);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.Grip);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.Velocity);
+//        _packet.Write((int)vrPlayer.RightHand.HandDataPacket.HandState);
+//        _packet.Write(vrPlayer.RightHand.HandDataPacket.StatePower);
+
+//        SendUDPPacketAll(_packet, vrPlayer.id);
+//    }
+//}
+
+//public static void VRLeftHandData(ServerPlayer vrPlayer)
+//{
+//    using (Packet _packet = new Packet((int)ServerPackets.VRLeftHandData))
+//    {
+//        _packet.Write(vrPlayer.id);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandPosition);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.HandRotation);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.Trigger);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.Grip);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.Velocity);
+//        _packet.Write((int)vrPlayer.LeftHand.HandDataPacket.HandState);
+//        _packet.Write(vrPlayer.LeftHand.HandDataPacket.StatePower);
+
+//        SendUDPPacketAll(_packet, vrPlayer.id);
+//    }
+//}
+
+//public static void HeadData(ServerPlayer vrPlayer)
+//{
+//    using (Packet _packet = new Packet((int)ServerPackets.VRHeadData))
+//    {
+//        _packet.Write(vrPlayer.id);
+//        _packet.Write(vrPlayer.HeadPos);
+//        _packet.Write(vrPlayer.HeadRot);
+
+//        SendUDPPacketAll(_packet, vrPlayer.id);
+//    }
+//}

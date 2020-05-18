@@ -38,9 +38,16 @@ public class PlayerClient : MonoBehaviour {
             return;
         }
 
-        ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
-        ClientPacketSender.VRLeftHandData(GetHandData(LeftHand, _leftHandSpellController));
-        ClientPacketSender.VRRightHandData(GetHandData(RightHand, _rightHandSpellController));        
+        ClientPacketSender.PlayerMovement(
+            Head.transform.position,
+            Head.transform.rotation,
+            GetHandData(LeftHand, _leftHandSpellController),
+            GetHandData(RightHand, _rightHandSpellController)
+            );
+
+        //ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
+        //ClientPacketSender.VRLeftHandData(GetHandData(LeftHand, _leftHandSpellController));
+        //ClientPacketSender.VRRightHandData(GetHandData(RightHand, _rightHandSpellController));        
     }
 
     private void Update()
