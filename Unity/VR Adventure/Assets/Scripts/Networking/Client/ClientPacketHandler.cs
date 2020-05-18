@@ -51,10 +51,10 @@ public static class ClientPacketHandler
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
-        if (GameManager.players.ContainsKey(id))
-            if (GameManager.players[id].LastPlayerUpdateTick < packetTick)
+        if (GameManager.EmulatedPlayers.ContainsKey(id))
+            if (GameManager.EmulatedPlayers[id].LastPlayerUpdateTick < packetTick)
             {
-                GameManager.players[id].LastPlayerUpdateTick = packetTick;
+                GameManager.EmulatedPlayers[id].LastPlayerUpdateTick = packetTick;
                 //Head
                 Vector3 pos = _packet.ReadVector3();
                 Quaternion rot = _packet.ReadQuaternion();
@@ -81,10 +81,10 @@ public static class ClientPacketHandler
                     StatePower = _packet.ReadFloat(),
                 };
 
-                GameManager.players[id].emulatedPlayer.Head.transform.position = pos;
-                GameManager.players[id].emulatedPlayer.Head.transform.rotation = rot;
-                GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.LeftHand, leftHand);
-                GameManager.players[id].emulatedPlayer.EmulateHand(GameManager.players[id].emulatedPlayer.RightHand, rightHand);
+                GameManager.EmulatedPlayers[id].emulatedPlayer.Head.transform.position = pos;
+                GameManager.EmulatedPlayers[id].emulatedPlayer.Head.transform.rotation = rot;
+                GameManager.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
+                GameManager.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
             }
     }
 
@@ -94,10 +94,10 @@ public static class ClientPacketHandler
         ThreadManager.ExecuteOnMainThread(() =>
         {
             PlayerManager player;
-            if (GameManager.players.TryGetValue(_id, out player))
+            if (GameManager.EmulatedPlayers.TryGetValue(_id, out player))
             {
                 UnityEngine.Object.Destroy(player.gameObject);
-                GameManager.players.Remove(_id);
+                GameManager.EmulatedPlayers.Remove(_id);
             }
         });
     }

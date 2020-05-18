@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public static Dictionary<int, PlayerManager> players = new Dictionary<int, PlayerManager>();
+    public static Dictionary<int, PlayerManager> EmulatedPlayers = new Dictionary<int, PlayerManager>();
     public static Dictionary<int, EmulatedFireball> EmulatedFireballs = new Dictionary<int, EmulatedFireball>();
     //public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         _player.GetComponent<PlayerManager>().Initialize(_id, _username);
         //_player.GetComponent<PlayerManager>().username = _username;
 
-        players.Add(_id, _player.GetComponent<PlayerManager>());
+        EmulatedPlayers.Add(_id, _player.GetComponent<PlayerManager>());
 
     }
 

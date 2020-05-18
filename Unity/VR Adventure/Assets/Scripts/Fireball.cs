@@ -62,6 +62,8 @@ public class Fireball : MonoBehaviour {
 
         Active = true;
         Armed = true;
+        //_rigidBody.useGravity = true;
+        //_rigidBody.isKinematic = false;
 
         ApplyForce(FireballVelocity * 1.5f);
     }
@@ -89,8 +91,6 @@ public class Fireball : MonoBehaviour {
     public void Launch (Vector3 relativeVelocity) {
         ApplyForce(relativeVelocity);
         Armed = true;
-        _rigidBody.useGravity = true;
-        _rigidBody.isKinematic = false;
     }
 
     private void OnTriggerEnter (Collider other) {

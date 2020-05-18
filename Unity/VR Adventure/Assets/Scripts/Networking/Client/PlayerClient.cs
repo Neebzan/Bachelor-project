@@ -24,7 +24,7 @@ public class PlayerClient : MonoBehaviour {
 
     private void Start () {
         ClientPacketHandler.OnConnectedToServer += ClientPacketHandler_OnConnectedToServer;
-        Client.instance.ConnectToServer("Placeholder");
+        //Client.instance.ConnectToServer("Placeholder");
         _leftHandSpellController = LeftHand.GetComponent<SpellController>();
         _rightHandSpellController = RightHand.GetComponent<SpellController>();
     }

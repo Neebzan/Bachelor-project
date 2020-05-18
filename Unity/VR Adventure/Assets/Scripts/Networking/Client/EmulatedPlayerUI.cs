@@ -6,6 +6,9 @@ using UnityEngine;
 public class EmulatedPlayerUI : MonoBehaviour {
     private string _username;
     public TextMeshProUGUI Text;
+    public GameObject HoverOverObject;
+    [Tooltip("How many meters the nametag will hover over the player's head")]
+    public float HoverHeight = .3f;
 
     public string Username {
         get {
@@ -19,6 +22,10 @@ public class EmulatedPlayerUI : MonoBehaviour {
 
     private void Update () {
         FaceCamera();
+    }
+
+    void HoverPosition () {
+        transform.position = HoverOverObject.transform.position + new Vector3(0, HoverHeight, 0);
     }
 
     private void FaceCamera () {

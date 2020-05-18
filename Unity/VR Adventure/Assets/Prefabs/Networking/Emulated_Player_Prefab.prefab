@@ -28,7 +28,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2766297618224435850}
-  - {fileID: 1876514219309285205}
   m_Father: {fileID: 2766297617080247980}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -374,6 +373,7 @@ Transform:
   - {fileID: 7387249523210485655}
   - {fileID: 5889106731485985744}
   - {fileID: 5352276936813463408}
+  - {fileID: 1876514219309285205}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -408,6 +408,7 @@ MonoBehaviour:
   username: 
   emulatedPlayer: {fileID: 2766297617080247981}
   EmulatedPlayerUI: {fileID: 7025943200397356720}
+  LastPlayerUpdateTick: 0
 --- !u!1 &2766297617574794268
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,8 +3575,8 @@ RectTransform:
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.01}
   m_Children:
   - {fileID: 5365449426528998858}
-  m_Father: {fileID: 5352276936813463408}
-  m_RootOrder: 1
+  m_Father: {fileID: 2766297617080247980}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3655,3 +3656,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Text: {fileID: 2820232834861709623}
+  HoverOverObject: {fileID: 502328450279493913}
+  HoverHeight: 0.3
