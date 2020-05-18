@@ -125,13 +125,19 @@ public static class ClientPacketHandler
 
     internal static void TimeSync(Packet _packet)
     {
-        int oldClientTime = _packet.ReadInt();
-        int serverTime = _packet.ReadInt();
-        float RTT = DateTime.UtcNow.Millisecond - oldClientTime;
-        float latency = RTT / 2f;
+        //https://docs.gamesparks.com/tutorials/real-time-services/clock-synchronization-and-network-programming.html
 
-        Debug.Log($"Packet RTT: {RTT}ms - Latency: {latency}");
-        Debug.Log($"Time sync diff would have been: {serverTime - (oldClientTime + latency)}ms");
+        long oldTimeStamp = _packet.ReadLong();
+        DateTime serverTime = new DateTime(_packet.ReadLong());
+        Client.instance.pingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
+        if (Client.instance.pingHistory.Count > 5)
+            Client.instance.pingHistory.Dequeue();
+        //Client.instance.Latency = (int)RTT / 2;
+
+        Debug.Log($"Packet RTT/Latency: {Client.instance.Latency}ms");
+        TimeSpan ts =  serverTime - DateTime.UtcNow;
+        Debug.Log($"Time sync diff: {ts.TotalMilliseconds + (Client.instance.Latency/2)}ms");
+        //Debug.Log($"Time sync diff would have been: {serverTime - (oldTimeStamp + Client.instance.Latency)}ms");
 
     }
 

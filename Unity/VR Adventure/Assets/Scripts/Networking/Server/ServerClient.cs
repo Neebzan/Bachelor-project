@@ -61,6 +61,12 @@ public class ServerClient
 
         }
 
+        //Send all existing fireballs to the connecting player
+        foreach (var fireball in ServerManager.instance.Fireballs.Values)
+        {
+            ServerPacketSender.SpawnFireball(id, fireball);
+        }
+
     }
 
     public void Disconnect()

@@ -90,9 +90,9 @@ public class ServerPacketHandler
     public static void TimeSync(Packet _packet)
     {
         int id = _packet.ReadInt();
-        int clientTime = _packet.ReadInt();
-        Console.WriteLine($"TimeSync Received! From id:{id}");
-        ServerPacketSender.TimeSync(id, clientTime, DateTime.UtcNow.Millisecond);
+        long clientTimeStamp = _packet.ReadLong();
+        //Console.WriteLine($"TimeSync Received! From id:{id}");
+        ServerPacketSender.TimeSync(id, clientTimeStamp, DateTime.UtcNow.Ticks);
     }
 
     //public static void VRLeftHandData(Packet _packet)
