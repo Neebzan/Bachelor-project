@@ -11,6 +11,15 @@ public class Fireball : MonoBehaviour {
     private Rigidbody _rigidBody;
 
     public static int IdIndexer = 0;
+    public static readonly float FireballMinSize = 0.05f;
+    public static readonly float FireballMaxSize = 0.4f;
+
+    private float sizePercentage {
+        get {
+            return ((Size-FireballMinSize) / (FireballMaxSize-FireballMinSize));
+        }
+    }
+
     public int ID { get; private set; }
 
     public Vector3 FireballVelocity { get; set; }
@@ -46,14 +55,6 @@ public class Fireball : MonoBehaviour {
         ServerPacketSender.SpawnFireball(this);
     }
 
-    //private void FixedUpdate () {
-    //    if (isServer) {
-    //        ServerPacketSender.UpdateFireball(this);
-    //    }
-    //}
-
-
-
     public void Create (Vector3 velocity) {
         _physicalCollider.radius = Size * .5f;
 
@@ -61,25 +62,10 @@ public class Fireball : MonoBehaviour {
         Armed = true;
 
         if (velocity.magnitude > .3f) {
-            ApplyForce(velocity * 1.5f);
-            //ApplyForce(FireballVelocity * 1.5f);
+            //ApplyForce(velocity * 1.5f);
+            ApplyForce(FireballVelocity * 1.5f);
         }
     }
-
-    //    private void SetSize {
-    //                    float newSize = _largeFireball.Size;
-    //            if (_largeFireball.Size<targetSize) {
-    //                newSize = Mathf.Clamp(_largeFireball.Size + Time.deltaTime* 0.1f, 0, targetSize);
-    //            }
-    //            if (_largeFireball.Size > targetSize) {
-    //                newSize = Mathf.Clamp(_largeFireball.Size - Time.deltaTime* 0.1f, targetSize, _largeFireball.Size);
-    //            }
-
-    //            //newSize = Mathf.Lerp(_largeFireball.Size, targetSize, 0.5f);
-    //            newSize = Mathf.Lerp(_largeFireball.Size, targetSize, .1f * Time.fixedDeltaTime);
-    //_largeFireball.Size = newSize;
-    //    }
-    //    }
 
     public void SetSize (float targetSize) {
         float newSize = Mathf.Lerp(Size, targetSize, .5f * Time.deltaTime);
@@ -91,8 +77,7 @@ public class Fireball : MonoBehaviour {
 
     public void FollowTarget (Vector3 target) {
         Vector3 oldPos = transform.position;
-        //Console.WriteLine("current position: " + transform.position + "  target position: " + target);
-        transform.position = Vector3.Lerp(transform.position, target, 0.1f);
+        transform.position = Vector3.Lerp(transform.position, target, 0.05f + 0.1f * (1 - sizePercentage) * .5f);
         Vector3 newPos = transform.position;
 
         FireballVelocity = (newPos - oldPos) / Time.fixedDeltaTime;
@@ -124,9 +109,8 @@ public class Fireball : MonoBehaviour {
             }
         }
 
-        if (destroy) {
+        if (destroy)
             Despawn(true);
-        }
     }
 
     public void Despawn (bool explode) {
