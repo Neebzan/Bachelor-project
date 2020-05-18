@@ -66,9 +66,7 @@ public static class ClientPacketHandler
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
                     Grip = _packet.ReadFloat(),
-                    Velocity = _packet.ReadVector3(),
                     HandState = (HandState)_packet.ReadInt(),
-                    TargetHandState = (HandState)_packet.ReadInt(),
                     StatePower = _packet.ReadFloat(),
                 };
 
@@ -79,9 +77,7 @@ public static class ClientPacketHandler
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
                     Grip = _packet.ReadFloat(),
-                    Velocity = _packet.ReadVector3(),
                     HandState = (HandState)_packet.ReadInt(),
-                    TargetHandState = (HandState)_packet.ReadInt(),
                     StatePower = _packet.ReadFloat(),
                 };
 

@@ -64,7 +64,6 @@ public class ServerPacketSender
                     _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.HandRotation);
                     _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Trigger);
                     _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Grip);
-                    _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.Velocity);
                     _packet.Write((int)client.player.vrPlayer.LeftHand.HandDataPacket.HandState);
                     _packet.Write(client.player.vrPlayer.LeftHand.HandDataPacket.StatePower);
 
@@ -73,7 +72,6 @@ public class ServerPacketSender
                     _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.HandRotation);
                     _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Trigger);
                     _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Grip);
-                    _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.Velocity);
                     _packet.Write((int)client.player.vrPlayer.RightHand.HandDataPacket.HandState);
                     _packet.Write(client.player.vrPlayer.RightHand.HandDataPacket.StatePower);
 
