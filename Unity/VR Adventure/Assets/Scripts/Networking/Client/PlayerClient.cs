@@ -14,29 +14,22 @@ public class PlayerClient : MonoBehaviour {
 
     public GameObject Head;
 
-    [HideInInspector]
-    public bool Connected = false;
-
 
     bool secondaryReleased = true;
 
 
 
     private void Start () {
-        ClientPacketHandler.OnClientConnectedToServer += ClientPacketHandler_OnConnectedToServer;
         //Client.instance.ConnectToServer("Placeholder");
         _leftHandSpellController = LeftHand.GetComponent<SpellController>();
         _rightHandSpellController = RightHand.GetComponent<SpellController>();
     }
 
-    private void ClientPacketHandler_OnConnectedToServer () {
-        Connected = true;
-    }
+
 
     private void FixedUpdate () {
-        if (!Connected) {
+        if (!Client.instance.isConnected)
             return;
-        }
 
         ClientPacketSender.PlayerMovement(
             Head.transform.position,
@@ -44,21 +37,14 @@ public class PlayerClient : MonoBehaviour {
             GetHandData(LeftHand, _leftHandSpellController),
             GetHandData(RightHand, _rightHandSpellController)
             );
-
-        //ClientPacketSender.HeadData(Head.transform.position, Head.transform.rotation);
-        //ClientPacketSender.VRLeftHandData(GetHandData(LeftHand, _leftHandSpellController));
-        //ClientPacketSender.VRRightHandData(GetHandData(RightHand, _rightHandSpellController));        
     }
 
-    private void Update()
-    {
-        if(secondaryReleased && RightHand.SecondaryButtonPressed)
-        {
+    private void Update () {
+        if (secondaryReleased && RightHand.SecondaryButtonPressed) {
             ClientPacketSender.ShootTest(RightHand.transform.forward);
             secondaryReleased = false;
         }
-        else if(!RightHand.SecondaryButtonPressed)
-        {
+        else if (!RightHand.SecondaryButtonPressed) {
             secondaryReleased = true;
         }
 

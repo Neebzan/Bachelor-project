@@ -102,7 +102,7 @@ public class ServerPacketSender
             _packet.Write(fireball.transform.position);
             _packet.Write(fireball.Size);
 
-            SendTCPPacketAll(_packet);
+            SendTCPPacket(targetClient, _packet);
         }
     }
 
