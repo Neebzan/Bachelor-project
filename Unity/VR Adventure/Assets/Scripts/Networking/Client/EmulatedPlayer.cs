@@ -15,7 +15,7 @@ public class EmulatedPlayer : MonoBehaviour {
     public GameObject Body;
 
     private PlayerClient PlayerClient;
-    bool test = true;
+    bool test = false;
 
     private float _headToBodyOffset = 0.2f;
 
