@@ -205,7 +205,7 @@ public class ServerPacketSender
     {
         using (Packet packet = new Packet((int)ServerPackets.SpawnPlayer))
         {
-            packet.Write(player.id);
+            packet.Write(player.ID);
             packet.Write(player.UserName);
             packet.Write(player.position);
 

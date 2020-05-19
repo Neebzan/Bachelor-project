@@ -8,7 +8,7 @@ using UnityEngine;
 public enum Spell { None, Fireball, ForcePush, LargeFireball }
 
 public class Player : MonoBehaviour {
-    public int id;
+    public int ID;
     public string UserName;
     public long LastUpdateTick = 0;
     public ServerPlayer vrPlayer = new ServerPlayer();
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour {
 
     internal void Initialize (int id, string userName) {
         UserName = userName;
-        this.id = id;
+        this.ID = id;
         vrPlayer.id = id;
     }
 
@@ -263,7 +263,7 @@ public class Player : MonoBehaviour {
     }
 
     void CastFireball (ServerVRHand hand) {
-        hand.Fireball = ServerManager.instance.SpawnFireball();
+        hand.Fireball = ServerManager.instance.SpawnFireball(ID);
         hand.Fireball.Size = 0.0f;
         hand.Fireball.transform.position = hand.DesiredFireballPosition;
         hand.CurrentSpell = Spell.Fireball;
@@ -280,9 +280,5 @@ public class Player : MonoBehaviour {
                 //EmulateHand(PlayerClient.LeftHand, PlayerClient.GetHandData(PlayerClient.LeftHand, PlayerClient.LeftHandSpellController);
             }
         }
-    }
-
-    public void SpawnTestProjectile (Vector3 dir) {
-        ServerManager.instance.SpawnProjectile(vrPlayer.RightHand.HandDataPacket.HandPosition).Init(dir);
     }
 }

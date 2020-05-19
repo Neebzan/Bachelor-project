@@ -63,7 +63,7 @@ public static class PacketHandlers
             {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
             {(int)ClientPackets.UdpTestReceived, ServerPacketHandler.UdpTestReceived },
 
-            {(int)ClientPackets.ShootTest, ServerPacketHandler.ShootTestReceived },
+            //{(int)ClientPackets.ShootTest, ServerPacketHandler.ShootTestReceived },
 
             {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
 

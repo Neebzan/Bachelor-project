@@ -6,16 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider), typeof(Rigidbody))]
 public class Fireball : MonoBehaviour {
     public LayerMask ExplodeOnCollide;
-
-    private SphereCollider _physicalCollider;
-    private Rigidbody _rigidBody;
-
     public static int IdIndexer = 0;
     public static readonly float FireballMinSize = 0.05f;
     public static readonly float FireballMaxSize = 0.2f;
     public static readonly float LargeFireballMaxSize = 0.7f;
-    private static readonly float FireballGrowthRate = 1.0f;
 
+    public int PlayerID;
+    private static readonly float FireballGrowthRate = 1.0f;
+    private SphereCollider _physicalCollider;
+    private Rigidbody _rigidBody;
     private float sizePercentage {
         get {
             return ((Size - FireballMinSize) / (LargeFireballMaxSize - FireballMinSize));
@@ -62,8 +61,6 @@ public class Fireball : MonoBehaviour {
 
         Active = true;
         Armed = true;
-        //_rigidBody.useGravity = true;
-        //_rigidBody.isKinematic = false;
 
         ApplyForce(FireballVelocity * 1.5f);
     }
@@ -103,6 +100,15 @@ public class Fireball : MonoBehaviour {
                         if (otherFireball.Armed) {
                             destroy = true;
                         }
+                    }
+                }
+                else if (other.tag == "Player"){
+                    Console.WriteLine("Hit player");
+                    Player player = other.transform.root.gameObject.GetComponent<Player>();
+                    if (player.ID != this.PlayerID) {
+                        Console.WriteLine("Player ID: " + player.ID);
+                        Console.WriteLine("Fireball ID: " + this.PlayerID);
+                        destroy = true;
                     }
                 }
                 else

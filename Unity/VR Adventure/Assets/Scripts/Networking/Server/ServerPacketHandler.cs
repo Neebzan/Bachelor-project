@@ -21,11 +21,11 @@ public class ServerPacketHandler {
         //}
     }
 
-    public static void ShootTestReceived (Packet _packet) {
-        int _clientId = _packet.ReadInt();
-        Vector3 dir = _packet.ReadVector3();
-        Server.clients [ _clientId ].player.SpawnTestProjectile(dir);
-    }
+    //public static void ShootTestReceived (Packet _packet) {
+    //    int _clientId = _packet.ReadInt();
+    //    Vector3 dir = _packet.ReadVector3();
+    //    Server.clients [ _clientId ].player.SpawnTestProjectile(dir);
+    //}
 
     public static void PlayerMovement (Packet _packet) {
         long packetTick = _packet.ReadLong();

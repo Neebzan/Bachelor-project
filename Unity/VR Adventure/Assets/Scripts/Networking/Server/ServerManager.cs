@@ -43,19 +43,21 @@ public class ServerManager : MonoBehaviour
         Server.Stop();
     }
 
-    public Projectile SpawnProjectile(Vector3 pos)
-    {
-        return Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>();
-    }
+    //public Projectile SpawnProjectile(Vector3 pos)
+    //{
+    //    return Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>();
+    //}
 
     public Player SpawnPlayer()
     {
         return Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
     }
 
-    public Fireball SpawnFireball () {
+    public Fireball SpawnFireball (int playerID) {
         Fireball fireball = Instantiate(FireballPrefab).GetComponent<Fireball>();
+        fireball.PlayerID = playerID;
         Fireballs.Add(fireball.ID, fireball);
+        
         return fireball;
     }
 }
