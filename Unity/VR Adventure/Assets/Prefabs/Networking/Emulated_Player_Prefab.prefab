@@ -393,7 +393,7 @@ MonoBehaviour:
   LeftHand: {fileID: 5889106731485816753}
   RightHand: {fileID: 7387249523210707952}
   Head: {fileID: 502328450279493913}
-  Body: {fileID: 3051080384162958584}
+  Body: {fileID: 5519513612799546539}
 --- !u!114 &9086174976077719944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1356,7 +1356,6 @@ GameObject:
   - component: {fileID: 7012978430345584551}
   - component: {fileID: 333044055224420545}
   - component: {fileID: 5173030052792381589}
-  - component: {fileID: 2904899441623638125}
   m_Layer: 0
   m_Name: PlayerBody
   m_TagString: Untagged
@@ -1760,20 +1759,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!64 &2904899441623638125
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3051080384162958584}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &3694955925456543825
 GameObject:
   m_ObjectHideFlags: 0

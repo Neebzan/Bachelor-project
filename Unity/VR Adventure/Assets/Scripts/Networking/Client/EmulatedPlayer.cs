@@ -13,6 +13,9 @@ public class EmulatedPlayer : MonoBehaviour {
     public GameObject Head;
     public GameObject Body;
 
+    private PlayerClient PlayerClient;
+    bool test = true;
+
     private float _headToBodyOffset = 0.2f;
 
     public void EmulateHead (Vector3 headPos, Quaternion headRot) {
@@ -36,6 +39,18 @@ public class EmulatedPlayer : MonoBehaviour {
 
         Body.transform.position = new Vector3(Head.transform.position.x, headHeight - .3f, Head.transform.position.z);
         Body.transform.rotation = Quaternion.Lerp(Body.transform.rotation, Head.transform.rotation, .3f * Time.fixedDeltaTime);
+    }
+
+    private void Update () {
+        if (test) {
+            if (PlayerClient == null) {
+                PlayerClient = GameObject.Find("XR Rig").GetComponent<PlayerClient>();
+            }
+            else {
+                EmulateHead(PlayerClient.Head.transform.position, PlayerClient.Head.transform.rotation);
+                //EmulateHand(PlayerClient.LeftHand, PlayerClient.GetHandData(PlayerClient.LeftHand, PlayerClient.LeftHandSpellController);
+            }
+        }
     }
 }
 

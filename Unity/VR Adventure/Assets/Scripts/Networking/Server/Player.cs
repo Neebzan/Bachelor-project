@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 public enum Spell { None, Fireball, ForcePush, LargeFireball }
-[RequireComponent(typeof(MeshCollider))]
+
 public class Player : MonoBehaviour {
     public int id;
     public string UserName;
@@ -15,7 +15,6 @@ public class Player : MonoBehaviour {
     public Vector3 position;
     public Vector3 BodyOffset;
 
-    private MeshCollider _meshCollider;
     private Fireball _largeFireball;
     private float _fireballMergeProgress = 0.0f;
     private bool _mergingFireballs = false;
@@ -24,8 +23,6 @@ public class Player : MonoBehaviour {
 
     private void Awake () {
         BodyOffset = transform.position;
-        _meshCollider = GetComponent<MeshCollider>();
-
     }
 
     public void SetHand (HandDataPacket packet, bool left = false) {
