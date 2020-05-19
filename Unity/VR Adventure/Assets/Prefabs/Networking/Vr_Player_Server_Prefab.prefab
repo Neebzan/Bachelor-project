@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8420676418199711720}
   - component: {fileID: 6892980627728899562}
-  - component: {fileID: 837760298}
+  - component: {fileID: 1738680762905367242}
   m_Layer: 10
   m_Name: Vr_Player_Server_Prefab
   m_TagString: Untagged
@@ -48,8 +48,9 @@ MonoBehaviour:
   UserName: 
   LastUpdateTick: 0
   position: {x: 0, y: 0, z: 0}
---- !u!136 &837760298
-CapsuleCollider:
+  BodyOffset: {x: 0, y: 0, z: 0}
+--- !u!64 &1738680762905367242
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -58,7 +59,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7067476996320840341, guid: b63b8cbbe57ee5a4c9153b72810e7f09, type: 3}

@@ -18,11 +18,6 @@ public class EmulatedPlayer : MonoBehaviour {
     public void EmulateHead (Vector3 headPos, Quaternion headRot) {
         Head.transform.position = headPos;
         Head.transform.rotation = headRot;
-
-        float headHeight = Mathf.Clamp(headPos.y, 1.0f, 2.5f) - _headToBodyOffset;
-
-        Body.transform.localScale = new Vector3(Body.transform.localScale.x, headHeight * .5f, Body.transform.localScale.z);
-        Body.transform.position = new Vector3(Head.transform.position.x, headHeight * .5f, Head.transform.position.z);
     }
 
     public void EmulateHand (EmulatedHand hand, HandDataPacket data) {
@@ -34,6 +29,13 @@ public class EmulatedPlayer : MonoBehaviour {
         hand.StatePower = data.StatePower;
 
         hand.Animate();
+    }
+
+    private void FixedUpdate () {
+        float headHeight = Mathf.Clamp(Head.transform.position.y, 1.0f, 2.5f) - _headToBodyOffset;
+
+        Body.transform.position = new Vector3(Head.transform.position.x, headHeight - .3f, Head.transform.position.z);
+        Body.transform.rotation = Quaternion.Lerp(Body.transform.rotation, Head.transform.rotation, .3f * Time.fixedDeltaTime);
     }
 }
 

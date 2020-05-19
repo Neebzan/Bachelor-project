@@ -6,15 +6,16 @@ using UnityEngine;
 
 
 public enum Spell { None, Fireball, ForcePush, LargeFireball }
-[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(MeshCollider))]
 public class Player : MonoBehaviour {
     public int id;
     public string UserName;
     public long LastUpdateTick = 0;
     public ServerPlayer vrPlayer = new ServerPlayer();
     public Vector3 position;
+    public Vector3 BodyOffset;
 
-    private CapsuleCollider _capsuleCollider;
+    private MeshCollider _meshCollider;
     private Fireball _largeFireball;
     private float _fireballMergeProgress = 0.0f;
     private bool _mergingFireballs = false;
@@ -22,7 +23,8 @@ public class Player : MonoBehaviour {
     private float _headToBodyOffset = .2f;
 
     private void Awake () {
-        _capsuleCollider = GetComponent<CapsuleCollider>();
+        BodyOffset = transform.position;
+        _meshCollider = GetComponent<MeshCollider>();
 
     }
 
@@ -36,11 +38,10 @@ public class Player : MonoBehaviour {
         vrPlayer.HeadPos = pos;
         vrPlayer.HeadRot = rot;
 
-        float headHeight = Mathf.Clamp(vrPlayer.HeadPos.y, 1.0f, 2.5f) - _headToBodyOffset;
-        Vector3 capsuleCenter = new Vector3(vrPlayer.HeadPos.x, headHeight * .5f, vrPlayer.HeadPos.z);
+        float headHeight = Mathf.Clamp(pos.y, 1.0f, 2.5f) - _headToBodyOffset;
 
-        _capsuleCollider.height = headHeight;
-        _capsuleCollider.center = capsuleCenter;
+        transform.position = new Vector3(pos.x, headHeight - .3f, pos.z);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rot, .3f * Time.fixedDeltaTime);
     }
     internal void Initialize (int id, string userName) {
         UserName = userName;
