@@ -11,10 +11,11 @@ public class EmulatedPlayer : MonoBehaviour {
     public EmulatedHand LeftHand;
     public EmulatedHand RightHand;
     public GameObject Head;
+    public GameObject HeadToBodyTracking;
     public GameObject Body;
 
     private PlayerClient PlayerClient;
-    bool test = false;
+    bool test = true;
 
     private float _headToBodyOffset = 0.2f;
 
@@ -37,7 +38,7 @@ public class EmulatedPlayer : MonoBehaviour {
     private void FixedUpdate () {
         float headHeight = Mathf.Clamp(Head.transform.position.y, 1.0f, 2.5f) - _headToBodyOffset;
 
-        Body.transform.position = new Vector3(Head.transform.position.x, headHeight - .3f, Head.transform.position.z);
+        Body.transform.position = new Vector3(HeadToBodyTracking.transform.position.x, headHeight - .3f, HeadToBodyTracking.transform.position.z);
 
         Vector3 newForward = Vector3.ProjectOnPlane(Head.transform.forward, Vector3.up);
         Vector3 newDir = Vector3.Lerp(Body.transform.forward, newForward, .1f);

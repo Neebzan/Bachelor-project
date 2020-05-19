@@ -13,13 +13,17 @@ public class Player : MonoBehaviour {
     public long LastUpdateTick = 0;
     public ServerPlayer vrPlayer = new ServerPlayer();
     public Vector3 position;
-    public Vector3 BodyOffset;
+
+    public GameObject Head;
+    public GameObject Body;
 
     private Fireball _largeFireball;
+    private Vector3 BodyOffset;
     private float _fireballMergeProgress = 0.0f;
     private bool _mergingFireballs = false;
     private float _fireballMergeDistance = 0.35f;
     private float _headToBodyOffset = .2f;
+
 
     private void Awake () {
         BodyOffset = transform.position;
@@ -35,15 +39,18 @@ public class Player : MonoBehaviour {
         vrPlayer.HeadPos = pos;
         vrPlayer.HeadRot = rot;
 
+        Head.transform.position = pos;
+        Head.transform.rotation = rot;
+
         float headHeight = Mathf.Clamp(pos.y, 1.0f, 2.5f) - _headToBodyOffset;
 
-        transform.position = new Vector3(pos.x, headHeight - .3f, pos.z);
+        Body.transform.position = new Vector3(pos.x, headHeight - .3f, pos.z);
 
         Vector3 headForward = rot * Vector3.forward;
 
         Vector3 newForward = Vector3.ProjectOnPlane(headForward, Vector3.up);
-        Vector3 newDir = Vector3.Lerp(transform.forward, newForward, .1f);
-        transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);
+        Vector3 newDir = Vector3.Lerp(Body.transform.forward, newForward, .1f);
+        Body.transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);
     }
     internal void Initialize (int id, string userName) {
         UserName = userName;
