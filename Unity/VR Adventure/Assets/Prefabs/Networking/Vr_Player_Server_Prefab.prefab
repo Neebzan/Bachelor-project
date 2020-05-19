@@ -232,6 +232,7 @@ MonoBehaviour:
   UserName: 
   LastUpdateTick: 0
   position: {x: 0, y: 0, z: 0}
-  BodyOffset: {x: 0, y: 0, z: 0}
   Head: {fileID: 885056998}
+  HeadToBodyTracking: {fileID: 206254841}
   Body: {fileID: 5789981355459136914}
+  Test: 0

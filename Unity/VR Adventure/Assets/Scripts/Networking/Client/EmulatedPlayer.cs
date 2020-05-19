@@ -15,7 +15,7 @@ public class EmulatedPlayer : MonoBehaviour {
     public GameObject Body;
 
     private PlayerClient PlayerClient;
-    bool test = false;
+    public bool Test = false;
 
     private float _headToBodyOffset = 0.2f;
 
@@ -46,7 +46,7 @@ public class EmulatedPlayer : MonoBehaviour {
     }
 
     private void Update () {
-        if (test) {
+        if (Test) {
             if (PlayerClient == null) {
                 PlayerClient = GameObject.Find("XR Rig").GetComponent<PlayerClient>();
             }

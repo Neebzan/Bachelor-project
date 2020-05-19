@@ -396,6 +396,7 @@ MonoBehaviour:
   Head: {fileID: 502328450279493913}
   HeadToBodyTracking: {fileID: 4657075419323380236}
   Body: {fileID: 5519513612799546539}
+  Test: 0
 --- !u!114 &9086174976077719944
 MonoBehaviour:
   m_ObjectHideFlags: 0

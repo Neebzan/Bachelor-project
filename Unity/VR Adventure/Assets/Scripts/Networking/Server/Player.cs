@@ -15,6 +15,7 @@ public class Player : MonoBehaviour {
     public Vector3 position;
 
     public GameObject Head;
+    public GameObject HeadToBodyTracking;
     public GameObject Body;
 
     private Fireball _largeFireball;
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour {
     private bool _mergingFireballs = false;
     private float _fireballMergeDistance = 0.35f;
     private float _headToBodyOffset = .2f;
+
+    private PlayerClient PlayerClient;
+    public bool Test = true;
 
 
     private void Awake () {
@@ -44,14 +48,14 @@ public class Player : MonoBehaviour {
 
         float headHeight = Mathf.Clamp(pos.y, 1.0f, 2.5f) - _headToBodyOffset;
 
-        Body.transform.position = new Vector3(pos.x, headHeight - .3f, pos.z);
+        Body.transform.position = new Vector3(HeadToBodyTracking.transform.position.x, headHeight - .3f, HeadToBodyTracking.transform.position.z);
 
         Vector3 headForward = rot * Vector3.forward;
-
         Vector3 newForward = Vector3.ProjectOnPlane(headForward, Vector3.up);
         Vector3 newDir = Vector3.Lerp(Body.transform.forward, newForward, .1f);
         Body.transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);
     }
+
     internal void Initialize (int id, string userName) {
         UserName = userName;
         this.id = id;
@@ -267,6 +271,15 @@ public class Player : MonoBehaviour {
 
     public void FixedUpdate () {
         FireballUpdate();
+        if (Test) {
+            if (PlayerClient == null) {
+                PlayerClient = GameObject.Find("XR Rig").GetComponent<PlayerClient>();
+            }
+            else {
+                SetHead(PlayerClient.Head.transform.position, PlayerClient.Head.transform.rotation);
+                //EmulateHand(PlayerClient.LeftHand, PlayerClient.GetHandData(PlayerClient.LeftHand, PlayerClient.LeftHandSpellController);
+            }
+        }
     }
 
     public void SpawnTestProjectile (Vector3 dir) {
