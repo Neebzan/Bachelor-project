@@ -14,7 +14,7 @@ public class EmulatedPlayer : MonoBehaviour {
     public GameObject Body;
 
     private PlayerClient PlayerClient;
-    bool test = true;
+    bool test = false;
 
     private float _headToBodyOffset = 0.2f;
 
@@ -38,7 +38,9 @@ public class EmulatedPlayer : MonoBehaviour {
         float headHeight = Mathf.Clamp(Head.transform.position.y, 1.0f, 2.5f) - _headToBodyOffset;
 
         Body.transform.position = new Vector3(Head.transform.position.x, headHeight - .3f, Head.transform.position.z);
-        Body.transform.rotation = Quaternion.Lerp(Body.transform.rotation, Head.transform.rotation, .3f * Time.fixedDeltaTime);
+        Quaternion rotation = Quaternion.LookRotation(Head.transform.forward, Vector3.up);
+        Body.transform.rotation = Quaternion.Slerp(Body.transform.rotation, rotation, .1f);
+        
     }
 
     private void Update () {
