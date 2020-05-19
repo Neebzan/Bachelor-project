@@ -13,7 +13,7 @@ public class SpellController : MonoBehaviour {
     public float ForceCharge = 0.0f;
     public float ForcePercentageCharged = 0.0f;
 
-    private float _chargeupSeconds = .5f;
+    private float _chargeupSeconds = .25f;
     public float FireCharge = 0.0f;
     public float FirePercentageCharged = 0.0f;
 

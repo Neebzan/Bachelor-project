@@ -62,7 +62,7 @@ public class Fireball : MonoBehaviour {
         Active = true;
         Armed = true;
 
-        ApplyForce(FireballVelocity * 1.5f);
+        ApplyForce(FireballVelocity * 3.5f);
     }
 
     public void SetSize (float targetSize) {
