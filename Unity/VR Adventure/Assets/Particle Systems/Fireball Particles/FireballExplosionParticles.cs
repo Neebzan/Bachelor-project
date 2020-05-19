@@ -11,19 +11,19 @@ public class FireballExplosionParticles : MonoBehaviour
     public float Size { get; set; }
     public Vector3 Velocity { get; set; }
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Base number of particles to spawn
         int numOfParticles = (int)(Size * 100.0f);
 
-        //var velocityParamters = new ParticleSystem.EmitParams() { velocity = Velocity };
+        // Sparks in explosion
+        TrailParticleSystem.Emit(numOfParticles * 2);
 
-        TrailParticleSystem.Emit(numOfParticles);
-        //TrailParticleSystem.transform.localScale = new Vector3(Size, Size, Size);
-        SphereParticleSystem.transform.localScale = new Vector3(Size, Size, Size);
+        // Spheres in explosion
         SphereParticleSystem.Emit(numOfParticles);
+        SphereParticleSystem.transform.localScale = new Vector3(Size * .5f, Size * .5f, Size * .5f);
 
-        //particleSystem.shape.radius = Size;
+        // Begin check for destroy after play
         StartCoroutine(DestroyAfterPlay());
     }    
 
