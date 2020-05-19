@@ -213,10 +213,10 @@ public class Player : MonoBehaviour {
                 _mergingFireballs = false;
 
                 if (vrPlayer.RightHand.HandDataPacket.TargetHandState != HandState.Fire) {
-                    vrPlayer.RightHand.Fireball.Despawn(false);
+                    ReleaseFireball(vrPlayer.RightHand);
                 }
                 else {
-                    vrPlayer.LeftHand.Fireball.Despawn(false);
+                    ReleaseFireball(vrPlayer.LeftHand);
                 }
             }
 

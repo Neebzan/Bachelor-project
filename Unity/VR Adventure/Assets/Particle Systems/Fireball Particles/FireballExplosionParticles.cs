@@ -14,13 +14,13 @@ public class FireballExplosionParticles : MonoBehaviour
     void Start()
     {
         // Base number of particles to spawn
-        int numOfParticles = (int)(Size * 100.0f);
+        int baseNumOfParticles = (int)(Size * 100.0f);
 
         // Sparks in explosion
-        TrailParticleSystem.Emit(numOfParticles * 2);
+        TrailParticleSystem.Emit(baseNumOfParticles);
 
         // Spheres in explosion
-        SphereParticleSystem.Emit(numOfParticles);
+        SphereParticleSystem.Emit(baseNumOfParticles / 2);
         SphereParticleSystem.transform.localScale = new Vector3(Size * .5f, Size * .5f, Size * .5f);
 
         // Begin check for destroy after play
@@ -28,7 +28,7 @@ public class FireballExplosionParticles : MonoBehaviour
     }    
 
     IEnumerator DestroyAfterPlay () {
-        while (TrailParticleSystem.particleCount > 0 && SphereParticleSystem.particleCount > 0) {
+        while (TrailParticleSystem.particleCount > 0 || SphereParticleSystem.particleCount > 0) {
             yield return new WaitForSeconds(.1f);
         }
 

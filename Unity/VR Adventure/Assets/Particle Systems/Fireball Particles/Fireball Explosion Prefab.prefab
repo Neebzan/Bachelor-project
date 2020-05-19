@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705678224002448366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3092752, y: -1.1261133, z: 1.2686507}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7802707724270939157}
@@ -58,6 +58,151 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fireball Explosion Trails Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].inSlope
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].outSlope
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[0].time
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].value
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[2].inSlope
+      value: 0.019053873
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[2].outSlope
+      value: 0.019053873
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[2].tangentMode
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.widthOverTrail.maxCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: SizeBySpeedModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: CollisionModule.m_Dampen.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: VelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: ClampVelocityModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[0].inSlope
+      value: 0.17722686
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[0].outSlope
+      value: 0.17722686
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[1].value
+      value: 0.10105875
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[1].inSlope
+      value: -0.048479
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[1].outSlope
+      value: -0.048479
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[2].inSlope
+      value: -0.27418485
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[2].outSlope
+      value: -0.27418485
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[1].time
+      value: 0.6314211
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[0].time
+      value: 0.11598331
+      objectReference: {fileID: 0}
+    - target: {fileID: 7565714454366544230, guid: cdd381e619d96434f95171d0d37afe15,
+        type: 3}
+      propertyPath: TrailModule.lifetime.maxCurve.m_Curve.Array.data[0].value
+      value: 0.009709336
       objectReference: {fileID: 0}
     - target: {fileID: 9205780012694512028, guid: cdd381e619d96434f95171d0d37afe15,
         type: 3}
@@ -114,8 +259,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -9009024208205296676, guid: cdd381e619d96434f95171d0d37afe15, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdd381e619d96434f95171d0d37afe15, type: 3}
 --- !u!4 &7802707724270939157 stripped
 Transform:
@@ -136,21 +280,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 966239481351982838}
     m_Modifications:
-    - target: {fileID: 1537632630283725959, guid: 458fc4f81b32e194c98a3059e01e0364,
-        type: 3}
-      propertyPath: InitialModule.startSize.minScalar
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537632630283725959, guid: 458fc4f81b32e194c98a3059e01e0364,
-        type: 3}
-      propertyPath: InitialModule.startSize.scalar
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537632630283725959, guid: 458fc4f81b32e194c98a3059e01e0364,
-        type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2400116189665932523, guid: 458fc4f81b32e194c98a3059e01e0364,
         type: 3}
       propertyPath: m_LocalPosition.x
