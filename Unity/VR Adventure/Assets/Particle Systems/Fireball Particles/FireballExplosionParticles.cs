@@ -11,6 +11,10 @@ public class FireballExplosionParticles : MonoBehaviour
     public float Size { get; set; }
     public Vector3 Velocity { get; set; }
 
+    private void Awake () {
+
+    }
+
     void Start()
     {
         // Base number of particles to spawn
@@ -18,10 +22,11 @@ public class FireballExplosionParticles : MonoBehaviour
 
         // Sparks in explosion
         TrailParticleSystem.Emit(baseNumOfParticles);
+        SphereParticleSystem.transform.localScale = new Vector3(Size, Size, Size);
 
         // Spheres in explosion
-        SphereParticleSystem.Emit(baseNumOfParticles / 2);
-        SphereParticleSystem.transform.localScale = new Vector3(Size * .5f, Size * .5f, Size * .5f);
+        //SphereParticleSystem.Emit(baseNumOfParticles / 2);
+
 
         // Begin check for destroy after play
         StartCoroutine(DestroyAfterPlay());
