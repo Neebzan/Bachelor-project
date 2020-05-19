@@ -19,8 +19,7 @@ public class Client : MonoBehaviour {
     public string ip = "127.0.0.1";
     public int port = 27000;
     public int id;
-    [HideInInspector]
-    public string userName = "NotSet";
+    public string UserName = "NotSet";
 
     public TCP tcp;
     public UDP udp;
@@ -67,7 +66,7 @@ public class Client : MonoBehaviour {
     }
 
     public void ConnectToServer (string _userName) {
-        userName = _userName;
+        UserName = _userName;
         tcp = new TCP();
         udp = new UDP(PacketHandlers.Client);
         tcp.Connect(ip, port, PacketHandlers.Client);

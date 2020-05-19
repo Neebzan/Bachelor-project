@@ -60,7 +60,6 @@ MonoBehaviour:
   localPlayerPrefab: {fileID: 0}
   playerPrefab: {fileID: 2766297617080247987, guid: b4f593ed5d14b2d44b2cd3a8dca16cb2,
     type: 3}
-  projectilePrefab: {fileID: 0}
   EmulatedFireballPrefab: {fileID: 4459125067082265348, guid: 1475a772fa4133a41896de23820d9bf1,
     type: 3}
 --- !u!114 &9183492938944514318
@@ -78,5 +77,5 @@ MonoBehaviour:
   ip: 127.0.0.1
   port: 27000
   id: 0
-  userName: NotSet
+  UserName: NotSet
   isConnected: 0

@@ -12,7 +12,7 @@ public static class ClientPacketSender
         using(Packet _packet = new Packet((int)ClientPackets.WelcomeReceived))
         {
             _packet.Write(Client.instance.id);
-            _packet.Write(Client.instance.userName);
+            _packet.Write(Client.instance.UserName);
 
             SendTCPData(_packet);
         }

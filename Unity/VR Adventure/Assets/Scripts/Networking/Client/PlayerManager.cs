@@ -17,5 +17,6 @@ public class PlayerManager : MonoBehaviour
     {
         id = _id;
         username = _username;
+        EmulatedPlayerUI.Username = _username;
     }
 }

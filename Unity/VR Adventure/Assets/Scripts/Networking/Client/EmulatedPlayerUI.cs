@@ -22,6 +22,7 @@ public class EmulatedPlayerUI : MonoBehaviour {
 
     private void Update () {
         FaceCamera();
+        HoverPosition();
     }
 
     void HoverPosition () {
