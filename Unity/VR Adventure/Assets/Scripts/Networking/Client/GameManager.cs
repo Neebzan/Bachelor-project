@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    public static Dictionary<int, PlayerManager> EmulatedPlayers = new Dictionary<int, PlayerManager>();
-    public static Dictionary<int, EmulatedFireball> EmulatedFireballs = new Dictionary<int, EmulatedFireball>();
+    public Dictionary<int, PlayerManager> EmulatedPlayers = new Dictionary<int, PlayerManager>();
+    public Dictionary<int, EmulatedFireball> EmulatedFireballs = new Dictionary<int, EmulatedFireball>();
     //public static Dictionary<int, Projectile> projectiles = new Dictionary<int, Projectile>();
 
 

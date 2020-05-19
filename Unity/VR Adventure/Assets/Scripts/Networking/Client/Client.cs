@@ -84,14 +84,13 @@ public class Client : MonoBehaviour {
             tcp.Disconnect();
             udp.Disconnect();
 
-            for (int i = 0; i < GameManager.EmulatedPlayers.Count; i++)
-                GameObject.Destroy(GameManager.EmulatedPlayers [ i ]);
-            GameManager.EmulatedPlayers.Clear();
+            foreach (PlayerManager player in GameManager.instance.EmulatedPlayers.Values)
+                GameObject.Destroy(player.gameObject);            
+            GameManager.instance.EmulatedPlayers.Clear();
 
-            for (int i = 0; i < GameManager.EmulatedFireballs.Count; i++)
-                GameObject.Destroy(GameManager.EmulatedFireballs [ i ]);
-            GameManager.EmulatedFireballs.Clear();
-
+            foreach (EmulatedFireball fireball in GameManager.instance.EmulatedFireballs.Values)
+                GameObject.Destroy(fireball.gameObject);            
+            GameManager.instance.EmulatedFireballs.Clear();
 
             UnityEngine.Debug.Log("Disconnected from server.");
 

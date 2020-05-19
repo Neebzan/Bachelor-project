@@ -51,10 +51,10 @@ public static class ClientPacketHandler
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
-        if (GameManager.EmulatedPlayers.ContainsKey(id))
-            if (GameManager.EmulatedPlayers[id].LastPlayerUpdateTick < packetTick)
+        if (GameManager.instance.EmulatedPlayers.ContainsKey(id))
+            if (GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick < packetTick)
             {
-                GameManager.EmulatedPlayers[id].LastPlayerUpdateTick = packetTick;
+                GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick = packetTick;
                 //Head
                 Vector3 pos = _packet.ReadVector3();
                 Quaternion rot = _packet.ReadQuaternion();
@@ -81,10 +81,10 @@ public static class ClientPacketHandler
                     StatePower = _packet.ReadFloat(),
                 };
 
-                GameManager.EmulatedPlayers[id].emulatedPlayer.Head.transform.position = pos;
-                GameManager.EmulatedPlayers[id].emulatedPlayer.Head.transform.rotation = rot;
-                GameManager.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
-                GameManager.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
+                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.Head.transform.position = pos;
+                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.Head.transform.rotation = rot;
+                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
+                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
             }
     }
 
@@ -94,10 +94,10 @@ public static class ClientPacketHandler
         ThreadManager.ExecuteOnMainThread(() =>
         {
             PlayerManager player;
-            if (GameManager.EmulatedPlayers.TryGetValue(_id, out player))
+            if (GameManager.instance.EmulatedPlayers.TryGetValue(_id, out player))
             {
                 UnityEngine.Object.Destroy(player.gameObject);
-                GameManager.EmulatedPlayers.Remove(_id);
+                GameManager.instance.EmulatedPlayers.Remove(_id);
             }
         });
     }
@@ -146,12 +146,12 @@ public static class ClientPacketHandler
         int id = _packet.ReadInt();
         bool explode = _packet.ReadBool();
 
-        if (GameManager.EmulatedFireballs.ContainsKey(id))
+        if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
         {
             ThreadManager.ExecuteOnMainThread(() =>
             {
-                lock (GameManager.EmulatedFireballs)
-                    GameManager.EmulatedFireballs[id].Despawn(explode);
+                lock (GameManager.instance.EmulatedFireballs)
+                    GameManager.instance.EmulatedFireballs[id].Despawn(explode);
             });
 
         }
@@ -163,12 +163,12 @@ public static class ClientPacketHandler
         Vector3 position = _packet.ReadVector3();
         float size = _packet.ReadFloat();
 
-        lock (GameManager.EmulatedFireballs)
-            if (GameManager.EmulatedFireballs.ContainsKey(id))
+        lock (GameManager.instance.EmulatedFireballs)
+            if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
             {
                 try
                 {
-                    GameManager.EmulatedFireballs[id].Emulate(position, size);
+                    GameManager.instance.EmulatedFireballs[id].Emulate(position, size);
                 }
                 catch
                 {
@@ -186,19 +186,19 @@ public static class ClientPacketHandler
         {
             int id = _packet.ReadInt();
 
-            lock (GameManager.EmulatedFireballs)
-                if (GameManager.EmulatedFireballs.ContainsKey(id))
+            lock (GameManager.instance.EmulatedFireballs)
+                if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
                 {
-                    if (GameManager.EmulatedFireballs[id]._lastUpdateTick < packetTick)
+                    if (GameManager.instance.EmulatedFireballs[id]._lastUpdateTick < packetTick)
                     {
-                        GameManager.EmulatedFireballs[id]._lastUpdateTick = packetTick;
+                        GameManager.instance.EmulatedFireballs[id]._lastUpdateTick = packetTick;
 
                         Vector3 position = _packet.ReadVector3();
                         float size = _packet.ReadFloat();
 
                         try
                         {
-                            GameManager.EmulatedFireballs[id].Emulate(position, size);
+                            GameManager.instance.EmulatedFireballs[id].Emulate(position, size);
                         }
                         catch
                         {

@@ -53,7 +53,7 @@ public class EmulatedFireball : MonoBehaviour {
     }
 
     private void Remove () {
-        GameManager.EmulatedFireballs.Remove(ID);
+        GameManager.instance.EmulatedFireballs.Remove(ID);
         Destroy(gameObject);
     }
 }
