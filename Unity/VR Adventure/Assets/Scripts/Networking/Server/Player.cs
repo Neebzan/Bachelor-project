@@ -38,7 +38,12 @@ public class Player : MonoBehaviour {
         float headHeight = Mathf.Clamp(pos.y, 1.0f, 2.5f) - _headToBodyOffset;
 
         transform.position = new Vector3(pos.x, headHeight - .3f, pos.z);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rot, .3f * Time.fixedDeltaTime);
+
+        Vector3 headForward = rot * Vector3.forward;
+
+        Vector3 newForward = Vector3.ProjectOnPlane(headForward, Vector3.up);
+        Vector3 newDir = Vector3.Lerp(transform.forward, newForward, .1f);
+        transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);
     }
     internal void Initialize (int id, string userName) {
         UserName = userName;

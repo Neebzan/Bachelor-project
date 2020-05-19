@@ -38,9 +38,10 @@ public class EmulatedPlayer : MonoBehaviour {
         float headHeight = Mathf.Clamp(Head.transform.position.y, 1.0f, 2.5f) - _headToBodyOffset;
 
         Body.transform.position = new Vector3(Head.transform.position.x, headHeight - .3f, Head.transform.position.z);
-        Quaternion rotation = Quaternion.LookRotation(Head.transform.forward, Vector3.up);
-        Body.transform.rotation = Quaternion.Slerp(Body.transform.rotation, rotation, .1f);
-        
+
+        Vector3 newForward = Vector3.ProjectOnPlane(Head.transform.forward, Vector3.up);
+        Vector3 newDir = Vector3.Lerp(Body.transform.forward, newForward, .1f);
+        Body.transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);  
     }
 
     private void Update () {
