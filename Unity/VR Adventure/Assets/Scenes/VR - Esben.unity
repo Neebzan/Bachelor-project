@@ -122,12 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &155395055 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1090247720074647265, guid: 5f950623b22c26547aa01a6056debbd9,
-    type: 3}
-  m_PrefabInstance: {fileID: 8267503132204742531}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &182197537
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +516,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh26324
+  m_Name: pb_Mesh49286
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3012,87 +3006,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 498857616}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2029990372
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2029990377}
-  - component: {fileID: 2029990376}
-  - component: {fileID: 2029990375}
-  - component: {fileID: 2029990373}
-  m_Layer: 0
-  m_Name: ClientNetworking
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2029990373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029990372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 907031e47fab925438c05c03062ec1a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ip: 127.0.0.1
-  port: 27000
-  id: 0
-  userName: NotSet
-  isConnected: 0
---- !u!114 &2029990375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029990372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7310573f99fef843bbf1ac25d7be946, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localPlayerPrefab: {fileID: 155395055}
-  playerPrefab: {fileID: 2766297617080247987, guid: b4f593ed5d14b2d44b2cd3a8dca16cb2,
-    type: 3}
-  projectilePrefab: {fileID: 1525993473585009942, guid: 91f06122b41130546983079868bb5227,
-    type: 3}
-  EmulatedFireballPrefab: {fileID: 4459125067082265348, guid: 1475a772fa4133a41896de23820d9bf1,
-    type: 3}
---- !u!114 &2029990376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029990372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c746f77465e3ee84bbb5715f4fa0b729, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2029990377
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029990372}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6164850163669678913
 PrefabInstance:

@@ -90,9 +90,9 @@ public static class PacketHandlers
             //{(int)ServerPackets.VRLeftHandData, ClientPacketHandler.VRLeftHandData },
             //{(int)ServerPackets.VRHeadData, ClientPacketHandler.VRHeadData },
 
-            {(int)ServerPackets.SpawnProjectile, ClientPacketHandler.SpawnProjectile },
-            {(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
-            {(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
+            //{(int)ServerPackets.SpawnProjectile, ClientPacketHandler.SpawnProjectile },
+            //{(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
+            //{(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
 
             {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
             //{(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},

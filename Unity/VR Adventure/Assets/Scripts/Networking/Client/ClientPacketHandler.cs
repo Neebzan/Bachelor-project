@@ -80,9 +80,8 @@ public static class ClientPacketHandler
                     HandState = (HandState)_packet.ReadInt(),
                     StatePower = _packet.ReadFloat(),
                 };
-
-                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.Head.transform.position = pos;
-                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.Head.transform.rotation = rot;
+                
+                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHead(pos, rot);
                 GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
                 GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
             }
@@ -102,26 +101,26 @@ public static class ClientPacketHandler
         });
     }
 
-    public static void ProjectilePosition(Packet _packet)
-    {
-        long packetTick = _packet.ReadLong();
-        int id = _packet.ReadInt();
-        Vector3 pos = _packet.ReadVector3();
-        Quaternion rot = _packet.ReadQuaternion();
+    //public static void ProjectilePosition(Packet _packet)
+    //{
+    //    long packetTick = _packet.ReadLong();
+    //    int id = _packet.ReadInt();
+    //    Vector3 pos = _packet.ReadVector3();
+    //    Quaternion rot = _packet.ReadQuaternion();
 
-        lock (Projectile.Projectiles)
-            if (Projectile.Projectiles.ContainsKey(id))
-            {
-                try
-                {
-                    Projectile.Projectiles[id].Emulate(pos, rot);
-                }
-                catch
-                {
-                    Debug.Log("waaa");
-                }
-            }
-    }
+    //    lock (Projectile.Projectiles)
+    //        if (Projectile.Projectiles.ContainsKey(id))
+    //        {
+    //            try
+    //            {
+    //                Projectile.Projectiles[id].Emulate(pos, rot);
+    //            }
+    //            catch
+    //            {
+    //                Debug.Log("waaa");
+    //            }
+    //        }
+    //}
 
     internal static void TimeSync(Packet _packet)
     {
@@ -219,26 +218,26 @@ public static class ClientPacketHandler
         GameManager.instance.SpawnEmulatedFireball(id, position, size);
     }
 
-    public static void DespawnProjectile(Packet _packet)
-    {
-        int id = _packet.ReadInt();
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            if (Projectile.Projectiles.ContainsKey(id))
-            {
-                lock (Projectile.Projectiles)
-                    Projectile.Projectiles[id].Despawn();
-            }
-        });
-    }
+    //public static void DespawnProjectile(Packet _packet)
+    //{
+    //    int id = _packet.ReadInt();
+    //    ThreadManager.ExecuteOnMainThread(() =>
+    //    {
+    //        if (Projectile.Projectiles.ContainsKey(id))
+    //        {
+    //            lock (Projectile.Projectiles)
+    //                Projectile.Projectiles[id].Despawn();
+    //        }
+    //    });
+    //}
 
-    internal static void SpawnProjectile(Packet _packet)
-    {
-        int id = _packet.ReadInt();
-        Vector3 pos = _packet.ReadVector3();
+    //internal static void SpawnProjectile(Packet _packet)
+    //{
+    //    int id = _packet.ReadInt();
+    //    Vector3 pos = _packet.ReadVector3();
 
-        GameManager.instance.SpawnProjectile(pos, id);
-    }
+    //    GameManager.instance.SpawnProjectile(pos, id);
+    //}
 }
 
 

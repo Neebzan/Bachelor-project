@@ -45,11 +45,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void SpawnProjectile(Vector3 pos, int id)
-    {
-        Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>().Init(id);
-    }
-
     public void SpawnEmulatedFireball(int id, Vector3 position, float size) {
         EmulatedFireball emulatedFireball = Instantiate(EmulatedFireballPrefab, position, Quaternion.identity).GetComponent<EmulatedFireball>();
         emulatedFireball.Init(id, size);

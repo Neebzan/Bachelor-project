@@ -11,7 +11,19 @@ public class EmulatedPlayer : MonoBehaviour {
     public EmulatedHand LeftHand;
     public EmulatedHand RightHand;
     public GameObject Head;
+    public GameObject Body;
 
+    private float _headToBodyOffset = 0.2f;
+
+    public void EmulateHead (Vector3 headPos, Quaternion headRot) {
+        Head.transform.position = headPos;
+        Head.transform.rotation = headRot;
+
+        float headHeight = Mathf.Clamp(headPos.y, 1.0f, 2.5f) - _headToBodyOffset;
+
+        Body.transform.localScale = new Vector3(Body.transform.localScale.x, headHeight * .5f, Body.transform.localScale.z);
+        Body.transform.position = new Vector3(Head.transform.position.x, headHeight * .5f, Head.transform.position.z);
+    }
 
     public void EmulateHand (EmulatedHand hand, HandDataPacket data) {
         hand.transform.position = data.HandPosition;

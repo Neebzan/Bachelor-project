@@ -1152,7 +1152,7 @@ MonoBehaviour:
   Controllers:
   - {fileID: 1090247718326729525}
   Speed: 1
-  GravityMultiplier: 1
+  GravityMultiplier: 15
 --- !u!143 &1090247720074647260
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1168,7 +1168,7 @@ CharacterController:
   m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1090247720074647263
@@ -1246,7 +1246,6 @@ MonoBehaviour:
   LeftHand: {fileID: 8307223246676468134}
   RightHand: {fileID: 8980869553907739448}
   Head: {fileID: 1090247719979241208}
-  Connected: 0
 --- !u!1 &8267503131438263689
 GameObject:
   m_ObjectHideFlags: 0

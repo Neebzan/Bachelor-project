@@ -40,13 +40,13 @@ public class PlayerClient : MonoBehaviour {
     }
 
     private void Update () {
-        if (secondaryReleased && RightHand.SecondaryButtonPressed) {
-            ClientPacketSender.ShootTest(RightHand.transform.forward);
-            secondaryReleased = false;
-        }
-        else if (!RightHand.SecondaryButtonPressed) {
-            secondaryReleased = true;
-        }
+        //if (secondaryReleased && RightHand.SecondaryButtonPressed) {
+        //    ClientPacketSender.ShootTest(RightHand.transform.forward);
+        //    secondaryReleased = false;
+        //}
+        //else if (!RightHand.SecondaryButtonPressed) {
+        //    secondaryReleased = true;
+        //}
 
     }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 
 public enum Spell { None, Fireball, ForcePush, LargeFireball }
+[RequireComponent(typeof(CapsuleCollider))]
 public class Player : MonoBehaviour {
     public int id;
     public string UserName;
@@ -12,10 +14,17 @@ public class Player : MonoBehaviour {
     public ServerPlayer vrPlayer = new ServerPlayer();
     public Vector3 position;
 
+    private CapsuleCollider _capsuleCollider;
     private Fireball _largeFireball;
     private float _fireballMergeProgress = 0.0f;
     private bool _mergingFireballs = false;
     private float _fireballMergeDistance = 0.35f;
+    private float _headToBodyOffset = .2f;
+
+    private void Awake () {
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+
+    }
 
     public void SetHand (HandDataPacket packet, bool left = false) {
         if (left)
@@ -26,6 +35,12 @@ public class Player : MonoBehaviour {
     public void SetHead (Vector3 pos, Quaternion rot) {
         vrPlayer.HeadPos = pos;
         vrPlayer.HeadRot = rot;
+
+        float headHeight = Mathf.Clamp(vrPlayer.HeadPos.y, 1.0f, 2.5f) - _headToBodyOffset;
+        Vector3 capsuleCenter = new Vector3(vrPlayer.HeadPos.x, headHeight * .5f, vrPlayer.HeadPos.z);
+
+        _capsuleCollider.height = headHeight;
+        _capsuleCollider.center = capsuleCenter;
     }
     internal void Initialize (int id, string userName) {
         UserName = userName;
