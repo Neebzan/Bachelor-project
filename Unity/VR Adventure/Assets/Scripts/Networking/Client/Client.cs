@@ -53,20 +53,24 @@ public class Client : MonoBehaviour {
             UnityEngine.Debug.Log("Instance already exists!");
             Destroy(this);
         }
+        ClientPacketHandler.OnClientConnectedToServer += OnClientConnectedToServer;
     }
 
-    public void ConnectToServer (string _userName) {
-        tcp = new TCP();
-        udp = new UDP(PacketHandlers.Client);
+    private void OnClientConnectedToServer () {
         isConnected = true;
-        userName = _userName;
-        tcp.Connect(ip, port, PacketHandlers.Client);
         StartCoroutine(AutoTimeSync());
 
         OnConnectionChanged(new ClientConnectionEventArgs() {
             Success = isConnected,
             Type = ClientConnectionEvent.Connect
         });
+    }
+
+    public void ConnectToServer (string _userName) {
+        userName = _userName;
+        tcp = new TCP();
+        udp = new UDP(PacketHandlers.Client);
+        tcp.Connect(ip, port, PacketHandlers.Client);
     }
 
     private void OnConnectionChanged (ClientConnectionEventArgs e) {
@@ -77,6 +81,8 @@ public class Client : MonoBehaviour {
         if (isConnected) {
             isConnected = false;
 
+            tcp.Disconnect();
+            udp.Disconnect();
 
             for (int i = 0; i < GameManager.EmulatedPlayers.Count; i++)
                 GameObject.Destroy(GameManager.EmulatedPlayers [ i ]);
@@ -86,19 +92,19 @@ public class Client : MonoBehaviour {
                 GameObject.Destroy(GameManager.EmulatedFireballs [ i ]);
             GameManager.EmulatedFireballs.Clear();
 
-            tcp.client.Close();
-            udp.client.Close();
 
             UnityEngine.Debug.Log("Disconnected from server.");
 
             OnConnectionChanged(new ClientConnectionEventArgs() {
-                Success = isConnected,
+                Success = !isConnected,
                 Type = ClientConnectionEvent.Disconnect
             });
         }
     }
     private void OnApplicationQuit () {
-        Disconnect();
+        if (isConnected) {
+            Disconnect();
+        }
     }
 
     IEnumerator AutoTimeSync () {

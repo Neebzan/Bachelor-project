@@ -126,5 +126,6 @@ public class UDP
     public void Disconnect()
     {
         endPoint = null;
+        client?.Close();
     }
 }

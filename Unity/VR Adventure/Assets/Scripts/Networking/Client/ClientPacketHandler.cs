@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class ClientPacketHandler
 {
-    public static event Action OnConnectedToServer;
+    public static event Action OnClientConnectedToServer;
 
     public static void WelcomeMessage(Packet packet)
     {
@@ -22,7 +22,7 @@ public static class ClientPacketHandler
 
         //Setup udp client on same port as TCP client
         Client.instance.udp.Connect(Client.instance.ip, Client.instance.port, ((IPEndPoint)Client.instance.tcp.client.Client.LocalEndPoint).Port);
-        OnConnectedToServer?.Invoke();
+        OnClientConnectedToServer?.Invoke();
     }
 
     public static void SpawnPlayer(Packet packet)
