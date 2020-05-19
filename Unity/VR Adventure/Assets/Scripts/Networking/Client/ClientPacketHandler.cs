@@ -80,7 +80,7 @@ public static class ClientPacketHandler
                     HandState = (HandState)_packet.ReadInt(),
                     StatePower = _packet.ReadFloat(),
                 };
-                
+
                 GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHead(pos, rot);
                 GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
                 GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
@@ -145,15 +145,15 @@ public static class ClientPacketHandler
         int id = _packet.ReadInt();
         bool explode = _packet.ReadBool();
 
-        if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
+        ThreadManager.ExecuteOnMainThread(() =>
         {
-            ThreadManager.ExecuteOnMainThread(() =>
+            if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
             {
                 lock (GameManager.instance.EmulatedFireballs)
                     GameManager.instance.EmulatedFireballs[id].Despawn(explode);
-            });
+            }
+        });
 
-        }
     }
 
     internal static void UpdateFireball(Packet _packet)
