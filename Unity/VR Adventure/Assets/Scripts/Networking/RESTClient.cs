@@ -43,7 +43,7 @@ public class RESTClient : MonoBehaviour
         if (verified)
         {
             JwtSecurityToken token = new JwtSecurityToken(accessToken);
-            Client.instance.UserName = token.Subject;
+            Client.instance.Username = token.Subject;
         }
         Verified = verified;
         OnTokenVerificationDone?.Invoke();

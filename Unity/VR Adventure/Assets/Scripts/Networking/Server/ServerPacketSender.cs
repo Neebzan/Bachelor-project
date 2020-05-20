@@ -206,7 +206,7 @@ public class ServerPacketSender
         using (Packet packet = new Packet((int)ServerPackets.SpawnPlayer))
         {
             packet.Write(player.ID);
-            packet.Write(player.UserName);
+            packet.Write(player.Username);
             packet.Write(player.position);
 
             Console.WriteLine("Send SpawnPlayer message to client: " + targetClient);

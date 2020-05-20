@@ -8,6 +8,7 @@ public static class ClientPacketHandler
 {
     public static event Action OnClientConnectedToServer;
 
+
     public static void WelcomeMessage(Packet packet)
     {
         string msg = packet.ReadString();
@@ -15,7 +16,7 @@ public static class ClientPacketHandler
 
         Debug.Log($"Welcome message from server: {msg}");
 
-        Client.instance.id = id;
+        Client.instance.ID = id;
 
         //Send a response to server here
         ClientPacketSender.WelcomeReceived();
@@ -125,9 +126,12 @@ public static class ClientPacketHandler
 
         long oldTimeStamp = _packet.ReadLong();
         DateTime serverTime = new DateTime(_packet.ReadLong());
-        Client.instance.pingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
-        if (Client.instance.pingHistory.Count > 5)
-            Client.instance.pingHistory.Dequeue();
+        Client.instance.PingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
+        if (Client.instance.PingHistory.Count > 5)
+            Client.instance.PingHistory.Dequeue();
+        
+
+
         //Client.instance.Latency = (int)RTT / 2;
 
         //Debug.Log($"Packet RTT/Latency: {Client.instance.Latency}ms");

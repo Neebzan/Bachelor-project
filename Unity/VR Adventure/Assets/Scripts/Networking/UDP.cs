@@ -54,7 +54,7 @@ public class UDP
         try
         {
             //Add the client's id so that the server knows who sent the packet
-            _packet.InsertInt(Client.instance.id);
+            _packet.InsertInt(Client.instance.ID);
             if (client != null)
             {
                 client.BeginSend(_packet.ToArray(), _packet.Length(), null, null);

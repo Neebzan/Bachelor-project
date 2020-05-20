@@ -390,6 +390,18 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &622609717 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8957715863360412413, guid: 7146d8a44df32e54ba9d144f9c0289c4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1563455010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f49c99ff2b80eb64783f83b80089b154, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &665605238
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +534,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16714
+  m_Name: pb_Mesh122948
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3542,6 +3554,11 @@ PrefabInstance:
       propertyPath: localPlayerPrefab
       value: 
       objectReference: {fileID: 155395055}
+    - target: {fileID: 9183492938944515825, guid: b2d50ebca1875fe47b9f836629677ed9,
+        type: 3}
+      propertyPath: ScoreboardUI
+      value: 
+      objectReference: {fileID: 622609717}
     - target: {fileID: 9183492938944515827, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: m_LocalPosition.x

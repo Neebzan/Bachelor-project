@@ -73,7 +73,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     private void Connect () {
-        Client.instance.ConnectToServer(Client.instance.UserName);
+        Client.instance.ConnectToServer(Client.instance.Username);
     }
 
     public void NavigateTo (GameObject navigateToPanel) {

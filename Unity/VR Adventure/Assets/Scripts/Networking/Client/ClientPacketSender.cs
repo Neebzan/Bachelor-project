@@ -11,8 +11,8 @@ public static class ClientPacketSender
     {
         using(Packet _packet = new Packet((int)ClientPackets.WelcomeReceived))
         {
-            _packet.Write(Client.instance.id);
-            _packet.Write(Client.instance.UserName);
+            _packet.Write(Client.instance.ID);
+            _packet.Write(Client.instance.Username);
 
             SendTCPData(_packet);
         }
@@ -22,7 +22,7 @@ public static class ClientPacketSender
     {
         using (Packet _packet = new Packet((int)ClientPackets.UdpTestReceived))
         {
-            _packet.Write(Client.instance.id);
+            _packet.Write(Client.instance.ID);
             _packet.Write("Yo Server bruh, I got that UDP packet!");
 
             SendUDPData(_packet);
@@ -33,7 +33,7 @@ public static class ClientPacketSender
     {
         using (Packet _packet = new Packet((int)ClientPackets.PlayerMovement))
         {
-            _packet.Write(Client.instance.id);
+            _packet.Write(Client.instance.ID);
             //Head
             _packet.Write(headPosition);
             _packet.Write(headRotation);
@@ -78,7 +78,7 @@ public static class ClientPacketSender
     {
         using (Packet _packet = new Packet((int)ClientPackets.TimeSync))
         {
-            _packet.Write(Client.instance.id);
+            _packet.Write(Client.instance.ID);
             _packet.Write(currentTimestamp); //Send current local time stamp
 
             SendTCPData(_packet);

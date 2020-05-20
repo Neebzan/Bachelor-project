@@ -18,8 +18,9 @@ public class Client : MonoBehaviour {
 
     public string ip = "127.0.0.1";
     public int port = 27000;
-    public int id;
-    public string UserName = "NotSet";
+    public int ID;
+    public string Username = "NotSet";
+    public int Score;
 
     public TCP tcp;
     public UDP udp;
@@ -42,13 +43,22 @@ public class Client : MonoBehaviour {
             else {
                 return 0;
             }
-
         }
     }
-    public Queue<int> pingHistory = new Queue<int>();
+
+    private Queue<int> pingHistory = new Queue<int>();
+
+    public Queue<int> PingHistory {
+        get { return pingHistory; }
+        set {
+            pingHistory = value;
+            LatencyUpdated?.Invoke();
+        }
+    }
     public Stopwatch Timer = new Stopwatch();
 
     public event EventHandler<ClientConnectionEventArgs> ConnectedToServer;
+    public event Action LatencyUpdated;
 
     private void Awake () {
         if (instance == null)
@@ -71,7 +81,7 @@ public class Client : MonoBehaviour {
     }
 
     public void ConnectToServer (string _userName) {
-        UserName = _userName;
+        Username = _userName;
         tcp = new TCP();
         udp = new UDP(PacketHandlers.Client);
         tcp.Connect(ip, port, PacketHandlers.Client);
@@ -89,11 +99,11 @@ public class Client : MonoBehaviour {
             udp.Disconnect();
 
             foreach (ClientConnectedPlayer player in GameManager.instance.EmulatedPlayers.Values)
-                GameObject.Destroy(player.gameObject);            
+                GameObject.Destroy(player.gameObject);
             GameManager.instance.EmulatedPlayers.Clear();
 
             foreach (EmulatedFireball fireball in GameManager.instance.EmulatedFireballs.Values)
-                GameObject.Destroy(fireball.gameObject);            
+                GameObject.Destroy(fireball.gameObject);
             GameManager.instance.EmulatedFireballs.Clear();
 
             UnityEngine.Debug.Log("Disconnected from server.");

@@ -9,8 +9,10 @@ public enum Spell { None, Fireball, ForcePush, LargeFireball }
 
 public class Player : MonoBehaviour {
     public int ID;
-    public string UserName;
+    public string Username;
+    public int Score;
     public long LastUpdateTick = 0;
+
     public ServerPlayer vrPlayer = new ServerPlayer();
     public Vector3 position;
 
@@ -31,6 +33,10 @@ public class Player : MonoBehaviour {
 
     private void Awake () {
         BodyOffset = transform.position;
+    }
+
+    private void Start () {
+        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
     }
 
     public void SetHand (HandDataPacket packet, bool left = false) {
@@ -57,7 +63,7 @@ public class Player : MonoBehaviour {
     }
 
     internal void Initialize (int id, string userName) {
-        UserName = userName;
+        Username = userName;
         this.ID = id;
         vrPlayer.id = id;
     }
