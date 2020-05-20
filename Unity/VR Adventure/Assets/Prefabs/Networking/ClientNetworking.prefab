@@ -62,6 +62,7 @@ MonoBehaviour:
     type: 3}
   EmulatedFireballPrefab: {fileID: 4459125067082265348, guid: 1475a772fa4133a41896de23820d9bf1,
     type: 3}
+  ScoreboardUI: {fileID: 0}
 --- !u!114 &9183492938944514318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,6 +77,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ip: 127.0.0.1
   port: 27000
-  id: 0
-  UserName: NotSet
+  ID: 0
+  Username: Neebz
+  Score: 0
   isConnected: 0
+  Rest: {fileID: 0}

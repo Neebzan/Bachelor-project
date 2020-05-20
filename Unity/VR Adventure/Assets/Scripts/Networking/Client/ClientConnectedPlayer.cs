@@ -7,7 +7,17 @@ public class ClientConnectedPlayer : MonoBehaviour
 {
     public int ID;
     public string Username;
-    public int Ping;
+
+    private int ping;
+
+    public int Ping {
+        get { return ping; }
+        set { ping = value;
+            PlayerPing?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+
     public int Score;
 
     public EmulatedPlayer emulatedPlayer;
@@ -16,6 +26,7 @@ public class ClientConnectedPlayer : MonoBehaviour
     public long LastPlayerUpdateTick = 0;
 
     public event EventHandler PlayerTick;
+    public event EventHandler PlayerPing;
 
     public void Tick(Vector3 headPosition, Quaternion headRotation, HandDataPacket leftHandData, HandDataPacket rightHandData) {
         emulatedPlayer.EmulateHead(headPosition, headRotation);

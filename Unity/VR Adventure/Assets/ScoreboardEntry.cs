@@ -30,6 +30,8 @@ public class ScoreboardEntry : MonoBehaviour {
         }
     }
 
+
+
     private string username;
     public string Username {
         get { return username; }
@@ -40,16 +42,18 @@ public class ScoreboardEntry : MonoBehaviour {
     }
 
     public void OnConnectedPlayerTick (object sender, EventArgs e) {
-        Username = (sender as ClientConnectedPlayer).Username;
-        // Ping
-        // Score
+        //Username = (sender as ClientConnectedPlayer).Username;
+        Score = (sender as ClientConnectedPlayer).Score;
+    }
+    public void OnConnectedPlayerPing (object sender, EventArgs e) {
+        Ping = (sender as ClientConnectedPlayer).Ping;
     }
 
     public void OnClientLatencyUpdated () {
         Ping = Client.instance.Latency;
         Debug.Log("Ping!");
     }
-    public void OnPlayerTick (object sender, EventArgs e) {
+    public void OnClientTick (object sender, EventArgs e) {
         Username = (sender as Player).Username;
         Score = (sender as Player).Score;
     }

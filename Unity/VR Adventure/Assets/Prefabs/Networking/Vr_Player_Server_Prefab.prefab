@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 518492465}
   - component: {fileID: 518492466}
   m_Layer: 10
-  m_Name: head_mesh
+  m_Name: HeadCollider
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 196853419725563932}
   - component: {fileID: 5622013218160720596}
   m_Layer: 10
-  m_Name: PlayerBody
+  m_Name: BodyCollider
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,8 +228,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71e0db7cab0533a48841247d37dd6d75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  UserName: 
+  ID: 0
+  Username: 
+  Score: 0
   LastUpdateTick: 0
   position: {x: 0, y: 0, z: 0}
   Head: {fileID: 885056998}
