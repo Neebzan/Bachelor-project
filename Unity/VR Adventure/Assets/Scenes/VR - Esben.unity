@@ -934,6 +934,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreboardFrame
       objectReference: {fileID: 0}
+    - target: {fileID: 8957715863360412401, guid: 7146d8a44df32e54ba9d144f9c0289c4,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1197619319}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7146d8a44df32e54ba9d144f9c0289c4, type: 3}
 --- !u!4 &1563455011 stripped
