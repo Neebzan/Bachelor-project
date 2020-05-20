@@ -84,13 +84,13 @@ namespace GameLauncher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastSelectedVersion {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int LastSelectedBranch {
             get {
-                return ((string)(this["LastSelectedVersion"]));
+                return ((int)(this["LastSelectedBranch"]));
             }
             set {
-                this["LastSelectedVersion"] = value;
+                this["LastSelectedBranch"] = value;
             }
         }
         

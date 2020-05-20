@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace GameLauncher.ViewModels {
         #endregion
 
         #region Properties
-        private string _buttonText = "Fetching..";
+        private string _buttonText = "Loading..";
         public string ButtonText {
             get { return _buttonText; }
             set {
@@ -79,7 +80,7 @@ namespace GameLauncher.ViewModels {
             set {
                 _selectedInstall = value;
                 NotifyOfPropertyChange(() => SelectedInstall);
-                Settings.Default.LastSelectedVersion = _selectedInstall?.VersionBranchToString;
+                Settings.Default.LastSelectedBranch = _selectedInstall?.VersionBranch != null ? (int)_selectedInstall?.VersionBranch : 0;
                 Settings.Default.Save();
 
                 if (IsDownloading) {
@@ -158,7 +159,6 @@ namespace GameLauncher.ViewModels {
             if (Settings.Default.AutoLogin && !string.IsNullOrEmpty(Settings.Default.AccessToken)) {
                 IssueAutoLogin();
             }
-
         }
 
         /// <summary>
@@ -231,13 +231,12 @@ namespace GameLauncher.ViewModels {
             try {
                 available = new BindableCollection<InstallationDataModel>(PatchClient.CompleteCheck(paths.Cast<string>().ToArray()));
                 if (SelectedInstall == null) {
-                    if (!String.IsNullOrEmpty(Settings.Default.LastSelectedVersion)) {
-                        foreach (InstallationDataModel installation in available) {
-                            if (installation.VersionBranchToString == Settings.Default.LastSelectedVersion) {
-                                SelectedInstall = installation;
-                                break;
-                            }
+                    foreach (InstallationDataModel installation in available) {
+                        if (installation.VersionBranch == (VersionBranch)Settings.Default.LastSelectedBranch) {
+                            SelectedInstall = installation;
+                            break;
                         }
+
                     }
                     if (SelectedInstall == null)
                         SelectedInstall = available [ 0 ];
@@ -256,7 +255,27 @@ namespace GameLauncher.ViewModels {
                 IsDownloading = true;
                 SelectedInstall = UpdateState(SelectedInstall, InstallationStatus.IsInstalling);
                 DownloadProgressPercentage = 0.0f;
-                Task.Run(() => PatchClient.DownloadMissingFilesNew(SelectedInstall));
+                Task.Run(() => PatchClient.DownloadMissingFiles(SelectedInstall));
+            }
+        }
+
+        public void LaunchGame () {
+            if (SelectedInstall.Status == InstallationStatus.Verified) {
+                if (!string.IsNullOrEmpty(SelectedInstall.InstallPath)) {
+                    Process p = new Process();
+
+                    try {
+                        p.StartInfo = new ProcessStartInfo("WizardBattleClient.exe", $"-rt {Settings.Default.RefreshToken} -at {Settings.Default.AccessToken}");
+                        if (!p.Start())
+                            DisplayErrorMessage("Something went wrong, could not start the game");
+                        else
+                            Environment.Exit(0);
+                        p.Dispose();
+                    }
+                    catch (Exception e) {
+                        DisplayErrorMessage($"Error: {e.Message}");
+                    }
+                }
             }
         }
 
@@ -290,7 +309,7 @@ namespace GameLauncher.ViewModels {
             DownloadCompleted?.Invoke();
             DownloadFile = "";
             DownloadProgress = "";
-            DownloadProgressPercentage = 100.0f;
+            DownloadProgressPercentage = 0.0f;
 
         }
 

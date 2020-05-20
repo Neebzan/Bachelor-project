@@ -46,6 +46,7 @@ namespace GameLauncher.Views {
 
         private void OnDownloadCompleted () {
             Dispatcher.Invoke(() => {
+                progress_bar.NewValueGiven?.Invoke(this, new ProgressBarValueChangedEventArgs((float)progress_bar.Value, 0));
                 progress_bar.Visibility = Visibility.Hidden;
                 PlayInstall_Button.IsEnabled = true;
             });
@@ -64,7 +65,7 @@ namespace GameLauncher.Views {
                         winForms.DialogResult folderLocation = dialog.ShowDialog();
                         if (folderLocation == System.Windows.Forms.DialogResult.OK) {
                             string path = dialog.SelectedPath;
-                            path += "\\" + (ViewModel as MainViewModel).SelectedInstall.VersionName;
+                            path += "\\" + (ViewModel as MainViewModel).SelectedInstall.VersionBranchToString;
                             (ViewModel as MainViewModel).SelectedInstall.InstallPath = path;
                             (ViewModel as MainViewModel).AddPath(path);
                             InitiateDownload();
@@ -79,6 +80,9 @@ namespace GameLauncher.Views {
                 case InstallationStatus.IsInstalling:
                     break;
 
+                case InstallationStatus.Verified:
+                    (ViewModel as MainViewModel).LaunchGame();
+                    break;
                 default:
                     break;
             }

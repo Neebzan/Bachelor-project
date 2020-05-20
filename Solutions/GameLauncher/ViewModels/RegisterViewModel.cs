@@ -11,6 +11,7 @@ using GameLauncher.Views;
 using System.Threading;
 using System.Security;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace GameLauncher.ViewModels {
     class RegisterViewModel : Screen {
@@ -58,6 +59,8 @@ namespace GameLauncher.ViewModels {
 
             return false;
         }
+
+
 
 
 
