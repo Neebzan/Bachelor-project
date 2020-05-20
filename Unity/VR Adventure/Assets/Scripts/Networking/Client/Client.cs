@@ -31,7 +31,8 @@ public class Client : MonoBehaviour {
     }
 
     public event Action PlayerScoreUpdated;
-    public event Action LatencyUpdated;
+    public event Action PlayerLatencyUpdated;
+    public event EventHandler PlayerDisconnected;
 
 
     public TCP tcp;
@@ -74,17 +75,12 @@ public class Client : MonoBehaviour {
         ClientPacketHandler.OnClientConnectedToServer += OnClientConnectedToServer;
     }
 
-    private void Start () {
-        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
-    }
-
-
     public void Ping (long oldTimeStamp) {
         PingHistory.Enqueue((int)(Timer.ElapsedMilliseconds - oldTimeStamp));
         if (PingHistory.Count > 5)
             PingHistory.Dequeue();
 
-        LatencyUpdated?.Invoke();
+        PlayerLatencyUpdated?.Invoke();
     }
 
     private void OnClientConnectedToServer () {
@@ -95,6 +91,7 @@ public class Client : MonoBehaviour {
             Success = isConnected,
             Type = ClientConnectionEvent.Connect
         });
+        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
     }
 
     public void ConnectToServer (string _userName) {
@@ -129,6 +126,7 @@ public class Client : MonoBehaviour {
                 Success = !isConnected,
                 Type = ClientConnectionEvent.Disconnect
             });
+            PlayerDisconnected?.Invoke(this, EventArgs.Empty);
         }
     }
     private void OnApplicationQuit () {

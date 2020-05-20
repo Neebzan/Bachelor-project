@@ -28,7 +28,7 @@ public class ScoreboardEntry : MonoBehaviour {
             score = value;
             _scoreText.text = score.ToString();
         }
-    }       
+    }
 
 
     private string username;
@@ -44,8 +44,22 @@ public class ScoreboardEntry : MonoBehaviour {
 
 
 
-    public void OnConnectedPlayerDisconnected () {
-        GameObject.Destroy(this.gameObject);
+    public void OnPlayerDisconnected (object sender, EventArgs e) {
+        if (sender is ClientConnectedPlayer) {
+            ClientConnectedPlayer client = (sender as ClientConnectedPlayer);
+            client.PlayerDisconnected -= OnPlayerDisconnected;
+            client.PlayerPingUpdated -= OnConnectedPlayerPingUpdated;
+            client.PlayerScoreUpdated -= OnConnectedPlayerScoreUpdated;
+        }
+
+        else if (sender is Client) {
+            Client client = (sender as Client);
+            client.PlayerDisconnected -= OnPlayerDisconnected;
+            client.PlayerLatencyUpdated -= OnClientLatencyUpdated;
+            client.PlayerScoreUpdated -= OnClientScoreUpdated;
+        }
+        
+        Destroy(this.gameObject);
     }
 
 

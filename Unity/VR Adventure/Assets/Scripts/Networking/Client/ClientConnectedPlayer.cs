@@ -33,8 +33,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
     public event EventHandler PlayerTick;
     public event EventHandler PlayerPingUpdated;
     public event EventHandler PlayerScoreUpdated;
-
-    public event Action PlayerDisconnected;
+    public event EventHandler PlayerDisconnected;
 
     public void Tick (Vector3 headPosition, Quaternion headRotation, HandDataPacket leftHandData, HandDataPacket rightHandData) {
         emulatedPlayer.EmulateHead(headPosition, headRotation);
@@ -50,7 +49,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
     }
 
     public void HandleDisconnect () {
-        PlayerDisconnected?.Invoke();
+        PlayerDisconnected?.Invoke(this, EventArgs.Empty);
         GameObject.Destroy(this.gameObject);
     }
 }
