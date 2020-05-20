@@ -35,30 +35,22 @@ public class Client : MonoBehaviour {
     public int Latency {
         get {
             int lat = 0;
-            foreach (var item in pingHistory) {
+            foreach (var item in PingHistory) {
                 lat += item;
             }
-            if (pingHistory.Count > 0)
-                return lat / pingHistory.Count;
+            if (PingHistory.Count > 0)
+                return lat / PingHistory.Count;
             else {
                 return 0;
             }
         }
     }
 
-    private Queue<int> pingHistory = new Queue<int>();
+    public Queue<int> PingHistory = new Queue<int>();
 
-    public Queue<int> PingHistory {
-        get { return pingHistory; }
-        set {
-            pingHistory = value;
-            LatencyUpdated?.Invoke();
-        }
-    }
     public Stopwatch Timer = new Stopwatch();
 
     public event EventHandler<ClientConnectionEventArgs> ConnectedToServer;
-    public event Action LatencyUpdated;
 
     private void Awake () {
         if (instance == null)
@@ -68,6 +60,19 @@ public class Client : MonoBehaviour {
             Destroy(this);
         }
         ClientPacketHandler.OnClientConnectedToServer += OnClientConnectedToServer;
+    }
+
+    private void Start () {
+        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
+    }
+
+    public event Action LatencyUpdated;
+    public void Ping (long oldTimeStamp) {
+        PingHistory.Enqueue((int)(Timer.ElapsedMilliseconds - oldTimeStamp));
+        if (PingHistory.Count > 5)
+            PingHistory.Dequeue();
+
+        LatencyUpdated?.Invoke();
     }
 
     private void OnClientConnectedToServer () {

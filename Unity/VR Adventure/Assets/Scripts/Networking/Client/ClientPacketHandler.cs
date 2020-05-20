@@ -127,9 +127,9 @@ public static class ClientPacketHandler
         long oldTimeStamp = _packet.ReadLong();
         DateTime serverTime = new DateTime(_packet.ReadLong());
 
-        Client.instance.PingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
-        if (Client.instance.PingHistory.Count > 5)
-            Client.instance.PingHistory.Dequeue();
+        Client.instance.Ping(oldTimeStamp);
+
+
 
 
         //Read how many other players latency is included

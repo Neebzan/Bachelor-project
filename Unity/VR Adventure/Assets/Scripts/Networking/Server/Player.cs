@@ -35,9 +35,6 @@ public class Player : MonoBehaviour {
         BodyOffset = transform.position;
     }
 
-    private void Start () {
-        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
-    }
 
     public void SetHand (HandDataPacket packet, bool left = false) {
         if (left)

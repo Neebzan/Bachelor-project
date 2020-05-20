@@ -47,6 +47,7 @@ public class ScoreboardEntry : MonoBehaviour {
 
     public void OnClientLatencyUpdated () {
         Ping = Client.instance.Latency;
+        Debug.Log("Ping!");
     }
     public void OnPlayerTick (object sender, EventArgs e) {
         Username = (sender as Player).Username;
