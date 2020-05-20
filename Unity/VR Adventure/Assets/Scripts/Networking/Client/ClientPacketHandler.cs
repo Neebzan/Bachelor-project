@@ -128,6 +128,17 @@ public static class ClientPacketHandler
         Client.instance.pingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
         if (Client.instance.pingHistory.Count > 5)
             Client.instance.pingHistory.Dequeue();
+
+        //Read how many other players latency is included
+        int latencyCount = _packet.ReadInt();
+
+        for (int i = 0; i < latencyCount; i++)
+        {
+            int playerID = _packet.ReadInt();
+            if (GameManager.instance.EmulatedPlayers.ContainsKey(playerID))
+                GameManager.instance.EmulatedPlayers[playerID].Ping = _packet.ReadInt();
+        }
+
         //Client.instance.Latency = (int)RTT / 2;
 
         //Debug.Log($"Packet RTT/Latency: {Client.instance.Latency}ms");

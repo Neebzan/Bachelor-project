@@ -21,18 +21,19 @@ namespace DatabaseREST.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Matches>> Get()
-        {
-            return _context.Matches.OrderBy(u => u.Ended).Take(1000).ToList();
-        }
+        //[HttpGet]
+        //public ActionResult<IEnumerable<Matches>> Get()
+        //{
+        //    return _context.Matches.OrderBy(u => u.Ended).Take(1000).ToList();
+        //}
 
         [HttpGet]
-        [Route("{id}")]
-        public ActionResult<Matches> Get(string id)
+        public ActionResult<Matches> Get(int id)
         {
 
-            var match = _context.Matches.Find(id);
+            var match = _context.Matches
+                        .Include(p => p.PlayedMatch)
+                        .SingleOrDefault(x => x.MatchId == id);
             if (match == null)
                 return NotFound();
 
@@ -47,7 +48,7 @@ namespace DatabaseREST.Controllers
             {
                 try
                 {
-                    _context.Matches.Add(match);                        
+                    _context.Matches.Add(match);
                     _context.SaveChanges();
                 }
                 catch (DbUpdateException e)

@@ -63,23 +63,13 @@ public static class ClientPacketSender
         }
     }
 
-    //internal static void ShootTest(Vector3 shootDir)
-    //{
-    //    using (Packet _packet = new Packet((int)ClientPackets.ShootTest))
-    //    {
-    //        _packet.Write(Client.instance.id);
-    //        _packet.Write(shootDir);
-
-    //        SendTCPData(_packet);
-    //    }
-    //}
-
     public static void TimeSync(long currentTimestamp)
     {
         using (Packet _packet = new Packet((int)ClientPackets.TimeSync))
         {
             _packet.Write(Client.instance.id);
             _packet.Write(currentTimestamp); //Send current local time stamp
+            _packet.Write(Client.instance.Latency); //Send previously calculated latency
 
             SendTCPData(_packet);
         }

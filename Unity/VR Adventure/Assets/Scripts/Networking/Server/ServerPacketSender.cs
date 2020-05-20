@@ -50,7 +50,7 @@ public class ServerPacketSender
         foreach (var client in Server.clients.Values)
         {
             if (client.player != null)
-            {                
+            {
                 using (Packet _packet = new Packet((int)ServerPackets.PlayerPosition))
                 {
                     _packet.Write(client.player.vrPlayer.id);
@@ -229,6 +229,19 @@ public class ServerPacketSender
         {
             _packet.Write(clientTimeStamp);
             _packet.Write(serverTime);
+
+            lock (Server.clients)
+            {
+                _packet.Write(Server.clients.Count - 1); //Write how many client are currently connected, exluding self
+                foreach (var client in Server.clients.Values)
+                {
+                    if (client.id != id)
+                    {
+                        _packet.Write(client.id);
+                        _packet.Write(client.Latency);
+                    }
+                }
+            }
             //Console.WriteLine("Sending TimeSync packet to client: "+ id);
             SendTCPPacket(id, _packet);
         }

@@ -8,7 +8,7 @@ public class ScoreboardUI : MonoBehaviour {
     public GameObject ScoreboardEntryPanel;
     public GameObject ScoreboardEntryPrefab;
     public void AddScoreboardEntry (ClientConnectedPlayer player) {        
-        ScoreboardEntry scoreboardEntry = Instantiate(ScoreboardEntryPrefab, ScoreboardEntryPrefab.transform).GetComponent<ScoreboardEntry>();
+        ScoreboardEntry scoreboardEntry = Instantiate(ScoreboardEntryPrefab, ScoreboardEntryPanel.transform).GetComponent<ScoreboardEntry>();
         player.PlayerTick += scoreboardEntry.OnPlayerTick;
     }
 }
