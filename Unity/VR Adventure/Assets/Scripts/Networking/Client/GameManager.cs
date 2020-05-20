@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
         GameObject _player;
         _player = Instantiate(playerPrefab, _position, _rotation);
 
-        ClientConnectedPlayer clientConnectedPlayer = GetComponent<ClientConnectedPlayer>();
+        ClientConnectedPlayer clientConnectedPlayer = _player.GetComponent<ClientConnectedPlayer>();
         clientConnectedPlayer.Initialize(_id, _username);
 
         EmulatedPlayers.Add(_id, _player.GetComponent<ClientConnectedPlayer>());
