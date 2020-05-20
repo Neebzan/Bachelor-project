@@ -20,13 +20,13 @@ public class ServerPacketSender
         }
     }
 
-    public static void UdpTestMessage(int client)
-    {
-        using (Packet packet = new Packet((int)ServerPackets.UpdTestSent))
-        {
-            SendUDPPacket(client, packet);
-        }
-    }
+    //public static void UdpTestMessage(int client)
+    //{
+    //    using (Packet packet = new Packet((int)ServerPackets.UpdTestSent))
+    //    {
+    //        SendUDPPacket(client, packet);
+    //    }
+    //}
 
 
     //public static void PlayerPostion(Player player)

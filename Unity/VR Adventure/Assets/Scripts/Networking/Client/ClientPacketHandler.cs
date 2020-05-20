@@ -34,14 +34,14 @@ public static class ClientPacketHandler {
         GameManager.instance.SpawnPlayer(_id, _username, _position, Quaternion.identity);
     }
 
-    public static void UdpReceiveMessageTest (Packet _packet) {
-        long packetTick = _packet.ReadLong();
-        string msg = _packet.ReadString();
+    //public static void UdpReceiveMessageTest (Packet _packet) {
+    //    long packetTick = _packet.ReadLong();
+    //    string msg = _packet.ReadString();
 
-        ClientPacketSender.UdpTestReceived();
+    //    ClientPacketSender.UdpTestReceived();
 
-        Debug.Log(msg);
-    }
+    //    Debug.Log(msg);
+    //}
 
     public static void PlayerPosition (Packet _packet) {
         long packetTick = _packet.ReadLong();

@@ -77,7 +77,7 @@ public static class PacketHandlers {
     public static Dictionary<int, PacketHandler> Client = new Dictionary<int, PacketHandler>()
     {
         {(int)ServerPackets.Welcome, ClientPacketHandler.WelcomeMessage },
-        {(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
+        //{(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
         {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
         {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
         {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },

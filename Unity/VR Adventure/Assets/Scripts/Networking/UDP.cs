@@ -28,7 +28,7 @@ public class UDP
     {
         packetHandlers = _packetHandlers;
         endPoint = _endPoint;
-        ServerPacketSender.UdpTestMessage(id);
+        //ServerPacketSender.UdpTestMessage(id);
     }
 
     public void Connect(string _ip, int _port, int _localPort)
