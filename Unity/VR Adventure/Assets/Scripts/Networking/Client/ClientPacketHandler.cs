@@ -126,11 +126,21 @@ public static class ClientPacketHandler
 
         long oldTimeStamp = _packet.ReadLong();
         DateTime serverTime = new DateTime(_packet.ReadLong());
+
         Client.instance.PingHistory.Enqueue((int)(Client.instance.Timer.ElapsedMilliseconds - oldTimeStamp));
         if (Client.instance.PingHistory.Count > 5)
             Client.instance.PingHistory.Dequeue();
-        
 
+
+        //Read how many other players latency is included
+        int latencyCount = _packet.ReadInt();
+
+        for (int i = 0; i < latencyCount; i++)
+        {
+            int playerID = _packet.ReadInt();
+            if (GameManager.instance.EmulatedPlayers.ContainsKey(playerID))
+                GameManager.instance.EmulatedPlayers[playerID].Ping = _packet.ReadInt();
+        }
 
         //Client.instance.Latency = (int)RTT / 2;
 

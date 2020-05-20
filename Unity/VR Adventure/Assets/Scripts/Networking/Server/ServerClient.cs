@@ -15,6 +15,8 @@ public class ServerClient
 
     public bool isConnected = false;
 
+    public int Latency;
+
     public ServerClient(int _id)
     {
         id = _id;
