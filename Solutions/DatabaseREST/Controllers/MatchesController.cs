@@ -32,18 +32,18 @@ namespace DatabaseREST.Controllers
         public ActionResult<Matches> Get(string id)
         {
 
-            var abb = _context.Matches.Find(id);
-            if (abb == null)
+            var match = _context.Matches.Find(id);
+            if (match == null)
                 return NotFound();
 
-            return abb;
+            return match;
         }
 
         public ActionResult<Matches> Post(Matches match)
         {
-            //Check if account exists
-            var existingAbbId = _context.Accounts.Find(match.MatchId);
-            if (existingAbbId == null)
+            //Check if match exists
+            var existingMatch = _context.Matches.Find(match.MatchId);
+            if (existingMatch == null)
             {
                 try
                 {

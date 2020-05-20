@@ -29,7 +29,6 @@ namespace DatabaseREST.Controllers
 
         [HttpPost]
         [Route("verify")]
-        [Produces("application/json")]
         public ActionResult Verify([FromHeader]string token)
         {
             if (Token.VerifyToken(token))
