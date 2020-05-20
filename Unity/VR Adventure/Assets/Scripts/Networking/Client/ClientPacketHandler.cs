@@ -151,6 +151,15 @@ public static class ClientPacketHandler
 
     }
 
+    public static void PlayerScoreUpdated(Packet _packet) {
+        int playerID = _packet.ReadInt();
+        int newScore = _packet.ReadInt();
+
+       if(GameManager.instance.EmulatedPlayers.ContainsKey(playerID)) {
+            GameManager.instance.EmulatedPlayers [ playerID ].Score = newScore;
+        }
+    }
+
     internal static void DespawnFireball(Packet _packet)
     {
         int id = _packet.ReadInt();

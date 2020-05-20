@@ -3539,6 +3539,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
+        type: 3}
+      propertyPath: ip
+      value: 212.10.51.254
+      objectReference: {fileID: 0}
     - target: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: m_Name

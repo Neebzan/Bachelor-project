@@ -103,15 +103,12 @@ public class Fireball : MonoBehaviour {
                     }
                 }
                 else if (other.tag == "Player") {
-                    Console.WriteLine("Hit player");
                     Player hitPlayer = other.transform.root.gameObject.GetComponent<Player>();
                     if (hitPlayer.ID != this.PlayerID) {
-                        Console.WriteLine("Player ID: " + hitPlayer.ID);
-                        Console.WriteLine("Fireball ID: " + this.PlayerID);
                         destroy = true;
 
                         // If the player who cast the fireball exists on the server
-                        if (Server.clients.ContainsKey(this.ID)) {
+                        if (Server.clients.ContainsKey(this.PlayerID)) {
                             if (other.gameObject.name == "HeadCollider") {
                                 // Hit head
                                 Hit(hitPlayer, true);
@@ -133,10 +130,12 @@ public class Fireball : MonoBehaviour {
     }
 
     private void Hit (Player hitPlayer, bool head) {
-        Server.clients [ this.ID ].player.Score += head ? 3 : 1;
+        Server.clients [ this.PlayerID ].player.Score += head ? 3 : 1;
 
-        if (Server.clients.ContainsKey(hitPlayer.ID))
-            Console.WriteLine($"Player {Server.clients [ this.ID ].player.Username} Fireball → {hitPlayer.Username}'s  {(head ? "head" : "body")}");   
+        if (Server.clients.ContainsKey(hitPlayer.ID)) {
+            Console.WriteLine($"Player {Server.clients [ this.PlayerID ].player.Username} hit {hitPlayer.Username} in the {(head ? "head" : "body")} with a fireball");
+            ServerPacketSender.PlayerScoreUpdated(this.PlayerID, Server.clients [ this.PlayerID ].player.Score);
+        }
     }
 
     public void Despawn (bool explode) {

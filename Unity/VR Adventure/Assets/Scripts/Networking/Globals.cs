@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void PacketHandler(Packet _packet);
+public delegate void PacketHandler (Packet _packet);
 
 public enum HandState {
     Default = 0,
     Fire = 1,
     Force = 2
 }
-public enum ServerPackets
-{
+public enum ServerPackets {
     Welcome,
 
     UpdTestSent,
@@ -30,6 +29,8 @@ public enum ServerPackets
     ProjectilePosition,
     DespawnProjectile,
 
+    PlayerScoreUpdated,
+
     TimeSync,
 
     SpawnFireball,
@@ -38,8 +39,7 @@ public enum ServerPackets
     DespawnFireball
 }
 
-public enum ClientPackets
-{
+public enum ClientPackets {
     WelcomeReceived,
 
     PlayerMovement,
@@ -56,8 +56,7 @@ public enum ClientPackets
     TimeSync
 }
 
-public static class PacketHandlers
-{
+public static class PacketHandlers {
     public static Dictionary<int, PacketHandler> Server = new Dictionary<int, PacketHandler>()
         {
             {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
@@ -76,29 +75,16 @@ public static class PacketHandlers
         };
 
     public static Dictionary<int, PacketHandler> Client = new Dictionary<int, PacketHandler>()
-        {
-            {(int)ServerPackets.Welcome, ClientPacketHandler.WelcomeMessage },
-
-            {(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
-
-            {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
-
-            {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
-            {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
-
-            //{(int)ServerPackets.VRRightHandData, ClientPacketHandler.VRRightHandData },
-            //{(int)ServerPackets.VRLeftHandData, ClientPacketHandler.VRLeftHandData },
-            //{(int)ServerPackets.VRHeadData, ClientPacketHandler.VRHeadData },
-
-            //{(int)ServerPackets.SpawnProjectile, ClientPacketHandler.SpawnProjectile },
-            //{(int)ServerPackets.ProjectilePosition, ClientPacketHandler.ProjectilePosition },
-            //{(int)ServerPackets.DespawnProjectile, ClientPacketHandler.DespawnProjectile },
-
-            {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
-            //{(int)ServerPackets.UpdateFireball, ClientPacketHandler.UpdateFireball},
-            {(int)ServerPackets.UpdateFireballs, ClientPacketHandler.UpdateFireballs},
-            {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
-
-            {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
+    {
+        {(int)ServerPackets.Welcome, ClientPacketHandler.WelcomeMessage },
+        {(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
+        {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
+        {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
+        {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
+        {(int)ServerPackets.SpawnFireball, ClientPacketHandler.SpawnFireball},
+        {(int)ServerPackets.UpdateFireballs, ClientPacketHandler.UpdateFireballs},
+        {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
+        {(int)ServerPackets.PlayerScoreUpdated, ClientPacketHandler.PlayerScoreUpdated},
+        {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
         };
 }

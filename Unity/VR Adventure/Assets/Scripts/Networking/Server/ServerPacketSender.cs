@@ -153,7 +153,14 @@ public class ServerPacketSender
     }
 
 
+    public static void PlayerScoreUpdated (int playerID, int newScore) {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerScoreUpdated)) {
+            _packet.Write(playerID);
+            _packet.Write(newScore);
 
+            SendTCPPacketAll(_packet);
+        }
+    }
 
     internal static void DespawnFireball(int id, bool explode)
     {

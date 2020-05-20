@@ -30,6 +30,7 @@ public class ScoreboardEntry : MonoBehaviour {
         }
     }
 
+        
 
 
     private string username;
@@ -41,17 +42,17 @@ public class ScoreboardEntry : MonoBehaviour {
         }
     }
 
-    public void OnConnectedPlayerTick (object sender, EventArgs e) {
-        //Username = (sender as ClientConnectedPlayer).Username;
+    // If the player is remote
+    public void OnConnectedPlayerScore (object sender, EventArgs e) {
         Score = (sender as ClientConnectedPlayer).Score;
     }
     public void OnConnectedPlayerPing (object sender, EventArgs e) {
         Ping = (sender as ClientConnectedPlayer).Ping;
     }
 
+    // If the player  local
     public void OnClientLatencyUpdated () {
         Ping = Client.instance.Latency;
-        Debug.Log("Ping!");
     }
     public void OnClientTick (object sender, EventArgs e) {
         Username = (sender as Player).Username;
