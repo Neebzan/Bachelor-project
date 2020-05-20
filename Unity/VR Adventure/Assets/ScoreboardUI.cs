@@ -15,6 +15,7 @@ public class ScoreboardUI : MonoBehaviour {
     public void AddScoreboardEntry (Client client) {
         ScoreboardEntry scoreboardEntry = Instantiate(ScoreboardEntryPrefab, ScoreboardEntryPanel.transform).GetComponent<ScoreboardEntry>();
         client.LatencyUpdated += scoreboardEntry.OnClientLatencyUpdated;
+        scoreboardEntry.Username = client.Username;
         //player.PlayerTick += scoreboardEntry.OnPlayerTick;
     }
 }

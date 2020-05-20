@@ -3544,6 +3544,11 @@ PrefabInstance:
       propertyPath: UserName
       value: Neebz
       objectReference: {fileID: 0}
+    - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
+        type: 3}
+      propertyPath: Username
+      value: Bleh
+      objectReference: {fileID: 0}
     - target: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: m_Name
