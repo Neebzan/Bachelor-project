@@ -40,6 +40,7 @@ namespace DatabaseREST.Controllers
             return match;
         }
 
+        [HttpPost]
         public ActionResult<Matches> Post(Matches match)
         {
             //Check if match exists

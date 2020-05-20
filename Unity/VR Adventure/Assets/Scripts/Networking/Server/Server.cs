@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 
-public class Server {
+public static class Server {
     public static int MaxPlayers { get; private set; }
     public static int Port { get; private set; }
 
@@ -18,8 +18,7 @@ public class Server {
 
     public static void Start (int _maxPlayers, int _port) {
         MaxPlayers = _maxPlayers;
-        Port = _port;
-        //InitServer();
+        Port = _port;           
 
         tcpListener = new TcpListener(IPAddress.Any, Port);
         tcpListener.Start();
