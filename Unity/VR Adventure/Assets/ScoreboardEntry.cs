@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -30,10 +31,16 @@ public class ScoreboardEntry : MonoBehaviour
 	}
 
 	private string username;
-	public string Username {
+    public string Username {
 		get { return username; }
 		set { username = value;
 			_usernameText.text = username;
 		}
+	}
+
+	internal void OnPlayerTick (object sender, EventArgs e) {
+		Username = (sender as ClientConnectedPlayer).Username;
+		// Ping
+		// Score
 	}
 }

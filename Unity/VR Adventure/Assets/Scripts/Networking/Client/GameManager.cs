@@ -6,12 +6,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
-    public Dictionary<int, PlayerManager> EmulatedPlayers = new Dictionary<int, PlayerManager>();
+    public Dictionary<int, ClientConnectedPlayer> EmulatedPlayers = new Dictionary<int, ClientConnectedPlayer>();
     public Dictionary<int, EmulatedFireball> EmulatedFireballs = new Dictionary<int, EmulatedFireball>();
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject EmulatedFireballPrefab;
+
+    public ScoreboardUI ScoreboardUI;
 
     private void Awake () {
         if (instance == null)
@@ -25,9 +27,13 @@ public class GameManager : MonoBehaviour {
     public void SpawnPlayer (int _id, string _username, Vector3 _position, Quaternion _rotation) {
         GameObject _player;
         _player = Instantiate(playerPrefab, _position, _rotation);
-        _player.GetComponent<PlayerManager>().Initialize(_id, _username);
-        EmulatedPlayers.Add(_id, _player.GetComponent<PlayerManager>());
 
+        ClientConnectedPlayer clientConnectedPlayer = GetComponent<ClientConnectedPlayer>();
+        clientConnectedPlayer.Initialize(_id, _username);
+
+        EmulatedPlayers.Add(_id, _player.GetComponent<ClientConnectedPlayer>());
+
+        ScoreboardUI.AddScoreboardEntry(clientConnectedPlayer);
     }
 
     public void SpawnEmulatedFireball (int id, Vector3 position, float size) {

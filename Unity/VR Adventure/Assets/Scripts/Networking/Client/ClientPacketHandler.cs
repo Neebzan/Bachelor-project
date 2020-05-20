@@ -55,13 +55,13 @@ public static class ClientPacketHandler
             if (GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick < packetTick)
             {
                 GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick = packetTick;
+
                 //Head
                 Vector3 pos = _packet.ReadVector3();
                 Quaternion rot = _packet.ReadQuaternion();
 
                 //Left hand
-                HandDataPacket leftHand = new HandDataPacket()
-                {
+                HandDataPacket leftHand = new HandDataPacket() {
                     HandPosition = _packet.ReadVector3(),
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
@@ -71,8 +71,7 @@ public static class ClientPacketHandler
                 };
 
                 //Right hand
-                HandDataPacket rightHand = new HandDataPacket()
-                {
+                HandDataPacket rightHand = new HandDataPacket() {
                     HandPosition = _packet.ReadVector3(),
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
@@ -81,9 +80,7 @@ public static class ClientPacketHandler
                     StatePower = _packet.ReadFloat(),
                 };
 
-                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHead(pos, rot);
-                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.LeftHand, leftHand);
-                GameManager.instance.EmulatedPlayers[id].emulatedPlayer.EmulateHand(GameManager.instance.EmulatedPlayers[id].emulatedPlayer.RightHand, rightHand);
+                GameManager.instance.EmulatedPlayers [ id ].Tick(pos, rot, leftHand, rightHand);
             }
     }
 
@@ -92,7 +89,7 @@ public static class ClientPacketHandler
         int _id = _packet.ReadInt();
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            PlayerManager player;
+            ClientConnectedPlayer player;
             if (GameManager.instance.EmulatedPlayers.TryGetValue(_id, out player))
             {
                 UnityEngine.Object.Destroy(player.gameObject);

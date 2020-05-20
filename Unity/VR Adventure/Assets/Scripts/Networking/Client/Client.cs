@@ -83,7 +83,7 @@ public class Client : MonoBehaviour {
             tcp.Disconnect();
             udp.Disconnect();
 
-            foreach (PlayerManager player in GameManager.instance.EmulatedPlayers.Values)
+            foreach (ClientConnectedPlayer player in GameManager.instance.EmulatedPlayers.Values)
                 GameObject.Destroy(player.gameObject);            
             GameManager.instance.EmulatedPlayers.Clear();
 
