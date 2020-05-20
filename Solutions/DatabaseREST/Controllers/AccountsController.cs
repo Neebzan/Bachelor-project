@@ -167,14 +167,5 @@ namespace DatabaseREST.Controllers
             }
             return BadRequest();
         }
-
-        //[HttpGet]
-        //public ActionResult<IEnumerable<string>> GetAccount()
-        //{
-        //    return new List<string>()
-        //    {
-        //        "This", "is", "some", "database"
-        //    };
-        //}
     }
 }

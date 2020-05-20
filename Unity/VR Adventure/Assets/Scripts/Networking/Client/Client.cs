@@ -26,6 +26,11 @@ public class Client : MonoBehaviour {
 
     public bool isConnected = false;
 
+    [HideInInspector]
+    public Players PlayerInfo;
+    [HideInInspector]
+    public RESTClient Rest = new RESTClient();
+
     public int Latency {
         get {
             int lat = 0;

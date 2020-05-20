@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DatabaseREST.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +16,9 @@ public class RESTClient : MonoBehaviour
     private readonly string _baseUrl = "http://212.10.51.254:30830/api/";
 
     public bool Verified = false;
-    public event Action TokenVerificationDone;
+    public event Action OnTokenVerificationDone;
+    public event Action OnNewAccessTokenFailed;
+
 
     private void Awake()
     {
@@ -36,13 +40,13 @@ public class RESTClient : MonoBehaviour
 
     private void VerifyCallback(bool verified)
     {
-        if(verified)
+        if (verified)
         {
             JwtSecurityToken token = new JwtSecurityToken(accessToken);
             Client.instance.UserName = token.Subject;
         }
         Verified = verified;
-        TokenVerificationDone?.Invoke();
+        OnTokenVerificationDone?.Invoke();
     }
 
     public IEnumerator VerifyToken(string token, Action<bool> callback)
@@ -59,13 +63,75 @@ public class RESTClient : MonoBehaviour
                 Debug.Log(webRequest.error);
                 callback(false);
             }
+            if (webRequest.isDone)
+            {
+                if (webRequest.responseCode == 200)
+                    callback(true);
+                else
+                    callback(false);
+            }
+        }
+        callback(false);
+    }
 
-            if (webRequest.responseCode == 200)
-                callback(true);
-            else
-                callback(false);
+    public IEnumerator RequestAccessToken(IEnumerator retryCallback = null)
+    {
+        string url = _baseUrl + "token";
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(url, ""))
+        {
+            webRequest.SetRequestHeader("token", refreshToken);
+
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+
+            if (webRequest.isDone)
+            {
+                if (webRequest.responseCode == 200)
+                {
+                    string json = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
+                    TokenModel tokens = JsonConvert.DeserializeObject<TokenModel>(json);
+                    accessToken = tokens.AccessToken;
+                    if (retryCallback != null)
+                        yield return retryCallback;
+                }
+                else
+                    OnNewAccessTokenFailed?.Invoke();
+            }
         }
     }
 
+    public IEnumerator GetPlayerInfo()
+    {
+        string url = _baseUrl + "players";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        {
+            webRequest.SetRequestHeader("token", accessToken);
+
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+
+            if (webRequest.isDone)
+            {
+                if (webRequest.responseCode == 200)
+                {
+                    string json = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
+                    Players player = JsonConvert.DeserializeObject<Players>(json);
+                    Client.instance.PlayerInfo = player;
+                }
+                else if(webRequest.responseCode == 401)
+                {
+                    yield return RequestAccessToken(GetPlayerInfo());
+                }
+            }
+        }
+    }
 
 }

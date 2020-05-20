@@ -382,7 +382,7 @@ namespace DatabaseREST.Models
                 entity.HasKey(e => e.Secret)
                     .HasName("PRIMARY");
 
-                entity.ToTable("servers");
+                entity.ToTable("Servers");
 
                 entity.Property(e => e.Secret)
                     .HasColumnName("secret")
