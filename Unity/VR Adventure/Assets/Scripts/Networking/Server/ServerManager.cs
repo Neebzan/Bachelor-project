@@ -13,6 +13,8 @@ public class ServerManager : MonoBehaviour
 
     public Dictionary<int, Fireball> Fireballs = new Dictionary<int, Fireball>();
 
+    public RESTServer REST;
+
     private void Awake()
     {
         if (instance == null)
@@ -29,6 +31,7 @@ public class ServerManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
+        REST.GetServerToken();
         Server.Start(10, 27000);
     }
 

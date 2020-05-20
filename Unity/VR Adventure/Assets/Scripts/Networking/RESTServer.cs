@@ -14,7 +14,11 @@ public class RESTServer : MonoBehaviour
 
     public event Action<bool> OnGetServerTokenDone;
 
-    public IEnumerator GetServerToken()
+    public void GetServerToken()
+    {
+        StartCoroutine(StartGetServerToken());
+    }
+    private IEnumerator StartGetServerToken()
     {
         string url = _baseUrl + "token/server";
 
@@ -34,9 +38,13 @@ public class RESTServer : MonoBehaviour
                 {
                     serverToken = webRequest.downloadHandler.text;
                     OnGetServerTokenDone?.Invoke(true);
+                    Console.WriteLine("Server token successfully received!");
                 }
                 else
+                {
                     OnGetServerTokenDone?.Invoke(false);
+                    Console.WriteLine("Server token could NOT be received!");
+                }
             }
         }
     }
