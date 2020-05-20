@@ -10,13 +10,14 @@ public class ScoreboardUI : MonoBehaviour {
     public void AddScoreboardEntry (ClientConnectedPlayer player) {        
         ScoreboardEntry scoreboardEntry = Instantiate(ScoreboardEntryPrefab, ScoreboardEntryPanel.transform).GetComponent<ScoreboardEntry>();
         scoreboardEntry.Username = player.Username;
-        player.PlayerPing += scoreboardEntry.OnConnectedPlayerPing;
-        player.PlayerScore += scoreboardEntry.OnConnectedPlayerScore;
+        player.PlayerPingUpdated += scoreboardEntry.OnConnectedPlayerPingUpdated;
+        player.PlayerScoreUpdated += scoreboardEntry.OnConnectedPlayerScoreUpdated;
     }
     public void AddScoreboardEntry (Client client) {
         ScoreboardEntry scoreboardEntry = Instantiate(ScoreboardEntryPrefab, ScoreboardEntryPanel.transform).GetComponent<ScoreboardEntry>();
-        client.LatencyUpdated += scoreboardEntry.OnClientLatencyUpdated;
         scoreboardEntry.Username = client.Username;
+        client.LatencyUpdated += scoreboardEntry.OnClientLatencyUpdated;
+        client.PlayerScoreUpdated += scoreboardEntry.OnClientScoreUpdated;
     }
 }
 

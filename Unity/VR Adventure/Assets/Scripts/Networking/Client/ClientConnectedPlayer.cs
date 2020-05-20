@@ -13,7 +13,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
         get { return ping; }
         set {
             ping = value;
-            PlayerPing?.Invoke(this, EventArgs.Empty);
+            PlayerPingUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -24,7 +24,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
         get { return score; }
         set {
             score = value;
-            PlayerScore.Invoke(this, EventArgs.Empty);
+            PlayerScoreUpdated.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -34,8 +34,8 @@ public class ClientConnectedPlayer : MonoBehaviour {
     public long LastPlayerUpdateTick = 0;
 
     public event EventHandler PlayerTick;
-    public event EventHandler PlayerPing;
-    public event EventHandler PlayerScore;
+    public event EventHandler PlayerPingUpdated;
+    public event EventHandler PlayerScoreUpdated;
 
     public void Tick (Vector3 headPosition, Quaternion headRotation, HandDataPacket leftHandData, HandDataPacket rightHandData) {
         emulatedPlayer.EmulateHead(headPosition, headRotation);

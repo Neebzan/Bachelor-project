@@ -43,10 +43,10 @@ public class ScoreboardEntry : MonoBehaviour {
     }
 
     // If the player is remote
-    public void OnConnectedPlayerScore (object sender, EventArgs e) {
+    public void OnConnectedPlayerScoreUpdated (object sender, EventArgs e) {
         Score = (sender as ClientConnectedPlayer).Score;
     }
-    public void OnConnectedPlayerPing (object sender, EventArgs e) {
+    public void OnConnectedPlayerPingUpdated (object sender, EventArgs e) {
         Ping = (sender as ClientConnectedPlayer).Ping;
     }
 
@@ -54,8 +54,7 @@ public class ScoreboardEntry : MonoBehaviour {
     public void OnClientLatencyUpdated () {
         Ping = Client.instance.Latency;
     }
-    public void OnClientTick (object sender, EventArgs e) {
-        Username = (sender as Player).Username;
-        Score = (sender as Player).Score;
+    public void OnClientScoreUpdated () {
+        Score = Client.instance.Score;
     }
 }

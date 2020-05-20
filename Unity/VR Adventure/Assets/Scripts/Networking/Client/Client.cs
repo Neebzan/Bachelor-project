@@ -20,7 +20,19 @@ public class Client : MonoBehaviour {
     public int port = 27000;
     public int ID;
     public string Username = "NotSet";
-    public int Score;
+    private int score;
+
+    public int Score {
+        get { return score; }
+        set {
+            score = value;
+            PlayerScoreUpdated?.Invoke();
+        }
+    }
+
+    public event Action PlayerScoreUpdated;
+    public event Action LatencyUpdated;
+
 
     public TCP tcp;
     public UDP udp;
@@ -66,7 +78,7 @@ public class Client : MonoBehaviour {
         GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
     }
 
-    public event Action LatencyUpdated;
+
     public void Ping (long oldTimeStamp) {
         PingHistory.Enqueue((int)(Timer.ElapsedMilliseconds - oldTimeStamp));
         if (PingHistory.Count > 5)
