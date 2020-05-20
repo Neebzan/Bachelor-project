@@ -156,7 +156,7 @@ namespace DatabaseREST
                     tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
                     return false;
                 }
@@ -183,7 +183,7 @@ namespace DatabaseREST
                     tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
                     return false;
                 }
