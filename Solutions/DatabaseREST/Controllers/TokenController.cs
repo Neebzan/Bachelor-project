@@ -25,10 +25,18 @@ namespace DatabaseREST.Controllers
         {
             _context = context;
             _contextRead = contextRead;
-
         }
 
+        [HttpPost]
+        [Route("verify")]
+        [Produces("application/json")]
+        public ActionResult Verify([FromHeader]string token)
+        {
+            if (Token.VerifyToken(token))
+                return Ok();
 
+            return Unauthorized();
+        }
 
         [HttpPost]
         [Produces("application/json")]
