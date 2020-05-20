@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public static class ClientPacketHandler
-{
+public static class ClientPacketHandler {
     public static event Action OnClientConnectedToServer;
 
 
-    public static void WelcomeMessage(Packet packet)
-    {
+    public static void WelcomeMessage (Packet packet) {
         string msg = packet.ReadString();
         int id = packet.ReadInt();
 
@@ -26,8 +24,7 @@ public static class ClientPacketHandler
         OnClientConnectedToServer?.Invoke();
     }
 
-    public static void SpawnPlayer(Packet packet)
-    {
+    public static void SpawnPlayer (Packet packet) {
         Debug.Log("Attempting to spawn player!");
 
         int _id = packet.ReadInt();
@@ -37,8 +34,7 @@ public static class ClientPacketHandler
         GameManager.instance.SpawnPlayer(_id, _username, _position, Quaternion.identity);
     }
 
-    public static void UdpReceiveMessageTest(Packet _packet)
-    {
+    public static void UdpReceiveMessageTest (Packet _packet) {
         long packetTick = _packet.ReadLong();
         string msg = _packet.ReadString();
 
@@ -47,15 +43,13 @@ public static class ClientPacketHandler
         Debug.Log(msg);
     }
 
-    public static void PlayerPosition(Packet _packet)
-    {
+    public static void PlayerPosition (Packet _packet) {
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
         if (GameManager.instance.EmulatedPlayers.ContainsKey(id))
-            if (GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick < packetTick)
-            {
-                GameManager.instance.EmulatedPlayers[id].LastPlayerUpdateTick = packetTick;
+            if (GameManager.instance.EmulatedPlayers [ id ].LastPlayerUpdateTick < packetTick) {
+                GameManager.instance.EmulatedPlayers [ id ].LastPlayerUpdateTick = packetTick;
 
                 //Head
                 Vector3 pos = _packet.ReadVector3();
@@ -85,14 +79,11 @@ public static class ClientPacketHandler
             }
     }
 
-    public static void PlayerDisconnected(Packet _packet)
-    {
+    public static void PlayerDisconnected (Packet _packet) {
         int _id = _packet.ReadInt();
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
+        ThreadManager.ExecuteOnMainThread(() => {
             ClientConnectedPlayer player;
-            if (GameManager.instance.EmulatedPlayers.TryGetValue(_id, out player))
-            {
+            if (GameManager.instance.EmulatedPlayers.TryGetValue(_id, out player)) {
                 UnityEngine.Object.Destroy(player.gameObject);
                 GameManager.instance.EmulatedPlayers.Remove(_id);
             }
@@ -120,8 +111,7 @@ public static class ClientPacketHandler
     //        }
     //}
 
-    internal static void TimeSync(Packet _packet)
-    {
+    internal static void TimeSync (Packet _packet) {
         //https://docs.gamesparks.com/tutorials/real-time-services/clock-synchronization-and-network-programming.html
 
         long oldTimeStamp = _packet.ReadLong();
@@ -135,11 +125,10 @@ public static class ClientPacketHandler
         //Read how many other players latency is included
         int latencyCount = _packet.ReadInt();
 
-        for (int i = 0; i < latencyCount; i++)
-        {
+        for (int i = 0; i < latencyCount; i++) {
             int playerID = _packet.ReadInt();
             if (GameManager.instance.EmulatedPlayers.ContainsKey(playerID))
-                GameManager.instance.EmulatedPlayers[playerID].Ping = _packet.ReadInt();
+                GameManager.instance.EmulatedPlayers [ playerID ].Ping = _packet.ReadInt();
         }
 
         //Client.instance.Latency = (int)RTT / 2;
@@ -151,76 +140,66 @@ public static class ClientPacketHandler
 
     }
 
-    public static void PlayerScoreUpdated(Packet _packet) {
+    public static void PlayerScoreUpdated (Packet _packet) {
         int playerID = _packet.ReadInt();
         int newScore = _packet.ReadInt();
 
-       if(GameManager.instance.EmulatedPlayers.ContainsKey(playerID)) {
+        if (GameManager.instance.EmulatedPlayers.ContainsKey(playerID)) {
             GameManager.instance.EmulatedPlayers [ playerID ].Score = newScore;
+        }
+        else if (Client.instance.ID == playerID) {
+            Client.instance.Score = newScore;
         }
     }
 
-    internal static void DespawnFireball(Packet _packet)
-    {
+    internal static void DespawnFireball (Packet _packet) {
         int id = _packet.ReadInt();
         bool explode = _packet.ReadBool();
 
-        ThreadManager.ExecuteOnMainThread(() =>
-        {
-            if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
-            {
+        ThreadManager.ExecuteOnMainThread(() => {
+            if (GameManager.instance.EmulatedFireballs.ContainsKey(id)) {
                 lock (GameManager.instance.EmulatedFireballs)
-                    GameManager.instance.EmulatedFireballs[id].Despawn(explode);
+                    GameManager.instance.EmulatedFireballs [ id ].Despawn(explode);
             }
         });
 
     }
 
-    internal static void UpdateFireball(Packet _packet)
-    {
+    internal static void UpdateFireball (Packet _packet) {
         int id = _packet.ReadInt();
         Vector3 position = _packet.ReadVector3();
         float size = _packet.ReadFloat();
 
         lock (GameManager.instance.EmulatedFireballs)
-            if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
-            {
-                try
-                {
-                    GameManager.instance.EmulatedFireballs[id].Emulate(position, size);
+            if (GameManager.instance.EmulatedFireballs.ContainsKey(id)) {
+                try {
+                    GameManager.instance.EmulatedFireballs [ id ].Emulate(position, size);
                 }
-                catch
-                {
+                catch {
                     Debug.Log("whaa");
                 }
             }
     }
 
-    public static void UpdateFireballs(Packet _packet)
-    {
+    public static void UpdateFireballs (Packet _packet) {
         long packetTick = _packet.ReadLong();
 
         int fireballCount = _packet.ReadInt();
-        for (int i = 0; i < fireballCount; i++)
-        {
+        for (int i = 0; i < fireballCount; i++) {
             int id = _packet.ReadInt();
 
             lock (GameManager.instance.EmulatedFireballs)
-                if (GameManager.instance.EmulatedFireballs.ContainsKey(id))
-                {
-                    if (GameManager.instance.EmulatedFireballs[id]._lastUpdateTick < packetTick)
-                    {
-                        GameManager.instance.EmulatedFireballs[id]._lastUpdateTick = packetTick;
+                if (GameManager.instance.EmulatedFireballs.ContainsKey(id)) {
+                    if (GameManager.instance.EmulatedFireballs [ id ]._lastUpdateTick < packetTick) {
+                        GameManager.instance.EmulatedFireballs [ id ]._lastUpdateTick = packetTick;
 
                         Vector3 position = _packet.ReadVector3();
                         float size = _packet.ReadFloat();
 
-                        try
-                        {
-                            GameManager.instance.EmulatedFireballs[id].Emulate(position, size);
+                        try {
+                            GameManager.instance.EmulatedFireballs [ id ].Emulate(position, size);
                         }
-                        catch
-                        {
+                        catch {
                             Debug.Log("whaa");
                         }
                     }
@@ -229,8 +208,7 @@ public static class ClientPacketHandler
 
     }
 
-    internal static void SpawnFireball(Packet _packet)
-    {
+    internal static void SpawnFireball (Packet _packet) {
         int id = _packet.ReadInt();
         Vector3 position = _packet.ReadVector3();
         float size = _packet.ReadFloat();
