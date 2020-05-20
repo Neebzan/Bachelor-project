@@ -8,8 +8,6 @@ public class ServerPacketHandler {
         int _clientId = _packet.ReadInt();
         string _username = _packet.ReadString();
 
-        System.Console.WriteLine($"Welcome message received from client: {_username}");
-
         //Update corresponding player information
         //Server.clients[_clientId].player.UserName = _username;
 
@@ -89,7 +87,6 @@ public class ServerPacketHandler {
         int clientLatency = _packet.ReadInt();
         //save of the client
         Server.clients[id].Latency = clientLatency;
-        //Console.WriteLine($"TimeSync Received! From id:{id}");
         ServerPacketSender.TimeSync(id, clientTimeStamp, DateTime.UtcNow.Ticks);
     }
 
@@ -138,7 +135,5 @@ public class ServerPacketHandler {
         long packetTick = packet.ReadLong();
         int _id = packet.ReadInt();
         string _msg = packet.ReadString();
-
-        System.Console.WriteLine($"Udp message received: {_msg} from client: {_id}");
     }
 }

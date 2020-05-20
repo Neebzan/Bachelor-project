@@ -18,18 +18,14 @@ public class ServerPacketSender
 
             SendTCPPacket(client, packet);
         }
-        Console.WriteLine($"Welcome message sent to client {client}");
     }
 
     public static void UdpTestMessage(int client)
     {
         using (Packet packet = new Packet((int)ServerPackets.UpdTestSent))
         {
-            packet.Write("This is a UDP test from the Server!");
-
             SendUDPPacket(client, packet);
         }
-        Console.WriteLine($"UdpTest message sent to client {client}");
     }
 
 
@@ -216,7 +212,6 @@ public class ServerPacketSender
             packet.Write(player.Username);
             packet.Write(player.position);
 
-            Console.WriteLine("Send SpawnPlayer message to client: " + targetClient);
             SendTCPPacket(targetClient, packet);
         }
     }
@@ -249,7 +244,6 @@ public class ServerPacketSender
                     }
                 }
             }
-            //Console.WriteLine("Sending TimeSync packet to client: "+ id);
             SendTCPPacket(id, _packet);
         }
     }

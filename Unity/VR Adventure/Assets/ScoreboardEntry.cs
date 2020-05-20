@@ -28,12 +28,12 @@ public class ScoreboardEntry : MonoBehaviour {
             score = value;
             _scoreText.text = score.ToString();
         }
-    }
-
-        
+    }       
 
 
     private string username;
+
+
     public string Username {
         get { return username; }
         set {
@@ -41,6 +41,13 @@ public class ScoreboardEntry : MonoBehaviour {
             _usernameText.text = username;
         }
     }
+
+
+
+    public void OnConnectedPlayerDisconnected () {
+        GameObject.Destroy(this.gameObject);
+    }
+
 
     // If the player is remote
     public void OnConnectedPlayerScoreUpdated (object sender, EventArgs e) {

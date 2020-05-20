@@ -8,7 +8,6 @@ public class ClientConnectedPlayer : MonoBehaviour {
     public string Username;
 
     private int ping;
-
     public int Ping {
         get { return ping; }
         set {
@@ -17,9 +16,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
         }
     }
 
-
     private int score;
-
     public int Score {
         get { return score; }
         set {
@@ -37,6 +34,8 @@ public class ClientConnectedPlayer : MonoBehaviour {
     public event EventHandler PlayerPingUpdated;
     public event EventHandler PlayerScoreUpdated;
 
+    public event Action PlayerDisconnected;
+
     public void Tick (Vector3 headPosition, Quaternion headRotation, HandDataPacket leftHandData, HandDataPacket rightHandData) {
         emulatedPlayer.EmulateHead(headPosition, headRotation);
         emulatedPlayer.EmulateHand(emulatedPlayer.LeftHand, leftHandData);
@@ -48,5 +47,10 @@ public class ClientConnectedPlayer : MonoBehaviour {
         ID = _id;
         Username = _username;
         EmulatedPlayerUI.Username = _username;
+    }
+
+    public void HandleDisconnect () {
+        PlayerDisconnected?.Invoke();
+        GameObject.Destroy(this.gameObject);
     }
 }

@@ -1,7 +1,10 @@
 ﻿using DatabaseREST.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
@@ -40,5 +43,15 @@ public class GameManager : MonoBehaviour {
         EmulatedFireball emulatedFireball = Instantiate(EmulatedFireballPrefab, position, Quaternion.identity).GetComponent<EmulatedFireball>();
         emulatedFireball.Init(id, size);
         EmulatedFireballs.Add(id, emulatedFireball);
+    }
+
+    public void PlayerDisconnected (int playerID) {
+        ThreadManager.ExecuteOnMainThread(() => {
+            ClientConnectedPlayer player;
+            if (EmulatedPlayers.TryGetValue(playerID, out player)) {
+                EmulatedPlayers[ playerID ].HandleDisconnect();
+                EmulatedPlayers.Remove(playerID);
+            }
+        });
     }
 }

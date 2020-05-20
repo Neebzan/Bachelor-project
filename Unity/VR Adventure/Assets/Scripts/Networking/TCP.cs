@@ -154,7 +154,6 @@ public class TCP
                 //If the length is 0, return
                 return true;
             }
-
         }
 
         //Keep reading until there is no more data left to read for this specific packet
@@ -203,9 +202,5 @@ public class TCP
         incomingPacket = null;
         receiveBuffer = null;
         client.Close();
-        //udp.socket.Close();
-
-        //Debug.Log("Disconnected from server.");        
-
     }
 }

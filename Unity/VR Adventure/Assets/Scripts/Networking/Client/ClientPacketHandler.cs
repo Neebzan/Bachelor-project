@@ -81,13 +81,7 @@ public static class ClientPacketHandler {
 
     public static void PlayerDisconnected (Packet _packet) {
         int _id = _packet.ReadInt();
-        ThreadManager.ExecuteOnMainThread(() => {
-            ClientConnectedPlayer player;
-            if (GameManager.instance.EmulatedPlayers.TryGetValue(_id, out player)) {
-                UnityEngine.Object.Destroy(player.gameObject);
-                GameManager.instance.EmulatedPlayers.Remove(_id);
-            }
-        });
+        GameManager.instance.PlayerDisconnected(_id);
     }
 
     //public static void ProjectilePosition(Packet _packet)
