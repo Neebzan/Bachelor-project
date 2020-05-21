@@ -12,11 +12,8 @@ namespace GameServerDecoy {
             Console.ReadKey();
         }
 
-        //public static void TestProcess () {
-        //    Process process = new Process();
-        //    process.StartInfo = new ProcessStartInfo("ipconfig", "/all");
-        //    process.Start();
-        //}
+
+
 
         public static void Connect () {
             TcpClient client = new TcpClient("212.10.51.254", 30832);
