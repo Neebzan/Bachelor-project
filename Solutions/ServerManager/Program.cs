@@ -23,7 +23,7 @@ namespace ServerManager {
                 Console.WriteLine($"Connected! from {client.Client.RemoteEndPoint.ToString()}");
                 Console.WriteLine("Begin K8S API attempt");
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo("kubectl get pods");
+                process.StartInfo = new ProcessStartInfo("kubectl", "get pods");
                 process.Start();
             }
         }
