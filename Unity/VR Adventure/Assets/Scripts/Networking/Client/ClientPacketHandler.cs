@@ -175,6 +175,16 @@ public static class ClientPacketHandler {
             }
     }
 
+    public static void PlayerReadyStateUpdated(Packet _packet) {
+        int clientID = _packet.ReadInt();
+        bool readyState = _packet.ReadBool();
+
+        if (GameManager.instance.EmulatedPlayers.ContainsKey(clientID)){
+            GameManager.instance.EmulatedPlayers [ clientID ].Ready = readyState;
+        }
+    }
+
+
     public static void UpdateFireballs (Packet _packet) {
         long packetTick = _packet.ReadLong();
 

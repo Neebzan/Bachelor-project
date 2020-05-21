@@ -90,6 +90,15 @@ public class ServerPacketSender
         }
     }
 
+    internal static void PlayerReadyStateUpdated (int clientID, bool readyState) {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerReadyStateUpdated)) {
+            _packet.Write(clientID);
+            _packet.Write(readyState);
+
+            SendTCPPacketAll(_packet, clientID);
+        }
+    }
+
     public static void SpawnFireball(int targetClient, Fireball fireball)
     {
         using (Packet _packet = new Packet((int)ServerPackets.SpawnFireball))

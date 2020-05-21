@@ -70,6 +70,18 @@ public class ServerPacketHandler {
         }
     }
 
+    public static void PlayerReadyStateUpdated(Packet _packet) {
+        int clientID = _packet.ReadInt();
+        bool readyState = _packet.ReadBool();
+
+        if (Server.clients.ContainsKey(clientID)) {
+            Server.clients [ clientID ].player.IsReady = readyState;
+
+            // Send player ready updated to all other players
+            ServerPacketSender.PlayerReadyStateUpdated(clientID, Server.clients [ clientID ].player.IsReady);
+        }
+    }
+
 
     //public static void VRHeadData(Packet _packet)
     //{

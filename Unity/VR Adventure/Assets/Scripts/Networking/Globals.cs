@@ -36,7 +36,8 @@ public enum ServerPackets {
     SpawnFireball,
     //UpdateFireball,
     UpdateFireballs,
-    DespawnFireball
+    DespawnFireball,
+    PlayerReadyStateUpdated
 }
 
 public enum ClientPackets {
