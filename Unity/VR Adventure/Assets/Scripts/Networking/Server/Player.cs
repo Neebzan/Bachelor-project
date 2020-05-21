@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
     public string Username;
     public int Score;
     public long LastUpdateTick = 0;
+    public bool IsReady;
 
     public ServerPlayer vrPlayer = new ServerPlayer();
     public Vector3 position;
