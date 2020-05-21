@@ -8,6 +8,7 @@ namespace K8SGameServerDevelopment {
             Console.WriteLine("Sleeping for 10 seconds");
             Thread.Sleep(10000);
             Console.WriteLine("kill");
+            Environment.Exit(0);
         }
     }
 }
