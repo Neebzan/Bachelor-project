@@ -17,19 +17,5 @@ WORKDIR /app
 # Copies all files from the release build
 COPY --from=build-env /app/servermanager/out/ .
 
-WORKDIR /tmp
-
-RUN  /usr/bin/curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
-     && chmod +x ./kubectl  \
-     &&  mv ./kubectl /usr/local/bin/kubectl \
-     && zypper install -y python2 \
-     && zypper install -y python2-pip \
-     && pip install kubernetes \
-     && zypper install -y git \
-     && zypper clean -a \
-     && git clone --recursive https://github.com/kubernetes-client/python.git \
-     && cd python \
-     && python setup.py install
-
 # Runs the application with dotnet, with PatchManager.dll as parameter
 ENTRYPOINT [ "dotnet", "ServerManager.dll" ]
