@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,10 @@ public class ServerManager : MonoBehaviour
     public Dictionary<int, Fireball> Fireballs = new Dictionary<int, Fireball>();
 
     public RESTServer REST;
+    public Match match;
+
+    public event EventHandler OnPlayerSpawned;
+    public event EventHandler OnPlayerDisconnected;
 
     private void Awake()
     {
@@ -30,8 +35,9 @@ public class ServerManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-
+        match = gameObject.AddComponent<Match>();
         REST.GetServerToken();
+
         Server.Start(10, 27000);
     }
 
@@ -53,7 +59,9 @@ public class ServerManager : MonoBehaviour
 
     public Player SpawnPlayer()
     {
-        return Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
+        Player player = Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();
+        OnPlayerSpawned?.Invoke(player, EventArgs.Empty);
+        return player;
     }
 
     public Fireball SpawnFireball (int playerID) {
@@ -62,6 +70,11 @@ public class ServerManager : MonoBehaviour
         Fireballs.Add(fireball.ID, fireball);
         
         return fireball;
+    }
+
+    public void PlayerDisconnected(Player player)
+    {
+        OnPlayerDisconnected?.Invoke(player, EventArgs.Empty);
     }
 
 }

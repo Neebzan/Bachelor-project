@@ -20,25 +20,6 @@ public class ServerPacketSender
         }
     }
 
-    //public static void UdpTestMessage(int client)
-    //{
-    //    using (Packet packet = new Packet((int)ServerPackets.UpdTestSent))
-    //    {
-    //        SendUDPPacket(client, packet);
-    //    }
-    //}
-
-
-    //public static void PlayerPostion(Player player)
-    //{
-    //    using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
-    //    {
-    //        packet.Write(player.id);
-    //        packet.Write(player.transform.position);
-
-    //        SendUDPPacketAll(packet);
-    //    }
-    //}
 
     public static void PlayerPositions()
     {

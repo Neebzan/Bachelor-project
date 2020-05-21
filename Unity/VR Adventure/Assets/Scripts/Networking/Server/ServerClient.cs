@@ -24,11 +24,6 @@ public class ServerClient
         udp = new UDP(id);
     }
 
-    ~ServerClient()
-    {
-
-    }
-
     public void Connect(TcpClient tcpClient)
     {
         tcp.Disconnected += Server.DisconnectClient;
@@ -75,6 +70,8 @@ public class ServerClient
     {
         if (isConnected)
         {
+            ServerManager.instance.PlayerDisconnected(player);
+
             tcp.Disconnected -= Server.DisconnectClient;
             isConnected = false;
 

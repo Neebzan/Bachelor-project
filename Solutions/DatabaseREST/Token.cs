@@ -39,7 +39,8 @@ namespace DatabaseREST
             SigningCredentials sCredentials = new SigningCredentials(GetSymmetricServerSecurityKey(), SecurityAlgorithms.HmacSha256);
 
             ClaimsIdentity claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim("sub", "gServer"));
+            claims.AddClaim(new Claim("aud", "gServer"));
+            claims.AddClaim(new Claim("aud", "gServer"));
 
             var token = tokenHandler.CreateJwtSecurityToken(
                 expires: expirationDate,
@@ -141,6 +142,7 @@ namespace DatabaseREST
         {
             if (token != null)
             {
+                token = token.Replace("\"", "");
                 try
                 {
                     //JwtSecurityToken tempToken = new JwtSecurityToken(token);
@@ -168,23 +170,18 @@ namespace DatabaseREST
         {
             if (token != null)
             {
+                token = token.Replace("\"", "");
                 try
                 {
-                    //JwtSecurityToken tempToken = new JwtSecurityToken(token);
-                    //if (aud != "")
-                    //{
-                    //    if (!tempToken.Audiences.Contains(aud))
-                    //        return false;
-                    //}
-
                     JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
 
                     TokenValidationParameters validationParameters = GetTokenValidationParameters(GetSymmetricServerSecurityKey(), "gServer");
                     tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
                     return true;
                 }
-                catch
+                catch( Exception e)
                 {
+                    Console.WriteLine(e);
                     return false;
                 }
             }
