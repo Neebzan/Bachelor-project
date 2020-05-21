@@ -10,6 +10,9 @@ COPY . ./
 # Publishes PatchManager project as release, into app/patchmanager/out
 RUN dotnet publish ServerManager -c Release -o servermanager/out
 
+# Add creation YAML file for pod creation
+ADD ServerManager/k8s servermanager/out/Files
+
 # Defines new base image to run application
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 # Sets the working directory to "app"
