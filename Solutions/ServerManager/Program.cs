@@ -12,6 +12,12 @@ namespace ServerManager {
 
         static void Main (string [ ] args) {
             Console.WriteLine("Started");
+
+            Console.WriteLine("Running with kubectl: ");
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo("kubectl", "version --short");
+            process.Start();
+
             Console.WriteLine("Listening for connections");
             ListenForConnections();
         }

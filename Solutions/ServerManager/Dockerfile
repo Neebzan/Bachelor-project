@@ -20,5 +20,11 @@ WORKDIR /app
 # Copies all files from the release build
 COPY --from=build-env /app/servermanager/out/ .
 
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin
+
 # Runs the application with dotnet, with PatchManager.dll as parameter
 ENTRYPOINT [ "dotnet", "ServerManager.dll" ]
+
+
