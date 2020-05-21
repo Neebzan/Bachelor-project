@@ -11,30 +11,18 @@ public enum HandState {
 }
 public enum ServerPackets {
     Welcome,
-
     UpdTestSent,
     UdpTestReceived,
     SpawnPlayer,
-
     PlayerPosition,
     PlayerRotation,
-
-    //VRRightHandData,
-    //VRLeftHandData,
-    //VRHeadData,
-
     PlayerDisconnected,
-
     SpawnProjectile,
     ProjectilePosition,
     DespawnProjectile,
-
     PlayerScoreUpdated,
-
     TimeSync,
-
     SpawnFireball,
-    //UpdateFireball,
     UpdateFireballs,
     DespawnFireball,
     PlayerReadyStateUpdated
@@ -42,44 +30,27 @@ public enum ServerPackets {
 
 public enum ClientPackets {
     WelcomeReceived,
-
     PlayerMovement,
-    //PlayerInput,
-
     ShootTest,
-
-    //VRRightHandData,
-    //VRLeftHandData,
-    //VRHeadData,
     UdpTestSent,
     UdpTestReceived,
     ReadyStateUpdated,
-
     TimeSync
 }
 
 public static class PacketHandlers {
     public static Dictionary<int, PacketHandler> Server = new Dictionary<int, PacketHandler>()
         {
-            {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
-            {(int)ClientPackets.UdpTestReceived, ServerPacketHandler.UdpTestReceived },
-
-            //{(int)ClientPackets.ShootTest, ServerPacketHandler.ShootTestReceived },
-
-            {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
-
-            //{(int)ClientPackets.VRRightHandData, ServerPacketHandler.VRRightHandData },
-            //{(int)ClientPackets.VRLeftHandData, ServerPacketHandler.VRLeftHandData },
-            //{(int)ClientPackets.VRHeadData, ServerPacketHandler.VRHeadData },
-
-            {(int)ClientPackets.TimeSync, ServerPacketHandler.TimeSync },
-
+        {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
+        {(int)ClientPackets.UdpTestReceived, ServerPacketHandler.UdpTestReceived },
+        {(int)ClientPackets.PlayerMovement, ServerPacketHandler.PlayerMovement },
+        {(int)ClientPackets.TimeSync, ServerPacketHandler.TimeSync },
+        {(int)ClientPackets.ReadyStateUpdated, ServerPacketHandler.PlayerReadyStateUpdated }
         };
 
     public static Dictionary<int, PacketHandler> Client = new Dictionary<int, PacketHandler>()
     {
         {(int)ServerPackets.Welcome, ClientPacketHandler.WelcomeMessage },
-        //{(int)ServerPackets.UpdTestSent, ClientPacketHandler.UdpReceiveMessageTest },
         {(int)ServerPackets.SpawnPlayer, ClientPacketHandler.SpawnPlayer },
         {(int)ServerPackets.PlayerPosition, ClientPacketHandler.PlayerPosition },
         {(int)ServerPackets.PlayerDisconnected, ClientPacketHandler.PlayerDisconnected },
@@ -88,5 +59,6 @@ public static class PacketHandlers {
         {(int)ServerPackets.DespawnFireball, ClientPacketHandler.DespawnFireball},
         {(int)ServerPackets.PlayerScoreUpdated, ClientPacketHandler.PlayerScoreUpdated},
         {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
+        {(int)ServerPackets.PlayerReadyStateUpdated, ClientPacketHandler.PlayerReadyStateUpdated }
         };
 }
