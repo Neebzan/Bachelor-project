@@ -7,6 +7,8 @@ using System.Net.Sockets;
 namespace ServerManager {
     class Program {
         static List<TcpClient> tcpClients = new List<TcpClient>();
+        private static string _filePath = "Files/";
+        private static string _k8sRessourceFileName = "GameServerPod.yaml";
 
         static void Main (string [ ] args) {
             Console.WriteLine("Started");
@@ -23,7 +25,7 @@ namespace ServerManager {
                 Console.WriteLine($"Connected! from {client.Client.RemoteEndPoint.ToString()}");
                 Console.WriteLine("Begin K8S API attempt");
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo("kubectl", "get pods");
+                process.StartInfo = new ProcessStartInfo("kubectl", $"create -f {_filePath + _k8sRessourceFileName}");
                 process.Start();
             }
         }
