@@ -25,6 +25,16 @@ public class ClientConnectedPlayer : MonoBehaviour {
         }
     }
 
+    private bool _ready;
+
+    public bool Ready {
+        get { return _ready; }
+        set { _ready = value;
+            PlayerReady?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+
     public EmulatedPlayer emulatedPlayer;
     public EmulatedPlayerUI EmulatedPlayerUI;
 
@@ -34,6 +44,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
     public event EventHandler PlayerPingUpdated;
     public event EventHandler PlayerScoreUpdated;
     public event EventHandler PlayerDisconnected;
+    public event EventHandler PlayerReady;
 
     public void Tick (Vector3 headPosition, Quaternion headRotation, HandDataPacket leftHandData, HandDataPacket rightHandData) {
         emulatedPlayer.EmulateHead(headPosition, headRotation);

@@ -10,7 +10,7 @@ public class UIProvider : MonoBehaviour {
     public List<XRRayInteractor> RayInteractors = null;
     public List<XRController> Controllers = null;
     public bool StartInMenu = false;
-    public GameObject UI;
+    //public GameObject UI;
 
     private bool _menuOpened = false;
     private bool _isPressingButton = false;
@@ -48,7 +48,7 @@ public class UIProvider : MonoBehaviour {
 
     private void SetMenu (bool value) {
         _menuOpened = value;
-        UI.SetActive(value);
+        //UI.SetActive(value);
         foreach (var interactor in DirectInteractors) {
             interactor.gameObject.SetActive(!value);
         }

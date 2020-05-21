@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour {
     public GameObject EmulatedFireballPrefab;
 
     public ScoreboardUI ScoreboardUI;
+    public LobbyUI LobbyUI;
+
+    private bool _inGame = false;
 
     private void Awake () {
         if (instance == null)
@@ -36,7 +39,22 @@ public class GameManager : MonoBehaviour {
 
         EmulatedPlayers.Add(_id, _player.GetComponent<ClientConnectedPlayer>());
 
-        ScoreboardUI.AddScoreboardEntry(clientConnectedPlayer);
+        SpawnPlayerUI(clientConnectedPlayer);
+    }
+
+    public void SpawnPlayerUI (ClientConnectedPlayer clientConnectedPlayer) {
+        if (_inGame)
+            ScoreboardUI.AddScoreboardEntry(clientConnectedPlayer);
+        else {
+            LobbyUI.AddLobbyEntry(clientConnectedPlayer);
+        }
+    }
+    public void SpawnPlayerUI (Client client) {
+        if (_inGame)
+            ScoreboardUI.AddScoreboardEntry(client);
+        else {
+            LobbyUI.AddLobbyEntry(client);
+        }
     }
 
     public void SpawnEmulatedFireball (int id, Vector3 position, float size) {
@@ -49,7 +67,7 @@ public class GameManager : MonoBehaviour {
         ThreadManager.ExecuteOnMainThread(() => {
             ClientConnectedPlayer player;
             if (EmulatedPlayers.TryGetValue(playerID, out player)) {
-                EmulatedPlayers[ playerID ].HandleDisconnect();
+                EmulatedPlayers [ playerID ].HandleDisconnect();
                 EmulatedPlayers.Remove(playerID);
             }
         });

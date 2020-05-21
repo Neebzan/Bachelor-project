@@ -75,11 +75,22 @@ public static class ClientPacketSender
         }
     }
 
+    public static void ReadyStatusUpdate(bool ready) {
+        using (Packet _packet = new Packet((int)ClientPackets.ReadyStateUpdated)) {
+            _packet.Write(Client.instance.ID);
+            _packet.Write(ready);
+
+            SendTCPData(_packet);
+        }
+    }
+
     private static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength(); //Add a length to the packet
         Client.instance.tcp.SendData(_packet);
     }
+
+
 
     private static void SendUDPData(Packet _packet)
     {

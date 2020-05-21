@@ -52,6 +52,7 @@ public enum ClientPackets {
     //VRHeadData,
     UdpTestSent,
     UdpTestReceived,
+    ReadyStateUpdated,
 
     TimeSync
 }

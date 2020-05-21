@@ -30,10 +30,20 @@ public class Client : MonoBehaviour {
         }
     }
 
+    private bool _ready;
+
+    public bool Ready {
+        get { return _ready; }
+        set { _ready = value;
+            PlayerReadyUpdated?.Invoke();
+        }
+    }
+
+
     public event Action PlayerScoreUpdated;
     public event Action PlayerLatencyUpdated;
     public event EventHandler PlayerDisconnected;
-
+    public Action PlayerReadyUpdated;
 
     public TCP tcp;
     public UDP udp;
@@ -59,6 +69,7 @@ public class Client : MonoBehaviour {
         }
     }
 
+
     public Queue<int> PingHistory = new Queue<int>();
 
     public Stopwatch Timer = new Stopwatch();
@@ -83,6 +94,11 @@ public class Client : MonoBehaviour {
         PlayerLatencyUpdated?.Invoke();
     }
 
+    public void ReadyUp (bool ready) {
+        Ready = ready;
+        ClientPacketSender.ReadyStatusUpdate(ready);
+    }
+
     private void OnClientConnectedToServer () {
         isConnected = true;
         StartCoroutine(AutoTimeSync());
@@ -91,7 +107,6 @@ public class Client : MonoBehaviour {
             Success = isConnected,
             Type = ClientConnectionEvent.Connect
         });
-        GameManager.instance.ScoreboardUI.AddScoreboardEntry(this);
     }
 
     public void ConnectToServer (string _userName) {
@@ -99,6 +114,7 @@ public class Client : MonoBehaviour {
         tcp = new TCP();
         udp = new UDP(PacketHandlers.Client);
         tcp.Connect(ip, port, PacketHandlers.Client);
+        GameManager.instance.SpawnPlayerUI(this);
     }
 
     private void OnConnectionChanged (ClientConnectionEventArgs e) {

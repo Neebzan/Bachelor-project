@@ -1187,8 +1187,8 @@ MonoBehaviour:
   m_TurnUsage: 0
   m_Controllers:
   - {fileID: 1090247719551414126}
-  m_TurnAmount: 45
-  m_DebounceTime: 0.5
+  m_TurnAmount: 2
+  m_DebounceTime: 0
   m_DeadZone: 0.75
 --- !u!114 &1090247720074647256
 MonoBehaviour:
@@ -1212,7 +1212,6 @@ MonoBehaviour:
   - {fileID: 1090247719149840813}
   - {fileID: 1090247719644820994}
   StartInMenu: 0
-  UI: {fileID: 0}
 --- !u!114 &1090247720074647257
 MonoBehaviour:
   m_ObjectHideFlags: 0
