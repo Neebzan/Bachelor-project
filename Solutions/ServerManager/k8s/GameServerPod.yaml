@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "mame-server-instance"
+  name: "Game-server-instance"
 spec:
   hostNetwork: true
   restartPolicy: Never
