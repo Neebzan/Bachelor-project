@@ -72,4 +72,14 @@ public class GameManager : MonoBehaviour {
             }
         });
     }
+
+    public static void HandleClientDisconnect () {
+        foreach (ClientConnectedPlayer player in GameManager.instance.EmulatedPlayers.Values)
+            player.HandleDisconnect();        
+        GameManager.instance.EmulatedPlayers.Clear();
+
+        foreach (EmulatedFireball fireball in GameManager.instance.EmulatedFireballs.Values)
+            GameObject.Destroy(fireball.gameObject);
+        GameManager.instance.EmulatedFireballs.Clear();
+    }
 }

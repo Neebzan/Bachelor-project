@@ -123,18 +123,12 @@ public class Client : MonoBehaviour {
 
     public void Disconnect () {
         if (isConnected) {
+            GameManager.HandleClientDisconnect();
+
             isConnected = false;
 
             tcp.Disconnect();
             udp.Disconnect();
-
-            foreach (ClientConnectedPlayer player in GameManager.instance.EmulatedPlayers.Values)
-                GameObject.Destroy(player.gameObject);
-            GameManager.instance.EmulatedPlayers.Clear();
-
-            foreach (EmulatedFireball fireball in GameManager.instance.EmulatedFireballs.Values)
-                GameObject.Destroy(fireball.gameObject);
-            GameManager.instance.EmulatedFireballs.Clear();
 
             UnityEngine.Debug.Log("Disconnected from server.");
 

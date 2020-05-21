@@ -42,8 +42,6 @@ public class LobbyEntry : MonoBehaviour
         }
     }
 
-
-
     public void OnPlayerDisconnected (object sender, EventArgs e) {
         if (sender is ClientConnectedPlayer) {
             ClientConnectedPlayer client = (sender as ClientConnectedPlayer);
