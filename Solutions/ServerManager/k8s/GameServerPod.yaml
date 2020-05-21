@@ -8,8 +8,3 @@ spec:
   containers:
     - name: game-server
       image: intrusivebaguettes/gameserver:development
-      env:
-        - name: SESSION_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
