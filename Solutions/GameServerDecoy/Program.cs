@@ -4,7 +4,7 @@ using System.Net.Sockets;
 namespace GameServerDecoy {
     class Program {
         static void Main (string [ ] args) {
-            TcpClient client = new TcpClient("212.10.51.254", 27001);
+            TcpClient client = new TcpClient("212.10.51.254", 30832);
             if (client.Connected) {
                 Console.WriteLine("Connected");
             }
