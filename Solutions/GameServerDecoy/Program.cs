@@ -19,7 +19,8 @@ namespace GameServerDecoy {
         //}
 
         public static void Connect () {
-            TcpClient client = new TcpClient("212.10.51.254", 30832);
+            //TcpClient client = new TcpClient("212.10.51.254", 30832);
+            TcpClient client = new TcpClient("localhost", 27001);
             if (client.Connected) {
                 Console.WriteLine("Connected");
             }
