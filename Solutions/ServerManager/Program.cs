@@ -7,7 +7,7 @@ using System.Net.Sockets;
 namespace ServerManager {
     class Program {
         static List<TcpClient> tcpClients = new List<TcpClient>();
-        private static string _filePath = "Test/";
+        private static string _filePath = "Files/";
         private static string _k8sRessourceFileName = "GameServerPod.yaml";
 
         static void Main (string [ ] args) {
