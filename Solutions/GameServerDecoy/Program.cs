@@ -16,8 +16,5 @@ namespace GameServerDecoy {
 
             Console.ReadKey();
         }
-
-
-
     }
 }

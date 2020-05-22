@@ -23,8 +23,6 @@ namespace GameServerDecoy {
 
         public void TcpCallback (IAsyncResult asyncResult) {
             try {
-
-
                 int messageLength = TcpClient.GetStream().EndRead(asyncResult);
                 //Check if we received more than 0 bytes
                 if (messageLength <= 0)

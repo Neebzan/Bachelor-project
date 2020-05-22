@@ -10,8 +10,8 @@ using System.Text;
 namespace GameServerDecoy {
     static class EmulatedUserConnection {
 
-        static Client ServerManagerClient = null;
-        static Client GameClient = null;
+        static EmulatedPlayerClient ServerManagerClient = null;
+        static EmulatedPlayerClient GameClient = null;
 
         public static void Init () {
             SendCreateServerRequest();
@@ -20,7 +20,7 @@ namespace GameServerDecoy {
         public static void SendCreateServerRequest () {
             Console.WriteLine($"Sending request to create server");
 
-            ServerManagerClient = new Client(new TcpClient("212.10.51.254", 30006));
+            ServerManagerClient = new EmulatedPlayerClient(new TcpClient("212.10.51.254", 30006));
             //ServerManagerClient = new Client(new TcpClient("212.10.51.254", 27001));
 
             GameserverInstance gameserverInstance = new GameserverInstance();
@@ -45,11 +45,13 @@ namespace GameServerDecoy {
             Console.WriteLine($"Game name {gameserverInstance.ServerName}");
             Console.WriteLine($"Server IP {gameserverInstance.IP}");
             Console.WriteLine($"Server Port {gameserverInstance.Port}");
+
+            ConnectToServer(gameserverInstance);
         }
 
         public static void ConnectToServer (GameserverInstance gameserverInstance) {
             Console.WriteLine("Connecting to game server");
-            GameClient = new Client(new TcpClient(gameserverInstance.IP, gameserverInstance.Port));
+            GameClient = new EmulatedPlayerClient(new TcpClient(gameserverInstance.IP, gameserverInstance.Port));
             Console.WriteLine("Connected!");
         }
     }
