@@ -7,7 +7,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: game-server
-      image: eehmm/k8sgameserver-temp
+      image: intrusivebaguettes/gameserver:development
       env:
         - name: SESSION_NAME
           valueFrom:
