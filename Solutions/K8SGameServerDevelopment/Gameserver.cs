@@ -2,10 +2,12 @@
 using ServerManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace K8SGameServerDevelopment {
@@ -17,7 +19,8 @@ namespace K8SGameServerDevelopment {
         public static readonly int _minPort = 27005;
         public static readonly int _maxPort = 27100;
         public static readonly int _serverManagerPort = 27002;
-        public static readonly string _serverManagerIP = "212.10.51.254";
+        public static readonly string _serverManagerIP = "servermanager-gameserver-service";
+        private static Stopwatch stopwatch = new Stopwatch();
 
         public static void Init () {
             TcpListener listener = StartListenerWithAvailablePort(_minPort, _maxPort);
@@ -25,6 +28,7 @@ namespace K8SGameServerDevelopment {
                 Task.Run(() => ListenForClients(ref listener));
                 SendRegisterRequest(listener);
                 Console.WriteLine($"Waiting for configuration");
+                Task.Run(() => Game());
             }
             else {
                 Console.WriteLine("No available ports");
@@ -38,11 +42,23 @@ namespace K8SGameServerDevelopment {
                     GameserverClient client = new GameserverClient(tcpClient);
 
                     ConnectedClients.Add(client);
+                    if (ConnectedClients.Count == 1) {
+                        stopwatch.Start();
+                    }
                     Console.WriteLine($"Client connected! from {tcpClient.Client.RemoteEndPoint.ToString()}");
                 }
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+        private static void Game () {
+            while (true) {
+                if (stopwatch.IsRunning && stopwatch.ElapsedMilliseconds > 10000) {
+                    Environment.Exit(0);
+                }
+                Thread.Sleep(100);
             }
         }
 
