@@ -77,15 +77,10 @@ namespace K8SGameServerDevelopment {
 
             string JSON = JsonConvert.SerializeObject(gameserverInstance);
 
-            List<byte> dataList = Encoding.Default.GetBytes(JSON).ToList();
+            Packet packet = new Packet((int)MessageType.Register);
+            packet.Write(JSON);            
 
-            int method = (int)MessageType.Register;
-
-            dataList.InsertRange(0, BitConverter.GetBytes(method));
-
-            byte[] data = AddPacketLength(dataList);
-
-            tcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+            tcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
 
         public static void RecieveConfigurationRequest (GameserverInstance configuration) {
@@ -119,15 +114,10 @@ namespace K8SGameServerDevelopment {
             Instance.GameState = GameState.Running;
             string JSON = JsonConvert.SerializeObject(Instance);
 
-            List<byte> dataList = Encoding.Default.GetBytes(JSON).ToList();
+            Packet packet = new Packet((int)MessageType.Ready);
+            packet.Write(JSON);
 
-            int method = (int)MessageType.Ready;
-
-            dataList.InsertRange(0, BitConverter.GetBytes(method));
-
-            byte [ ] data = AddPacketLength(dataList);
-
-            ConnectedServerManager.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+            ConnectedServerManager.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
 
         public static TcpListener StartListenerWithAvailablePort (int minPort, int maxPort) {

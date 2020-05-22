@@ -27,23 +27,12 @@ namespace GameServerDecoy {
 
             string JSON = JsonConvert.SerializeObject(gameserverInstance);
 
-            List<byte> dataList = Encoding.Default.GetBytes(JSON).ToList();
-
-            int method = (int)MessageType.Create;
-
-            dataList.InsertRange(0, BitConverter.GetBytes(method));
-
-            byte[] data = AddPacketLength(dataList);
+            Packet packet = new Packet((int)MessageType.Create);
+            packet.Write(JSON);
 
 
-            ServerManagerClient.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+            ServerManagerClient.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
             Console.WriteLine("Waiting for server response");
-        }
-
-        private static byte[] AddPacketLength(List<byte> data)
-        {
-            data.InsertRange(0, BitConverter.GetBytes(data.Count));
-            return data.ToArray();
         }
 
         public static void ReceiveServerInfo (GameserverInstance gameserverInstance) {

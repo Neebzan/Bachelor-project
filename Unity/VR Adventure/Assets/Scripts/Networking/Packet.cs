@@ -39,13 +39,11 @@ public class Packet : IDisposable
         Write(_data);
         readableBuffer = buffer.ToArray();
     }
-
     /// <summary>Inserts the length of the packet's content at the start of the buffer.</summary>
     public void WriteLength()
     {
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count)); // Insert the byte length of the packet at the very beginning
     }
-
     public void WriteLengthAndTimeStamp()
     {
         // Insert a timestamp (ms) and the total length of the packet at  the begining
@@ -53,19 +51,16 @@ public class Packet : IDisposable
         buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         //int test = BitConverter.ToInt32(buffer.ToArray(), 0);
     }
-
     public int Length()
     {
         return buffer.Count;
     }
-
     /// <summary>Gets the packet's content in array form.</summary>
     public byte[] ToArray()
     {
         readableBuffer = buffer.ToArray();
         return readableBuffer;
     }
-
     /// <summary>Gets the length of the unread data contained in the packet.</summary>
     public int UnreadLength()
     {
@@ -103,31 +98,25 @@ public class Packet : IDisposable
     {
         buffer.AddRange(BitConverter.GetBytes(_value));
     }
-
     public void Write(string _value)
     {
         Write(_value.Length); //Write the length of the string
         buffer.AddRange(Encoding.ASCII.GetBytes(_value)); //Add the string
     }
-
     public void Write(int _value)
     {
         buffer.AddRange(BitConverter.GetBytes(_value));
     }
-
     public void Write(long _value)
     {
         buffer.AddRange(BitConverter.GetBytes(_value));
     }
-
-
     public void Write(Vector3 _value)
     {
         Write(_value.x);
         Write(_value.y);
         Write(_value.z);
     }
-
     public void Write(Quaternion _value)
     {
         Write(_value.x);

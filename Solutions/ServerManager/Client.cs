@@ -13,11 +13,7 @@ namespace ServerManager
         private byte[] _buffer;
         public TcpClient TcpClient;
 
-        byte[] incomingData;
-        List<byte> incomingBytes = new List<byte>();
-        int incomingPacketSize = -1;
-        int readIndex = 0;
-        bool sizeSet = false;
+        Packet incomingPacket = new Packet();
 
         public Client(TcpClient client)
         {
@@ -43,15 +39,9 @@ namespace ServerManager
 
                 byte[] messageData = new byte[messageLength];
 
-                Array.Copy(_buffer, 0, messageData, 0, messageLength);
+                Array.Copy(_buffer, messageData, messageLength);
 
-                if(HandleIncomingData(messageData))
-                {
-                    incomingBytes = new List<byte>();
-                    incomingPacketSize = -1;
-                    readIndex = 0;
-                    sizeSet = false;
-                }
+                incomingPacket.Reset(HandleIncomingData(messageData));
 
                 TcpClient.GetStream().BeginRead(_buffer, 0, _bufferSize, TcpCallback, null);
 
@@ -65,58 +55,72 @@ namespace ServerManager
         private bool HandleIncomingData(byte[] data)
         {
             //Read the length of the next data packet
-            if (incomingPacketSize < 0)
+            int packetLength = 0;
+
+            //Check if there is 4 or more bytes in the packet (size of int is 4)
+            if (incomingPacket.UnreadLength() >= 4)
             {
-                if (data.Length + incomingBytes.Count >= 4)
+                //Read the length of the incoming packet
+                packetLength = incomingPacket.ReadInt();
+                if (packetLength <= 0)
                 {
-                    incomingPacketSize = BitConverter.ToInt32(data, readIndex);
-                    readIndex += 4;
-                    incomingData = new byte[incomingPacketSize];
-                    sizeSet = true;
-                }
-                else
-                    incomingBytes.AddRange(data.ToList());
-            }
-
-            if(sizeSet && incomingBytes.Count < incomingPacketSize)
-            {
-                incomingBytes.AddRange(data.ToList());
-
-                if(incomingBytes.Count >= incomingPacketSize)
-                {
-
-                    byte[] dataBytes = incomingBytes.ToArray();
-
-                    //Read the messagetype
-                    int messageTypeInt = BitConverter.ToInt32(dataBytes, readIndex);
-                    readIndex += 4;
-                    MessageType messageType = (MessageType)messageTypeInt;
-
-
-                    string messageJSON = "";
-
-                    switch (messageType)
-                    {
-                        case MessageType.Create:
-                            messageJSON = Encoding.Default.GetString(dataBytes, readIndex, dataBytes.Length-readIndex);
-                            GameserverInstance gameserverToCreate = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
-                            ServerManager.CreateGameServer(gameserverToCreate, this);                            
-                            break;
-                        case MessageType.Register:
-                            messageJSON = Encoding.Default.GetString(dataBytes, readIndex, dataBytes.Length - readIndex);
-                            GameserverInstance gameserverToRegister = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
-                            ServerManager.Register(gameserverToRegister, this);
-                            break;
-                        case MessageType.Ready:
-                            messageJSON = Encoding.Default.GetString(dataBytes, readIndex, dataBytes.Length - readIndex);
-                            GameserverInstance gameserverReady = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
-                            ServerManager.RecieveGameserverReady(gameserverReady, this);
-                            break;
-                        default:
-                            break;
-                    }
+                    //If the length is 0, return
                     return true;
                 }
+            }
+
+            //Keep reading until there is no more data left to read for this specific packet
+            //We keep this in a while loop here because one packet might be made up of several packets
+            while (packetLength > 0 && packetLength <= incomingPacket.UnreadLength())
+            {
+                byte[] bytes = incomingPacket.ReadBytes(packetLength);
+
+                //Handle packet
+                //Read the messagetype
+                int messageTypeInt = incomingPacket.ReadInt();
+                MessageType messageType = (MessageType)messageTypeInt;
+                string messageJSON = "";
+
+                switch (messageType)
+                {
+                    case MessageType.Create:
+                        messageJSON = incomingPacket.ReadString();
+                        GameserverInstance gameserverToCreate = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
+                        ServerManager.CreateGameServer(gameserverToCreate, this);
+                        break;
+                    case MessageType.Register:
+                        messageJSON = incomingPacket.ReadString();
+                        GameserverInstance gameserverToRegister = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
+                        ServerManager.Register(gameserverToRegister, this);
+                        break;
+                    case MessageType.Ready:
+                        messageJSON = incomingPacket.ReadString();
+                        GameserverInstance gameserverReady = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
+                        ServerManager.RecieveGameserverReady(gameserverReady, this);
+                        break;
+                    default:
+                        break;
+                }
+
+                packetLength = 0;
+
+                //Check if there 4 or more bytes in the packet (size of int is 4)
+                if (incomingPacket.UnreadLength() >= 4)
+                {
+                    //Read the length of the incoming packet
+                    packetLength = incomingPacket.ReadInt();
+                    if (packetLength <= 0)
+                    {
+                        //If the length is 0, return
+                        return true;
+                    }
+
+                }
+            }
+
+            if (packetLength <= 1)
+            {
+                return true;
             }
 
             return false;
