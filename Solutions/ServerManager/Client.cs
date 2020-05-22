@@ -49,6 +49,7 @@ namespace ServerManager
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                ServerManager.DisconnectClient(this);
             }
         }
 
