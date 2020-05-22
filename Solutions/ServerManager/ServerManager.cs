@@ -130,7 +130,7 @@ namespace ServerManager {
                 GameserverInstances.Add(gameServerInstance, client);
             }
 
-            //StartGameserverOnCluster();
+            StartGameserverOnCluster();
 
 
         }
