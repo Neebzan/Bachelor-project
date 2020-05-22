@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using ServerManager;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace GameServerDecoy {
     class Program {
         static void Main (string [ ] args) {
-            Connect();
+            EmulatedUserConnection.Init();
             //TestProcess();
 
             Console.ReadKey();
@@ -14,16 +19,5 @@ namespace GameServerDecoy {
 
 
 
-
-        public static void Connect () {
-            TcpClient client = new TcpClient("212.10.51.254", 30832);
-            //TcpClient client = new TcpClient("localhost", 27001);
-            if (client.Connected) {
-                Console.WriteLine("Connected");
-            }
-            else {
-                Console.WriteLine("Not connected");
-            }
-        }
     }
 }

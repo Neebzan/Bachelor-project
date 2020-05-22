@@ -11,6 +11,7 @@ namespace ServerManager {
 
     public enum GameState {
         Starting,
+        Configuring,
         Running,
         Ending
     }
