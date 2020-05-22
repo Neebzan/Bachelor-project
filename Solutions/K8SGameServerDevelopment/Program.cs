@@ -1,14 +1,28 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using ServerManager;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
 namespace K8SGameServerDevelopment {
     class Program {
+        public static bool Running { get; private set; } = true;
+
         static void Main (string [ ] args) {
             Console.WriteLine("Server started");
-            Console.WriteLine("Sleeping for 10 seconds");
-            Thread.Sleep(10000);
-            Console.WriteLine("killing server");
-            Environment.Exit(0);
+
+            Gameserver.Init();
+
+            while (Running) {
+                var key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Escape) {
+                    Running = false;
+                }
+            }
         }
     }
 }

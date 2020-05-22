@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 
 namespace ServerManager {
     class Program {
-        public static bool Running { get; private set; }
+        public static bool Running { get; private set; } = true;
 
         static void Main (string [ ] args) {
             ServerManager.Init();
 
 
             while (Running) {
-                Console.ReadKey();
+                var key =  Console.ReadKey();
+                if (key.Key == ConsoleKey.Escape) {
+                    Running = false;
+                }
             }
         }
     }

@@ -14,25 +14,24 @@ namespace ServerManager {
     }
 
     public static class ClientConnectionManager {
-        public static event EventHandler<ClientMessageRecievedEventHandler> ClientMessageRecieved;
+        public static List<Client> ConnectedClients = new List<Client>();
+
         public static void ListenForClients (int port) {
-            TcpListener listener = new TcpListener(IPAddress.Any, port);
-            listener.Start();
-            while (true) {
-                TcpClient client = listener.AcceptTcpClient();
-                Console.WriteLine($"Client connected! from {client.Client.RemoteEndPoint.ToString()}");
+            try {
+                TcpListener listener = new TcpListener(IPAddress.Any, port);
+                listener.Start();
+                Console.WriteLine($"Listening for clients on port {port}");
+                while (true) {
+                    TcpClient tcpClient = listener.AcceptTcpClient();
+                    Client client = new Client(tcpClient);
 
-                // Handle message type
-                HandleClientMessages(client);
+                    ConnectedClients.Add(client);
+                    Console.WriteLine($"Client connected! from {tcpClient.Client.RemoteEndPoint.ToString()}");
+                }
             }
-        }
-
-        private static void HandleClientMessages (TcpClient client) {
-            // Decode message format
-            // Placeholder
-            ClientMessageType clientMessage = ClientMessageType.CreateServer;
-
-            ClientMessageRecieved?.Invoke(null, new ClientMessageRecievedEventHandler() { Client = client, MessageType = clientMessage });
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
