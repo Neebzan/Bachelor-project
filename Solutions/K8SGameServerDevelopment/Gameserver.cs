@@ -77,7 +77,14 @@ namespace K8SGameServerDevelopment {
             Console.WriteLine("Getting game ID..");
 
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo("printenv", "SESSION_NAME");
+            p.StartInfo = new ProcessStartInfo() {
+                FileName = "printenv",
+                Arguments = "SESSION_NAME",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+
             string gameIdentifier = "";
 
             // Read result from process
@@ -85,6 +92,8 @@ namespace K8SGameServerDevelopment {
             while (!p.StandardOutput.EndOfStream) {
                 gameIdentifier = p.StandardOutput.ReadLine();
             }
+
+            p.WaitForExit();
 
             Console.WriteLine("GameID: " + gameIdentifier);
 
@@ -94,6 +103,7 @@ namespace K8SGameServerDevelopment {
                 Port = ((IPEndPoint)listener.LocalEndpoint).Port,
                 IP = "212.10.51.254"
             };
+
 
             if (gameIdentifier.Contains("game-"))
                 Instance.GameserverID = gameIdentifier;
