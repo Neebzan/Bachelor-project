@@ -83,7 +83,7 @@ namespace K8SGameServerDevelopment {
 
             dataList.InsertRange(0, BitConverter.GetBytes(method));
 
-            byte [ ] data = dataList.ToArray();
+            byte[] data = AddPacketLength(dataList);
 
             tcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
         }
@@ -97,6 +97,12 @@ namespace K8SGameServerDevelopment {
 
             // After server is started and configured, send ready update to ServerManager
             SendReadyState();
+        }
+
+        private static byte[] AddPacketLength(List<byte> data)
+        {
+            data.InsertRange(0, BitConverter.GetBytes(data.Count));
+            return data.ToArray();
         }
 
 
@@ -113,7 +119,7 @@ namespace K8SGameServerDevelopment {
 
             dataList.InsertRange(0, BitConverter.GetBytes(method));
 
-            byte [ ] data = dataList.ToArray();
+            byte [ ] data = AddPacketLength(dataList);
 
             ConnectedServerManager.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
         }
