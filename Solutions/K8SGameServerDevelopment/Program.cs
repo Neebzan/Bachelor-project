@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace K8SGameServerDevelopment {
     class Program {
@@ -15,7 +16,7 @@ namespace K8SGameServerDevelopment {
         static void Main (string [ ] args) {
             Console.WriteLine("Server started");
 
-            Gameserver.Init();
+            Task.Run(() => Gameserver.Init());
 
             while (Running) {
                 Thread.Sleep(100);
