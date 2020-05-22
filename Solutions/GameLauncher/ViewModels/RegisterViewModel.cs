@@ -18,7 +18,7 @@ namespace GameLauncher.ViewModels {
 
         public async Task<bool> Register (string userID, string email, string passwordRaw, string firstName = "Default", string lastName = "Default") {
 
-            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestClient client = new RestClient("http://212.10.51.254:30005/api");
             RestRequest request = new RestRequest("accounts/", Method.POST);
 
             //hash password

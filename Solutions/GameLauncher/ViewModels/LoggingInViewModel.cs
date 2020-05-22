@@ -21,10 +21,10 @@ using System.Net.Http.Headers;
 
 namespace GameLauncher.ViewModels {
     class LoggingInViewModel : Screen {
-        private const string URL = "http://212.10.51.254:30830";
+        private const string URL = "http://212.10.51.254:30005/api";
 
         public async Task<bool> LoginTokenAsync () {
-            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestClient client = new RestClient(URL);
 
             RestRequest request = new RestRequest("token", Method.POST);
             request.AddHeader("token", Settings.Default.RefreshToken);
@@ -60,7 +60,7 @@ namespace GameLauncher.ViewModels {
 
 
         public async Task<bool> LoginAsync (string username, SecureString rawPassword) {
-            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestClient client = new RestClient(URL);
             RestRequest request = new RestRequest("accounts/login", Method.POST);
 
             //Convert to unsecure
