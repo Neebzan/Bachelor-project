@@ -93,7 +93,8 @@ namespace ServerManager
                 {
                     if (server.GameserverID == gameserverReady.GameserverID)
                     {
-                        instance = gameserverReady;
+                        instance = server;
+                        instance.GameState = gameserverReady.GameState;
                         break;
                     }
                 }
