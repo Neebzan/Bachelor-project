@@ -115,7 +115,6 @@ namespace ServerManager
                         default:
                             break;
                     }
-
                     return true;
                 }
             }
