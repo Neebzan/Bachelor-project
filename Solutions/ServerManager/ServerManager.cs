@@ -136,15 +136,15 @@ namespace ServerManager {
                 GameserverInstances.Add(gameServerInstance, client);
             }
 
-
+            StartGameserverOnCluster();
 
 
         }
 
         private static void StartGameserverOnCluster () {
-            //Process process = new Process();
-            //process.StartInfo = new ProcessStartInfo("kubectl", $"create -f {_k8sRessource}");
-            //process.Start();
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo("kubectl", $"create -f {_k8sRessource}");
+            process.Start();
         }
     }
 }

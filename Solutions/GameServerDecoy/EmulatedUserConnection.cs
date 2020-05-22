@@ -36,6 +36,7 @@ namespace GameServerDecoy {
 
 
             ServerManagerClient.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+            Console.WriteLine("Waiting for server response");
         }
 
         public static void ReceiveServerInfo (GameserverInstance gameserverInstance) {
