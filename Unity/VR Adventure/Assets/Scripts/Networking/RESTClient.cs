@@ -13,7 +13,7 @@ public class RESTClient : MonoBehaviour
     private string refreshToken = "";
     private string accessToken = "";
 
-    private readonly string _baseUrl = "http://212.10.51.254:30830/api/";
+    private readonly string _baseUrl = "http://212.10.51.254:30005/api/";
 
     public bool Verified = false;
     public event Action OnTokenVerificationDone;
