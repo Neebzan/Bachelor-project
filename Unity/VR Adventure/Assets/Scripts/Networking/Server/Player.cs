@@ -77,11 +77,12 @@ public class Player : MonoBehaviour
         Body.transform.rotation = Quaternion.LookRotation(newDir, Vector3.up);
     }
 
-    internal void Initialize(int id, string userName)
+    internal void Initialize(int id, string userName, int score = 0)
     {
         Username = userName;
         this.ID = id;
         vrPlayer.id = id;
+        Score = score;
     }
 
 

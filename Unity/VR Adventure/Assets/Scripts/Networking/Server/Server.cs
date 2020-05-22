@@ -10,9 +10,12 @@ public static class Server {
     public static int Port { get; private set; }
 
     private static int playerIndex = 1;
+    private static int incomingPlayerIndex = 1;
 
     public static Dictionary<int, ServerClient> clients = new Dictionary<int, ServerClient>();
+    //public static Dictionary<int, ServerClient> incomingClients = new Dictionary<int, ServerClient>();
 
+    public static Dictionary<string, int> DisconnectedPlayersScore = new Dictionary<string, int>();
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
@@ -83,6 +86,7 @@ public static class Server {
     public static void DisconnectClient (object sender, int _id) {
         ServerClient _client;
         if (clients.TryGetValue(_id, out _client)) {
+            DisconnectedPlayersScore.Add(_client.player.Username, _client.player.Score);
             _client.Disconnect();
             clients.Remove(_id);
             Debug.Log($"Client: {_id} - Disconnected successfully!");
@@ -97,15 +101,21 @@ public static class Server {
         Console.WriteLine("Incoming connection from " + _client.Client.RemoteEndPoint);
 
         if (clients.Count < MaxPlayers) {
+            //incomingClients.Add(incomingPlayerIndex, new ServerClient(incomingPlayerIndex));
+            //incomingClients[incomingPlayerIndex].Connect(_client);
+            //incomingPlayerIndex++;
             clients.Add(playerIndex, new ServerClient(playerIndex));
-            clients [ playerIndex ].Connect(_client);
+            clients[playerIndex].Connect(_client);
             playerIndex++;
+
+
             return;
         }
 
         Console.WriteLine("Server is full!");
 
     }
+
     public static void Stop () {
         tcpListener.Stop();
         udpListener.Close();

@@ -52,11 +52,6 @@ public class ServerManager : MonoBehaviour
         Server.Stop();
     }
 
-    //public Projectile SpawnProjectile(Vector3 pos)
-    //{
-    //    return Instantiate(projectilePrefab, pos, Quaternion.identity).GetComponent<Projectile>();
-    //}
-
     public Player SpawnPlayer()
     {
         Player player = Instantiate(vrPlayerPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity).GetComponent<Player>();

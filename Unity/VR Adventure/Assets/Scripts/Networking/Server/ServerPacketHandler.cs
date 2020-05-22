@@ -3,43 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerPacketHandler {
-    public static void WelcomeReceived (Packet _packet) {
+public class ServerPacketHandler
+{
+    public static void WelcomeReceived(Packet _packet)
+    {
         int _clientId = _packet.ReadInt();
         string _username = _packet.ReadString();
 
-        //Update corresponding player information
-        //Server.clients[_clientId].player.UserName = _username;
-
-        Server.clients [ _clientId ].SpawnPlayer(_username);
-
-        //if(_fromId != _clientId)
-        //{
-        //    System.Console.WriteLine("ID's didn't match and something has gone terribly wrong!");
-        //}
+        if (Server.DisconnectedPlayersScore.ContainsKey(_username))
+        {
+            Console.WriteLine("Reconnecting player");
+            int existingScore = Server.DisconnectedPlayersScore[_username];
+            Server.clients[_clientId].SpawnPlayer(_username, existingScore);
+            Server.DisconnectedPlayersScore.Remove(_username);
+        }
+        else
+        {
+            Console.WriteLine("spawning new player");
+            Server.clients[_clientId].SpawnPlayer(_username);
+        }
     }
 
-    //public static void ShootTestReceived (Packet _packet) {
-    //    int _clientId = _packet.ReadInt();
-    //    Vector3 dir = _packet.ReadVector3();
-    //    Server.clients [ _clientId ].player.SpawnTestProjectile(dir);
-    //}
-
-    public static void PlayerMovement (Packet _packet) {
+    public static void PlayerMovement(Packet _packet)
+    {
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
-        if (Server.clients.ContainsKey(id)) {
-
-
-            if (Server.clients [ id ].player.LastUpdateTick < packetTick) {
-                Server.clients [ id ].player.LastUpdateTick = packetTick;
+        if (Server.clients.ContainsKey(id))
+        {
+            if (Server.clients[id].player.LastUpdateTick < packetTick)
+            {
+                Server.clients[id].player.LastUpdateTick = packetTick;
                 //Head
                 Vector3 pos = _packet.ReadVector3();
                 Quaternion rot = _packet.ReadQuaternion();
 
                 //Left hand
-                HandDataPacket leftHand = new HandDataPacket() {
+                HandDataPacket leftHand = new HandDataPacket()
+                {
                     HandPosition = _packet.ReadVector3(),
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
@@ -51,7 +52,8 @@ public class ServerPacketHandler {
                 };
 
                 //Right hand
-                HandDataPacket rightHand = new HandDataPacket() {
+                HandDataPacket rightHand = new HandDataPacket()
+                {
                     HandPosition = _packet.ReadVector3(),
                     HandRotation = _packet.ReadQuaternion(),
                     Trigger = _packet.ReadFloat(),
@@ -63,37 +65,29 @@ public class ServerPacketHandler {
                 };
 
 
-                Server.clients [ id ].player.SetHead(pos, rot);
-                Server.clients [ id ].player.SetHand(leftHand, true);
-                Server.clients [ id ].player.SetHand(rightHand);
+                Server.clients[id].player.SetHead(pos, rot);
+                Server.clients[id].player.SetHand(leftHand, true);
+                Server.clients[id].player.SetHand(rightHand);
             }
         }
     }
 
-    public static void PlayerReadyStateUpdated(Packet _packet) {
+    public static void PlayerReadyStateUpdated(Packet _packet)
+    {
         int clientID = _packet.ReadInt();
         bool readyState = _packet.ReadBool();
 
-        if (Server.clients.ContainsKey(clientID)) {
-            Server.clients [ clientID ].player.IsReady = readyState;
+        if (Server.clients.ContainsKey(clientID))
+        {
+            Server.clients[clientID].player.IsReady = readyState;
 
             // Send player ready updated to all other players
-            ServerPacketSender.PlayerReadyStateUpdated(clientID, Server.clients [ clientID ].player.IsReady);
+            ServerPacketSender.PlayerReadyStateUpdated(clientID, Server.clients[clientID].player.IsReady);
         }
     }
 
-
-    //public static void VRHeadData(Packet _packet)
-    //{
-    //    int packetTick = _packet.ReadInt();
-    //    int id = _packet.ReadInt();
-
-    //    Vector3 pos = _packet.ReadVector3();
-    //    Quaternion rot = _packet.ReadQuaternion();
-    //    Server.clients[id].player.SetHead(pos, rot);
-    //}
-
-    public static void TimeSync (Packet _packet) {
+    public static void TimeSync(Packet _packet)
+    {
         int id = _packet.ReadInt();
         long clientTimeStamp = _packet.ReadLong();
         int clientLatency = _packet.ReadInt();
@@ -102,48 +96,8 @@ public class ServerPacketHandler {
         ServerPacketSender.TimeSync(id, clientTimeStamp, DateTime.UtcNow.Ticks);
     }
 
-    //public static void VRLeftHandData(Packet _packet)
-    //{
-    //    int packetTick = _packet.ReadInt();
-    //    int id = _packet.ReadInt();
-
-    //    HandDataPacket leftHand = new HandDataPacket()
-    //    {
-    //        HandPosition = _packet.ReadVector3(),
-    //        HandRotation = _packet.ReadQuaternion(),
-    //        Trigger = _packet.ReadFloat(),
-    //        Grip = _packet.ReadFloat(),
-    //        Velocity = _packet.ReadVector3(),
-    //        HandState = (HandState)_packet.ReadInt(),
-    //        TargetHandState = (HandState)_packet.ReadInt(),
-    //        StatePower = _packet.ReadFloat(),
-    //    };
-    //    Server.clients[id].player.SetHand(leftHand, true);
-
-    //}
-
-    //public static void VRRightHandData(Packet _packet)
-    //{
-    //    int packetTick = _packet.ReadInt();
-    //    int id = _packet.ReadInt();
-
-    //    HandDataPacket rightHand = new HandDataPacket()
-    //    {
-    //        HandPosition = _packet.ReadVector3(),
-    //        HandRotation = _packet.ReadQuaternion(),
-    //        Trigger = _packet.ReadFloat(),
-    //        Grip = _packet.ReadFloat(),
-    //        Velocity = _packet.ReadVector3(),
-    //        HandState = (HandState)_packet.ReadInt(),
-    //        TargetHandState = (HandState)_packet.ReadInt(),
-    //        StatePower = _packet.ReadFloat(),
-    //    };
-
-    //    Server.clients[id].player.SetHand(rightHand);
-
-    //}
-
-    public static void UdpTestReceived (Packet packet) {
+    public static void UdpTestReceived(Packet packet)
+    {
         long packetTick = packet.ReadLong();
         int _id = packet.ReadInt();
         string _msg = packet.ReadString();

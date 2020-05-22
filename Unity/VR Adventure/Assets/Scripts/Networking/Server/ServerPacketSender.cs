@@ -17,9 +17,9 @@ public class ServerPacketSender
             packet.Write(client);
 
             SendTCPPacket(client, packet);
+            Console.WriteLine("Welcome packet send");
         }
     }
-
 
     public static void PlayerPositions()
     {
@@ -71,8 +71,10 @@ public class ServerPacketSender
         }
     }
 
-    internal static void PlayerReadyStateUpdated (int clientID, bool readyState) {
-        using (Packet _packet = new Packet((int)ServerPackets.PlayerReadyStateUpdated)) {
+    internal static void PlayerReadyStateUpdated(int clientID, bool readyState)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerReadyStateUpdated))
+        {
             _packet.Write(clientID);
             _packet.Write(readyState);
 
@@ -139,8 +141,10 @@ public class ServerPacketSender
     }
 
 
-    public static void PlayerScoreUpdated (int playerID, int newScore) {
-        using (Packet _packet = new Packet((int)ServerPackets.PlayerScoreUpdated)) {
+    public static void PlayerScoreUpdated(int playerID, int newScore)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerScoreUpdated))
+        {
             _packet.Write(playerID);
             _packet.Write(newScore);
 
