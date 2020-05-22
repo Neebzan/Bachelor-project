@@ -12,8 +12,8 @@ public class RESTServer : MonoBehaviour
 
     private string serverToken = "";
     private string serverSecret = "ThisIsAVerySecretServerSecretThisIsAVerySecretServerSecretThisIsAVerySecretServerSecretThisIsAVerySecretServerSecret";
-    //private readonly string _baseUrl = "http://212.10.51.254:30830/api/";
-    private readonly string _baseUrl = "https://localhost:5001/api/";
+    private readonly string _baseUrl = "http://212.10.51.254:30830/api/";
+    //private readonly string _baseUrl = "https://localhost:5001/api/";
 
 
     public event Action<bool> OnGetServerTokenDone;
