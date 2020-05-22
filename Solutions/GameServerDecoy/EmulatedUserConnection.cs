@@ -25,15 +25,7 @@ namespace GameServerDecoy {
             GameserverInstance gameserverInstance = new GameserverInstance();
 
             // Get the name generated for this pod
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo("printenv", "SESSION_NAME");
-            p.Start();
-            string gameIdentifier = p.StandardOutput.ReadLine();
-
-            if (gameIdentifier.Contains("game-"))
-                gameserverInstance.GameserverID = gameIdentifier;
-            else
-                gameserverInstance.GameserverID = "Default";
+            gameserverInstance.ServerName = "Test name";
 
             // Serialize GameserverInstance
             string JSON = JsonConvert.SerializeObject(gameserverInstance);

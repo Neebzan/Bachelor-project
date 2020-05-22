@@ -25,8 +25,11 @@ namespace K8SGameServerDevelopment {
         //public static readonly string _serverManagerIP = "servermanager-gameserver-service.default.svc.cluster.local";
         public static readonly string _serverManagerIP = "212.10.51.254";
         private static Stopwatch stopwatch = new Stopwatch();
+        private static string GameID = "";
+
 
         public static void Init () {
+
             TcpListener listener = StartListenerWithAvailablePort(_minPort, _maxPort);
             if (listener != null) {
                 Task.Run(() => ListenForClients(ref listener));
@@ -71,13 +74,25 @@ namespace K8SGameServerDevelopment {
             TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
             ConnectedServerManager = new GameserverClient(tcpClient);
 
-            GameserverInstance gameserverInstance = new GameserverInstance() {
+
+
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo("printenv", "SESSION_NAME");
+            p.Start();
+            string gameIdentifier = p.StandardOutput.ReadLine();
+
+            Instance = new GameserverInstance() {
                 GameserverID = "", // Read from kubernetes pod
                 Port = ((IPEndPoint)listener.LocalEndpoint).Port,
                 IP = "212.10.51.254"
             };
 
-            string JSON = JsonConvert.SerializeObject(gameserverInstance);
+            if (gameIdentifier.Contains("game-"))
+                Instance.GameserverID = gameIdentifier;
+            else
+                Instance.GameserverID = "Default";
+
+            string JSON = JsonConvert.SerializeObject(Instance);
 
             Packet packet = new Packet((int)MessageType.Register);
             packet.Write(JSON);
