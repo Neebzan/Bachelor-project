@@ -32,11 +32,17 @@ namespace GameServerDecoy {
 
             dataList.InsertRange(0, BitConverter.GetBytes(method));
 
-            byte [ ] data = dataList.ToArray();
+            byte[] data = AddPacketLength(dataList);
 
 
             ServerManagerClient.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
             Console.WriteLine("Waiting for server response");
+        }
+
+        private static byte[] AddPacketLength(List<byte> data)
+        {
+            data.InsertRange(0, BitConverter.GetBytes(data.Count));
+            return data.ToArray();
         }
 
         public static void ReceiveServerInfo (GameserverInstance gameserverInstance) {
