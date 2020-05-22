@@ -21,8 +21,8 @@ namespace ServerManager {
 
         private static string _k8sRessource = "Files/GameServerPod.yaml";
 
-        //private static List<GameserverInstance> GameserverInstances = new List<GameserverInstance>();
-        private static Dictionary<GameserverInstance, Client> GameserverInstances = new Dictionary<GameserverInstance, Client>();
+        private static List<GameserverInstance> LiveGameInstances = new List<GameserverInstance>();
+        private static Dictionary<GameserverInstance, Client> ConfiguringGameserverInstances = new Dictionary<GameserverInstance, Client>();
 
         /// <summary>
         /// Setup ServerManager to start accepting clients
@@ -51,8 +51,8 @@ namespace ServerManager {
             GameserverInstance instance = null;
 
             // Find a server that is now ready
-            lock (GameserverInstances) {
-                foreach (GameserverInstance server in GameserverInstances.Keys) {
+            lock (ConfiguringGameserverInstances) {
+                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys) {
                     if (server.GameState == GameState.Starting) {
                         instance = server;
                         break;
@@ -76,8 +76,8 @@ namespace ServerManager {
             GameserverInstance instance = null;
 
             // Find a server that is now ready
-            lock (GameserverInstances) {
-                foreach (GameserverInstance server in GameserverInstances.Keys) {
+            lock (ConfiguringGameserverInstances) {
+                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys) {
                     if (server.GameserverID == gameserverReady.GameserverID) {
                         instance = server;
                         break;
@@ -101,8 +101,14 @@ namespace ServerManager {
             packet.Write(JSON);
             packet.WriteLength();            
 
-            lock (GameserverInstances) {
-                GameserverInstances [ instance ].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+            lock (ConfiguringGameserverInstances) {
+                ConfiguringGameserverInstances [ instance ].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                LiveGameInstances.Add(instance);
+                ConfiguringGameserverInstances [ instance ].TcpClient.GetStream().Close();
+                ConfiguringGameserverInstances [ instance ].TcpClient.Dispose();
+                ConfiguringGameserverInstances [ instance ] = null;
+                ConfiguringGameserverInstances.Remove(instance);
+
             }
         }
 
@@ -126,8 +132,8 @@ namespace ServerManager {
             Console.WriteLine("Creating server instance");
             gameServerInstance.GameState = GameState.Starting;
 
-            lock (GameserverInstances) {
-                GameserverInstances.Add(gameServerInstance, client);
+            lock (ConfiguringGameserverInstances) {
+                ConfiguringGameserverInstances.Add(gameServerInstance, client);
             }
 
             StartGameserverOnCluster();

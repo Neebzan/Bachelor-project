@@ -14,6 +14,8 @@ namespace K8SGameServerDevelopment {
     public static class Gameserver {
 
         public static GameserverInstance Instance { get; set; }
+        public static bool Running { get; internal set; } = true;
+
         public static List<GameserverClient> ConnectedClients = new List<GameserverClient>();
         public static GameserverClient ConnectedServerManager = null;
         public static readonly int _minPort = 27005;
@@ -58,7 +60,7 @@ namespace K8SGameServerDevelopment {
         private static void Game () {
             while (true) {
                 if (stopwatch.IsRunning && stopwatch.ElapsedMilliseconds > 10000) {
-                    Environment.Exit(0);
+                    Running = false;
                 }
                 Thread.Sleep(100);
             }

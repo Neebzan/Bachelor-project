@@ -11,14 +11,15 @@ using System.Threading.Tasks;
 
 namespace K8SGameServerDevelopment {
     class Program {
-        public static bool Running { get; private set; } = true;
+
+
 
         static void Main (string [ ] args) {
             Console.WriteLine("Server started");
 
             Task.Run(() => Gameserver.Init());
 
-            while (Running) {
+            while (Gameserver.Running) {
                 Thread.Sleep(100);
             }
         }
