@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerManager {
@@ -14,10 +15,7 @@ namespace ServerManager {
 
 
             while (Running) {
-                var key =  Console.ReadKey();
-                if (key.Key == ConsoleKey.Escape) {
-                    Running = false;
-                }
+                Thread.Sleep(100);
             }
         }
     }
