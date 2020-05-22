@@ -18,10 +18,7 @@ namespace K8SGameServerDevelopment {
             Gameserver.Init();
 
             while (Running) {
-                var key = Console.ReadKey();
-                if (key.Key == ConsoleKey.Escape) {
-                    Running = false;
-                }
+                Thread.Sleep(100);
             }
         }
     }
