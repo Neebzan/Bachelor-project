@@ -101,14 +101,12 @@ namespace ServerManager
 
             if (instance != null)
             {
-                Console.WriteLine($"Sending gameserver {gameserverReady.GameserverID} information to player");
                 SendServerToClient(instance);
             }
         }
 
         private static void SendServerToClient(GameserverInstance instance)
         {
-            Console.WriteLine($"Sending server {instance.GameserverID} information to client");
 
             string JSON = JsonConvert.SerializeObject(instance);
 
@@ -119,7 +117,8 @@ namespace ServerManager
 
             lock (ConfiguringGameserverInstances)
             {
-                ConfiguringGameserverInstances[instance].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                Console.WriteLine($"Sending gameserver {instance.GameserverID} information to player");
+                ConfiguringGameserverInstances [instance].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
                 LiveGameInstances.Add(instance);
                 ConfiguringGameserverInstances.Remove(instance);
 

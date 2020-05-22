@@ -11,6 +11,7 @@ namespace GameServerDecoy {
     static class EmulatedUserConnection {
 
         static Client ServerManagerClient = null;
+        static Client GameClient = null;
 
         public static void Init () {
             SendCreateServerRequest();
@@ -44,6 +45,12 @@ namespace GameServerDecoy {
             Console.WriteLine($"Game name {gameserverInstance.ServerName}");
             Console.WriteLine($"Server IP {gameserverInstance.IP}");
             Console.WriteLine($"Server Port {gameserverInstance.Port}");
+        }
+
+        public static void ConnectToServer (GameserverInstance gameserverInstance) {
+            Console.WriteLine("Connecting to game server");
+            GameClient = new Client(new TcpClient(gameserverInstance.IP, gameserverInstance.Port));
+            Console.WriteLine("Connected!");
         }
     }
 }

@@ -22,6 +22,7 @@ namespace K8SGameServerDevelopment {
             while (Gameserver.Running) {
                 Thread.Sleep(100);
             }
+            Console.WriteLine("Closing server");
         }
     }
 }

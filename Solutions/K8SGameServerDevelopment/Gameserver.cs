@@ -61,6 +61,7 @@ namespace K8SGameServerDevelopment {
         }
 
         private static void Game () {
+            Console.WriteLine("\nGame started");
             while (true) {
                 if (stopwatch.IsRunning && stopwatch.ElapsedMilliseconds > 10000) {
                     Running = false;
@@ -70,7 +71,6 @@ namespace K8SGameServerDevelopment {
         }
 
         public static void SendRegisterRequest (TcpListener listener) {
-            Console.WriteLine("Sending register request");
             TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
             ConnectedServerManager = new GameserverClient(tcpClient);
 
@@ -96,6 +96,7 @@ namespace K8SGameServerDevelopment {
             p.WaitForExit();
 
             Console.WriteLine("GameID: " + gameIdentifier);
+            Console.WriteLine("\n");
 
             Console.WriteLine("Creating game instance..");
             Instance = new GameserverInstance() {
@@ -110,11 +111,11 @@ namespace K8SGameServerDevelopment {
             else
                 Instance.GameserverID = "Default";
 
-            Console.WriteLine("Creating game created");
+            Console.WriteLine("Instance created");
             Console.WriteLine($"ServerID {Instance.GameserverID}");
             Console.WriteLine($"Server IP {Instance.IP}");
             Console.WriteLine($"Server Port {Instance.Port}");
-
+            Console.WriteLine("\n");
 
             string JSON = JsonConvert.SerializeObject(Instance);
 
@@ -131,9 +132,7 @@ namespace K8SGameServerDevelopment {
             Console.WriteLine("Configuring server..");
             Instance = configuration;
             Console.WriteLine("Server configured");
-            //StartServer(); // Some unity logic with the given configuration
-
-            // After server is started and configured, send ready update to ServerManager
+            Console.WriteLine("\n");
             SendReadyState();
         }
 
