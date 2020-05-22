@@ -18,8 +18,8 @@ namespace GameServerDecoy {
         public static void SendCreateServerRequest () {
             Console.WriteLine($"Sending request to create server");
 
-            //ServerManagerClient = new Client(new TcpClient("212.10.51.254", 30006));
-            ServerManagerClient = new Client(new TcpClient("212.10.51.254", 27001));
+            ServerManagerClient = new Client(new TcpClient("212.10.51.254", 30006));
+            //ServerManagerClient = new Client(new TcpClient("212.10.51.254", 27001));
 
             GameserverInstance gameserverInstance = new GameserverInstance() {
                 ServerName = "hihihaha - Tais"
