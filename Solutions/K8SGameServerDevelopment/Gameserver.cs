@@ -74,13 +74,21 @@ namespace K8SGameServerDevelopment {
             TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
             ConnectedServerManager = new GameserverClient(tcpClient);
 
-
+            Console.WriteLine("Getting game ID..");
 
             Process p = new Process();
             p.StartInfo = new ProcessStartInfo("printenv", "SESSION_NAME");
-            p.Start();
-            string gameIdentifier = p.StandardOutput.ReadLine();
+            string gameIdentifier = "";
 
+            // Read result from process
+            p.Start();
+            while (!p.StandardOutput.EndOfStream) {
+                gameIdentifier = p.StandardOutput.ReadLine();
+            }
+
+            Console.WriteLine("GameID: " + gameIdentifier);
+
+            Console.WriteLine("Creating game instance..");
             Instance = new GameserverInstance() {
                 GameserverID = "", // Read from kubernetes pod
                 Port = ((IPEndPoint)listener.LocalEndpoint).Port,
@@ -92,12 +100,19 @@ namespace K8SGameServerDevelopment {
             else
                 Instance.GameserverID = "Default";
 
+            Console.WriteLine("Creating game created");
+            Console.WriteLine($"ServerID {Instance.GameserverID}");
+            Console.WriteLine($"Server IP {Instance.IP}");
+            Console.WriteLine($"Server Port {Instance.Port}");
+
+
             string JSON = JsonConvert.SerializeObject(Instance);
 
             Packet packet = new Packet((int)MessageType.Register);
             packet.Write(JSON);
             packet.WriteLength();
 
+            Console.WriteLine($"Sending game instance to server manager, to be configured..");
             tcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
 
