@@ -2,6 +2,7 @@
 using ServerManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -21,10 +22,20 @@ namespace GameServerDecoy {
             ServerManagerClient = new Client(new TcpClient("212.10.51.254", 30006));
             //ServerManagerClient = new Client(new TcpClient("212.10.51.254", 27001));
 
-            GameserverInstance gameserverInstance = new GameserverInstance() {
-                ServerName = "hihihaha - Tais"
-            };
+            GameserverInstance gameserverInstance = new GameserverInstance();
 
+            // Get the name generated for this pod
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo("printenv", "SESSION_NAME");
+            p.Start();
+            string gameIdentifier = p.StandardOutput.ReadLine();
+
+            if (gameIdentifier.Contains("game-"))
+                gameserverInstance.GameserverID = gameIdentifier;
+            else
+                gameserverInstance.GameserverID = "Default";
+
+            // Serialize GameserverInstance
             string JSON = JsonConvert.SerializeObject(gameserverInstance);
 
             Packet packet = new Packet((int)MessageType.Create);
