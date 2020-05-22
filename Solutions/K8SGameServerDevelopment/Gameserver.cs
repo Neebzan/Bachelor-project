@@ -27,13 +27,15 @@ namespace K8SGameServerDevelopment {
         private static Stopwatch stopwatch = new Stopwatch();
         private static string GameID = "";
 
+        static TcpListener clientListener = null;
+
 
         public static void Init () {
 
-            TcpListener listener = StartListenerWithAvailablePort(_minPort, _maxPort);
-            if (listener != null) {
-                Task.Run(() => ListenForClients(ref listener));
-                SendRegisterRequest(listener);
+            clientListener = StartListenerWithAvailablePort(_minPort, _maxPort);
+            if (clientListener != null) {
+                Task.Run(() => ListenForClients());
+                SendRegisterRequest();
                 Console.WriteLine($"Waiting for configuration");
                 Task.Run(() => Game());
             }
@@ -42,10 +44,10 @@ namespace K8SGameServerDevelopment {
             }
         }
 
-        private static void ListenForClients (ref TcpListener listener) {
+        private static void ListenForClients () {
             try {
                 while (true) {
-                    TcpClient tcpClient = listener.AcceptTcpClient();
+                    TcpClient tcpClient = clientListener.AcceptTcpClient();
                     GameserverClient client = new GameserverClient(tcpClient);
 
                     ConnectedClients.Add(client);
@@ -70,7 +72,7 @@ namespace K8SGameServerDevelopment {
             }
         }
 
-        public static void SendRegisterRequest (TcpListener listener) {
+        public static void SendRegisterRequest () {
             TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
             ConnectedServerManager = new GameserverClient(tcpClient);
 
@@ -101,7 +103,7 @@ namespace K8SGameServerDevelopment {
             Console.WriteLine("Creating game instance..");
             Instance = new GameserverInstance() {
                 GameserverID = "", // Read from kubernetes pod
-                Port = ((IPEndPoint)listener.LocalEndpoint).Port,
+                Port = ((IPEndPoint)clientListener.LocalEndpoint).Port,
                 IP = "212.10.51.254"
             };
 

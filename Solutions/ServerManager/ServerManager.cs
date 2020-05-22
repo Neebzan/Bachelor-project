@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,6 +54,9 @@ namespace ServerManager
         public static void ReceiveRegisterRequest(GameserverInstance gameserverToRegister, Client client)
         {
             Console.WriteLine($"Started server on {gameserverToRegister.IP + ":" + gameserverToRegister.Port}");
+
+            Console.WriteLine($"Gameserver remote endpoint: {((client.TcpClient.Client.RemoteEndPoint) as IPEndPoint).Address.ToString() + ":" + ((client.TcpClient.Client.RemoteEndPoint) as IPEndPoint).Port.ToString()}");
+            Console.WriteLine($"Gameserver local endpoint: {((client.TcpClient.Client.LocalEndPoint) as IPEndPoint).Address.ToString() + ":" + ((client.TcpClient.Client.LocalEndPoint) as IPEndPoint).Port.ToString()}");
 
             GameserverInstance instance = null;
 
