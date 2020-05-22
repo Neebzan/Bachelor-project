@@ -29,7 +29,7 @@ namespace GameServerDecoy {
 
             Packet packet = new Packet((int)MessageType.Create);
             packet.Write(JSON);
-
+            packet.WriteLength();
 
             ServerManagerClient.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
             Console.WriteLine("Waiting for server response");

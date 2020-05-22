@@ -45,7 +45,7 @@ namespace ServerManager {
             process.Start();
         }
 
-        public static void Register (GameserverInstance gameserverToRegister, Client client) {
+        public static void ReceiveRegisterRequest (GameserverInstance gameserverToRegister, Client client) {
             Console.WriteLine($"Started server on {gameserverToRegister.IP + ":" + gameserverToRegister.Port}");
 
             GameserverInstance instance = null;
@@ -96,16 +96,13 @@ namespace ServerManager {
 
             string JSON = JsonConvert.SerializeObject(instance);
 
-            List<byte> dataList = Encoding.Default.GetBytes(JSON).ToList();
 
-            int method = (int)MessageType.Ready;
-
-            dataList.InsertRange(0, BitConverter.GetBytes(method));
-
-            byte [ ] data = dataList.ToArray();
+            Packet packet = new Packet((int)MessageType.Ready);
+            packet.Write(JSON);
+            packet.WriteLength();            
 
             lock (GameserverInstances) {
-                GameserverInstances [ instance ].TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+                GameserverInstances [ instance ].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
             }
         }
 
@@ -114,15 +111,12 @@ namespace ServerManager {
 
             string JSON = JsonConvert.SerializeObject(instanceToConfigure);
 
-            List<byte> dataList = Encoding.Default.GetBytes(JSON).ToList();
 
-            int method = (int)MessageType.Configure;
+            Packet packet = new Packet((int)MessageType.Configure);
+            packet.Write(JSON);
+            packet.WriteLength();
 
-            dataList.InsertRange(0, BitConverter.GetBytes(method));
-
-            byte [ ] data = dataList.ToArray();
-
-            client.TcpClient.GetStream().BeginWrite(data, 0, data.Length, null, null);
+            client.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
 
         /// <summary>

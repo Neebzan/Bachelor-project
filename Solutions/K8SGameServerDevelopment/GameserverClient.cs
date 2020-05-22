@@ -53,11 +53,11 @@ namespace K8SGameServerDevelopment
 
         }
 
-
         private bool HandleIncomingData(byte[] data)
         {
             //Read the length of the next data packet
             int packetLength = 0;
+            incomingPacket.SetBytes(data);
 
             //Check if there is 4 or more bytes in the packet (size of int is 4)
             if (incomingPacket.UnreadLength() >= 4)
@@ -75,8 +75,6 @@ namespace K8SGameServerDevelopment
             //We keep this in a while loop here because one packet might be made up of several packets
             while (packetLength > 0 && packetLength <= incomingPacket.UnreadLength())
             {
-                byte[] bytes = incomingPacket.ReadBytes(packetLength);
-
                 //Handle packet
                 //Read the messagetype
                 int messageTypeInt = incomingPacket.ReadInt();

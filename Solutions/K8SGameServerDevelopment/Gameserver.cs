@@ -78,7 +78,8 @@ namespace K8SGameServerDevelopment {
             string JSON = JsonConvert.SerializeObject(gameserverInstance);
 
             Packet packet = new Packet((int)MessageType.Register);
-            packet.Write(JSON);            
+            packet.Write(JSON);
+            packet.WriteLength();
 
             tcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
@@ -92,21 +93,7 @@ namespace K8SGameServerDevelopment {
 
             // After server is started and configured, send ready update to ServerManager
             SendReadyState();
-            SendReadyState();
-            SendReadyState();
-            SendReadyState();
-            SendReadyState();
-            SendReadyState();
-            SendReadyState();
         }
-
-        private static byte[] AddPacketLength(List<byte> data)
-        {
-            data.InsertRange(0, BitConverter.GetBytes(data.Count));
-            return data.ToArray();
-        }
-
-
 
         private static void SendReadyState () {
             Console.WriteLine("Sending ready state to ServerManager");
@@ -116,6 +103,7 @@ namespace K8SGameServerDevelopment {
 
             Packet packet = new Packet((int)MessageType.Ready);
             packet.Write(JSON);
+            packet.WriteLength();
 
             ConnectedServerManager.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
         }
