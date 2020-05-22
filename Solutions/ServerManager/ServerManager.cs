@@ -7,15 +7,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerManager {
-    public enum MessageType {
+namespace ServerManager
+{
+    public enum MessageType
+    {
         Create,
         Register,
         Configure,
         Ready
     }
 
-    public static class ServerManager {
+    public static class ServerManager
+    {
         private readonly static int _clientPort = 27001;
         private readonly static int _gameserverPort = 27002;
 
@@ -27,7 +30,8 @@ namespace ServerManager {
         /// <summary>
         /// Setup ServerManager to start accepting clients
         /// </summary>
-        internal static void Init () {
+        internal static void Init()
+        {
             Console.WriteLine("Started");
             //Console.WriteLine("Running with kubectl: ");
             //PrintKubectlVersion();
@@ -39,21 +43,26 @@ namespace ServerManager {
         /// <summary>
         /// Prints the installed version of kubectl
         /// </summary>
-        private static void PrintKubectlVersion () {
+        private static void PrintKubectlVersion()
+        {
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo("kubectl", "version --short");
             process.Start();
         }
 
-        public static void ReceiveRegisterRequest (GameserverInstance gameserverToRegister, Client client) {
+        public static void ReceiveRegisterRequest(GameserverInstance gameserverToRegister, Client client)
+        {
             Console.WriteLine($"Started server on {gameserverToRegister.IP + ":" + gameserverToRegister.Port}");
 
             GameserverInstance instance = null;
 
             // Find a server that is now ready
-            lock (ConfiguringGameserverInstances) {
-                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys) {
-                    if (server.GameState == GameState.Starting) {
+            lock (ConfiguringGameserverInstances)
+            {
+                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys)
+                {
+                    if (server.GameState == GameState.Starting)
+                    {
                         instance = server;
                         break;
                     }
@@ -62,7 +71,8 @@ namespace ServerManager {
 
             // We found a starting server
             // Merge with information of started server
-            if (instance != null) {
+            if (instance != null)
+            {
                 instance.GameserverID = gameserverToRegister.GameserverID;
                 instance.Port = gameserverToRegister.Port;
                 instance.IP = gameserverToRegister.IP;
@@ -71,27 +81,33 @@ namespace ServerManager {
             }
         }
 
-        public static void RecieveGameserverReady (GameserverInstance gameserverReady, Client client) {
+        public static void RecieveGameserverReady(GameserverInstance gameserverReady, Client client)
+        {
             Console.WriteLine($"Gameserver {gameserverReady.GameserverID} ready recieved");
             GameserverInstance instance = null;
 
             // Find a server that is now ready
-            lock (ConfiguringGameserverInstances) {
-                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys) {
-                    if (server.GameserverID == gameserverReady.GameserverID) {
+            lock (ConfiguringGameserverInstances)
+            {
+                foreach (GameserverInstance server in ConfiguringGameserverInstances.Keys)
+                {
+                    if (server.GameserverID == gameserverReady.GameserverID)
+                    {
                         instance = server;
                         break;
                     }
                 }
             }
 
-            if (instance != null) {
+            if (instance != null)
+            {
                 Console.WriteLine($"Sending gameserver {gameserverReady.GameserverID} information to player");
                 SendServerToClient(instance);
             }
         }
 
-        private static void SendServerToClient (GameserverInstance instance) {
+        private static void SendServerToClient(GameserverInstance instance)
+        {
             Console.WriteLine($"Sending server {instance.GameserverID} information to client");
 
             string JSON = JsonConvert.SerializeObject(instance);
@@ -99,20 +115,33 @@ namespace ServerManager {
 
             Packet packet = new Packet((int)MessageType.Ready);
             packet.Write(JSON);
-            packet.WriteLength();            
+            packet.WriteLength();
 
-            lock (ConfiguringGameserverInstances) {
-                ConfiguringGameserverInstances [ instance ].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+            lock (ConfiguringGameserverInstances)
+            {
+                ConfiguringGameserverInstances[instance].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
                 LiveGameInstances.Add(instance);
-                ConfiguringGameserverInstances [ instance ].TcpClient.GetStream().Close();
-                ConfiguringGameserverInstances [ instance ].TcpClient.Dispose();
-                ConfiguringGameserverInstances [ instance ] = null;
                 ConfiguringGameserverInstances.Remove(instance);
 
             }
         }
 
-        private static void SendServerConfiguration (GameserverInstance instanceToConfigure, Client client) {
+        public static void DisconnectClient(Client client)
+        {
+            lock (ConfiguringGameserverInstances)
+                if (ConfiguringGameserverInstances.ContainsValue(client))
+                {
+                    var instance = ConfiguringGameserverInstances.First(x => x.Value == client).Key;
+                    ConfiguringGameserverInstances.Remove(instance);
+                    client.TcpClient.GetStream().Close();
+                    client.TcpClient.Dispose();
+                    client = null;
+                }
+
+        }
+
+        private static void SendServerConfiguration(GameserverInstance instanceToConfigure, Client client)
+        {
             Console.WriteLine($"Sending server configuration to {instanceToConfigure.GameserverID}");
 
             string JSON = JsonConvert.SerializeObject(instanceToConfigure);
@@ -128,11 +157,13 @@ namespace ServerManager {
         /// <summary>
         /// Creates a game server instance
         /// </summary>
-        public static void CreateGameServer (GameserverInstance gameServerInstance, Client client) {
+        public static void CreateGameServer(GameserverInstance gameServerInstance, Client client)
+        {
             Console.WriteLine("Creating server instance");
             gameServerInstance.GameState = GameState.Starting;
 
-            lock (ConfiguringGameserverInstances) {
+            lock (ConfiguringGameserverInstances)
+            {
                 ConfiguringGameserverInstances.Add(gameServerInstance, client);
             }
 
@@ -141,7 +172,8 @@ namespace ServerManager {
 
         }
 
-        private static void StartGameserverOnCluster () {
+        private static void StartGameserverOnCluster()
+        {
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo("kubectl", $"create -f {_k8sRessource}");
             process.Start();
