@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: c8295784aaced1b4781a0a5c301c8012,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -299,8 +299,8 @@ Transform:
   - {fileID: 1688448916}
   - {fileID: 1994315301}
   - {fileID: 744053613}
-  - {fileID: 252392681}
   - {fileID: 6552052393314086160}
+  - {fileID: 252392681}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -528,7 +528,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16688
+  m_Name: pb_Mesh171728
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3461,7 +3461,12 @@ PrefabInstance:
     - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: ip
-      value: 212.10.51.254
+      value: 127.0.0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
+        type: 3}
+      propertyPath: Username
+      value: Aberdeen1798Ted
       objectReference: {fileID: 0}
     - target: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}

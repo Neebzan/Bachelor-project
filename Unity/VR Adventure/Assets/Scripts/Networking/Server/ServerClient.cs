@@ -24,11 +24,6 @@ public class ServerClient
         udp = new UDP(id);
     }
 
-    ~ServerClient()
-    {
-
-    }
-
     public void Connect(TcpClient tcpClient)
     {
         tcp.Disconnected += Server.DisconnectClient;
@@ -36,10 +31,20 @@ public class ServerClient
         isConnected = true;
     }
 
-    public void SpawnPlayer(string _userName)
+    public void SpawnPlayer(string _userName, int score = -1)
     {
         player = ServerManager.instance.SpawnPlayer();
-        player.Initialize(id, _userName);
+        if (score < 0)
+        {
+            player.Initialize(id, _userName);
+            Console.WriteLine("New player spawned!");
+        }
+        else
+        {
+            player.Initialize(id, _userName, score);
+            Console.WriteLine("Existing player spawned!");
+        }
+
 
         //Send all existing players to the client
         foreach (var client in Server.clients.Values)
@@ -75,6 +80,8 @@ public class ServerClient
     {
         if (isConnected)
         {
+            ServerManager.instance.PlayerDisconnected(player);
+
             tcp.Disconnected -= Server.DisconnectClient;
             isConnected = false;
 

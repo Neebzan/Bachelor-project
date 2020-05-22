@@ -21,49 +21,55 @@ namespace DatabaseREST.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //public ActionResult<IEnumerable<Matches>> Get()
-        //{
-        //    return _context.Matches.OrderBy(u => u.Ended).Take(1000).ToList();
-        //}
-
         [HttpGet]
-        public ActionResult<Matches> Get(int id)
+        public ActionResult<IEnumerable<Matches>> Get()
         {
-
-            var match = _context.Matches
-                        .Include(p => p.PlayedMatch)
-                        .SingleOrDefault(x => x.MatchId == id);
-            if (match == null)
-                return NotFound();
-
-            return match;
+            return _context.Matches.Include(p => p.PlayedMatch).OrderBy(u => u.Ended).Take(1000).ToList();
         }
 
+        //[HttpGet]
+        //public ActionResult<Matches> Get(int id)
+        //{
+
+        //    var match = _context.Matches
+        //                .Include(p => p.PlayedMatch)
+        //                .SingleOrDefault(x => x.MatchId == id);
+        //    if (match == null)
+        //        return NotFound();
+
+        //    return match;
+        //}
+
         [HttpPost]
-        public ActionResult<Matches> Post(Matches match)
+        public ActionResult<Matches> Post(Matches match, [FromHeader] string serverToken)
         {
-            //Check if match exists
-            var existingMatch = _context.Matches.Find(match.MatchId);
-            if (existingMatch == null)
+            //Check if serverToken is valid
+            if (Token.VerifyServerToken(serverToken))
             {
-                try
+                //Check if match exists
+                var existingMatch = _context.Matches.Find(match.MatchId);
+                if (existingMatch == null)
                 {
-                    _context.Matches.Add(match);
-                    _context.SaveChanges();
+                    try
+                    {
+                        _context.Matches.Add(match);
+                        _context.SaveChanges();
+                    }
+                    catch (DbUpdateException e)
+                    {
+                        ModelState.AddModelError("Exception", e.InnerException.Message);
+                        return StatusCode(500, ModelState);
+                    }
+                    return Created(string.Empty, match);
                 }
-                catch (DbUpdateException e)
+                else
                 {
-                    ModelState.AddModelError("Exception", e.InnerException.Message);
-                    return StatusCode(500, ModelState);
+                    ModelState.AddModelError("MatchId", "A match with that ID already exists!");
+                    return Conflict(ModelState);
                 }
-                return Created(string.Empty, match);
             }
             else
-            {
-                ModelState.AddModelError("MatchId", "A match with that ID already exists!");
-                return Conflict(ModelState);
-            }
+                return Unauthorized();
 
         }
     }

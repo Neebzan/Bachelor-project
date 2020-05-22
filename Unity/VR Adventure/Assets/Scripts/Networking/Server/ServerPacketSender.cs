@@ -17,28 +17,9 @@ public class ServerPacketSender
             packet.Write(client);
 
             SendTCPPacket(client, packet);
+            Console.WriteLine("Welcome packet send");
         }
     }
-
-    //public static void UdpTestMessage(int client)
-    //{
-    //    using (Packet packet = new Packet((int)ServerPackets.UpdTestSent))
-    //    {
-    //        SendUDPPacket(client, packet);
-    //    }
-    //}
-
-
-    //public static void PlayerPostion(Player player)
-    //{
-    //    using (Packet packet = new Packet((int)ServerPackets.PlayerPosition))
-    //    {
-    //        packet.Write(player.id);
-    //        packet.Write(player.transform.position);
-
-    //        SendUDPPacketAll(packet);
-    //    }
-    //}
 
     public static void PlayerPositions()
     {
@@ -90,8 +71,10 @@ public class ServerPacketSender
         }
     }
 
-    internal static void PlayerReadyStateUpdated (int clientID, bool readyState) {
-        using (Packet _packet = new Packet((int)ServerPackets.PlayerReadyStateUpdated)) {
+    internal static void PlayerReadyStateUpdated(int clientID, bool readyState)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerReadyStateUpdated))
+        {
             _packet.Write(clientID);
             _packet.Write(readyState);
 
@@ -158,8 +141,10 @@ public class ServerPacketSender
     }
 
 
-    public static void PlayerScoreUpdated (int playerID, int newScore) {
-        using (Packet _packet = new Packet((int)ServerPackets.PlayerScoreUpdated)) {
+    public static void PlayerScoreUpdated(int playerID, int newScore)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.PlayerScoreUpdated))
+        {
             _packet.Write(playerID);
             _packet.Write(newScore);
 
