@@ -20,7 +20,7 @@ namespace K8SGameServerDevelopment {
         public static readonly int _maxPort = 27100;
         //public static readonly int _serverManagerPort = 27002;
         public static readonly int _serverManagerPort = 30007;
-        //public static readonly string _serverManagerIP = "servermanager-gameserver-service";
+        //public static readonly string _serverManagerIP = "servermanager-gameserver-service.default.svc.cluster.local";
         public static readonly string _serverManagerIP = "212.10.51.254";
         private static Stopwatch stopwatch = new Stopwatch();
 
