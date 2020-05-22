@@ -5,8 +5,6 @@ metadata:
 spec:
   hostNetwork: true
   restartPolicy: Never
-  successfulJobsHistoryLimit: 3
-  failedJobsHistoryLimit: 3
   containers:
     - name: game-server
       image: intrusivebaguettes/gameserver:development
