@@ -64,7 +64,7 @@ namespace ChecksumHandlerLib
                 });
             }
 
-            tempModel.InstallationChecksum = GetCombinedChecksum(SanitizePath(installPath));
+            tempModel.InstallationChecksum = GetCombinedChecksum(tempModel.Files);
             tempModel.SaveToFile();
 
             return tempModel;
@@ -104,7 +104,7 @@ namespace ChecksumHandlerLib
             {
                 Directory.CreateDirectory(version.InstallPath);
             }
-            version.InstallationChecksum = GetCombinedChecksum(SanitizePath(version.InstallPath));
+            version.InstallationChecksum = GetCombinedChecksum(version.Files);
             version.SaveToFile();
             return version;
         }
@@ -142,7 +142,7 @@ namespace ChecksumHandlerLib
                     });
                 }
 
-                tempModel.InstallationChecksum = GetCombinedChecksum(tempModel.InstallPath);
+                tempModel.InstallationChecksum = GetCombinedChecksum(tempModel.Files);
 
                 tempModel.SaveToFile();
                 installedVersions.Add(tempModel);
@@ -271,43 +271,63 @@ namespace ChecksumHandlerLib
             System.Uri uri1 = new Uri(filePath);
 
             System.Uri uri2;
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                uri2 = new Uri(directory + "/");
-            else
-                uri2 = new Uri(directory + "\\");
+            uri2 = new Uri(directory + "/");
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            //    uri2 = new Uri(directory + "/");
+            //else
+            //    uri2 = new Uri(directory + "\\");
 
             //return Path.GetFileName(filePath);
             string t = uri2.MakeRelativeUri(uri1).ToString();
             return Uri.UnescapeDataString(uri2.MakeRelativeUri(uri1).ToString());
         }
 
-        public static string GetCombinedChecksum(string path)
+        public static string GetCombinedChecksum(List<FileModel> files)
         {
-            path = RootedPathCheck(path);
-            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).Where(name => !(name.Contains("Version.json"))).ToList();
+            //path = RootedPathCheck(path);
+            //var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories).OrderBy(p => p).Where(name => !(name.Contains("Version.json"))).ToList();
+
+            List<string> fileChecksums = new List<string>();
+            foreach (var file in files)
+            {
+                fileChecksums.Add(file.FileChecksum);
+            }
+
+            fileChecksums.Sort();
+
+
             using (MD5 md5 = MD5.Create())
             {
                 //If the folder is empty, generate a hash based on a 0 byte
-                if (files.Count == 0)
+                if (fileChecksums.Count == 0)
                 {
                     md5.ComputeHash(new byte[0]);
                 }
                 else
-                    for (int i = 0; i < files.Count; i++)
+                    for (int i = 0; i < fileChecksums.Count; i++)
                     {
-                        string relPath = GetRelativePath(files[i], path);
-                        byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
-                        using (FileStream stream = File.OpenRead(files[i]))
-                        {
-                            byte[] checksum = md5.ComputeHash(stream);
+                        byte[] checksumBytes = Encoding.ASCII.GetBytes(fileChecksums[i]);
+                        
+                        if (i == files.Count - 1)
+                            md5.TransformFinalBlock(checksumBytes, 0, checksumBytes.Length);
+                        else
+                            md5.TransformBlock(checksumBytes, 0, checksumBytes.Length, checksumBytes, 0);
 
-                            md5.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
-                            if (i == files.Count - 1)
-                                md5.TransformFinalBlock(checksum, 0, checksum.Length);
-                            else
-                                md5.TransformBlock(checksum, 0, checksum.Length, checksum, 0);
-                        }
+                        //string relPath = GetRelativePath(files[i], path);
+                        //Console.WriteLine($"Hashing file: {relPath}");
+                        //byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+                        //using (FileStream stream = File.OpenRead(files[i]))
+                        //{
+                        //    byte[] checksum = md5.ComputeHash(stream);
+
+                        //    md5.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
+                        //    if (i == files.Count - 1)
+                        //        md5.TransformFinalBlock(checksum, 0, checksum.Length);
+                        //    else
+                        //        md5.TransformBlock(checksum, 0, checksum.Length, checksum, 0);
+                        //}
                     }
+                Console.WriteLine($"FINAL CHECKSUM: {BitConverter.ToString(md5.Hash).Replace(" - ", String.Empty)}");
                 return BitConverter.ToString(md5.Hash).Replace("-", String.Empty);
             }
         }
@@ -326,10 +346,12 @@ namespace ChecksumHandlerLib
                 {
                     byte[] checksum = md5.ComputeHash(stream);
                     byte[] nameBytes = Encoding.ASCII.GetBytes(relPath);
+                    //Console.WriteLine($"Relative path: {relPath}");
 
                     md5.TransformBlock(nameBytes, 0, nameBytes.Length, nameBytes, 0);
                     md5.TransformFinalBlock(checksum, 0, checksum.Length);
 
+                    //Console.WriteLine($"File checksum: {BitConverter.ToString(checksum).Replace("-", String.Empty)}");
                     return BitConverter.ToString(checksum).Replace("-", String.Empty);
                 }
             }

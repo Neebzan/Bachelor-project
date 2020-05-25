@@ -190,7 +190,8 @@ namespace PatchManager
                 {
                     data.InstalledVersion.Status = InstallationStatus.UpdateRequired;
                     Console.WriteLine(ConsoleExtension.AddTimestamp("Installation checksum did NOT match and " + data.InstalledVersion.VersionName + " was NOT VERIFIED"));
-                    ConnectionHandler.SendObject(data, client);
+                    Console.WriteLine(ConsoleExtension.AddTimestamp($"Incoming checksum is: {data.InstalledVersion.InstallationChecksum}\nServer checksum is: {temp.InstallationChecksum})"));
+                   ConnectionHandler.SendObject(data, client);
                 }
             }
             else
