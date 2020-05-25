@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9183492938944515824}
   - component: {fileID: 9183492938944515825}
   - component: {fileID: 9183492938944514318}
+  - component: {fileID: 9183492939061648115}
   m_Layer: 0
   m_Name: ClientNetworking
   m_TagString: Untagged
@@ -63,6 +64,7 @@ MonoBehaviour:
   EmulatedFireballPrefab: {fileID: 4459125067082265348, guid: 1475a772fa4133a41896de23820d9bf1,
     type: 3}
   ScoreboardUI: {fileID: 0}
+  LobbyUI: {fileID: 0}
 --- !u!114 &9183492938944514318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,10 +77,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 907031e47fab925438c05c03062ec1a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ip: 127.0.0.1
+  ip: 212.10.51.254
   port: 27000
   ID: 0
-  Username: Neebz
-  Score: 0
+  Username: Aberdeen1798Ted
   isConnected: 0
   Rest: {fileID: 0}
+--- !u!114 &9183492939061648115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9183492938944514319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 782afad2378a5a4489ac04c78796bbe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Verified: 0
