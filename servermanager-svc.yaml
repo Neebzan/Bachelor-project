@@ -1,0 +1,27 @@
+kind: Service 
+apiVersion: v1 
+metadata: 
+  name: servermanager-client-service 
+spec: 
+  selector: 
+    app: servermanager 
+  type: NodePort
+  ports: 
+  - protocol: TCP 
+    port: 27001
+    targetPort: 27001
+    nodePort: 30006
+---
+kind: Service 
+apiVersion: v1 
+metadata: 
+  name: servermanager-gameserver-service 
+spec: 
+  selector: 
+    app: servermanager 
+  type: NodePort
+  ports: 
+  - protocol: TCP 
+    port: 27002
+    targetPort: 27002
+    nodePort: 30007
