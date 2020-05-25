@@ -1,0 +1,13 @@
+kind: Service 
+apiVersion: v1 
+metadata: 
+  name: patchmanager-service 
+spec: 
+  selector: 
+    app: patchmanager 
+  type: NodePort
+  ports: 
+  - protocol: TCP 
+    port: 13000
+    targetPort: 13000
+    nodePort: 30004
