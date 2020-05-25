@@ -3,6 +3,7 @@ kind: Job
 metadata:
   generateName: "game-"
 spec:
+  restartPolicy: Never
   ttlSecondsAfterFinished: 5
   template:
     spec:
