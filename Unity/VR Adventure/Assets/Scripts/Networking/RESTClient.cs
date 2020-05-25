@@ -36,6 +36,12 @@ public class RESTClient : MonoBehaviour
             else if (args[i] == "-at")
                 accessToken = args[i + 1];
         }
+
+        if (refreshToken == "")
+            Debug.Log("Couldn't read RefreshToken from Commandline!");
+        if (accessToken == "")
+            Debug.Log("Couldn't read AccessToken from Commandline!");
+
     }
 
     private void VerifyCallback(bool verified)
