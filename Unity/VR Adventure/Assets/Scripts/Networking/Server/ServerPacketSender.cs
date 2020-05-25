@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -219,6 +220,31 @@ public class ServerPacketSender
         }
     }
 
+    public static void RegisterServer()
+    {
+        string JSON = JsonConvert.SerializeObject(Server.GameserverInstance);
+
+        using (Packet packet = new Packet((int)ServerManagerPackets.Register))
+        {
+            packet.Write(JSON);
+            SendTCPPacket(packet);
+        }
+
+        Console.WriteLine($"Sending game instance to server manager, to be configured..");
+    }
+
+    public static void SendReadyState()
+    {
+        Console.WriteLine("Sending ready state to ServerManager");
+        Server.GameserverInstance.GameState = GameState.Running;
+        string JSON = JsonConvert.SerializeObject(Server.GameserverInstance);
+
+        using (Packet packet = new Packet((int)ServerManagerPackets.Ready))
+        {
+            packet.Write(JSON);
+            SendTCPPacket(packet);
+        }
+    }
     public static void TimeSync(int id, long clientTimeStamp, long serverTime)
     {
         using (Packet _packet = new Packet((int)ServerPackets.TimeSync))
@@ -246,6 +272,12 @@ public class ServerPacketSender
     {
         _packet.WriteLength();
         Server.clients[_clientId].tcp.SendData(_packet);
+    }
+
+    private static void SendTCPPacket(Packet _packet)
+    {
+        _packet.WriteLength();
+        Server.ServerManagerTCP.SendData(_packet);
     }
 
     private static void SendTCPPacketAll(Packet _packet, int excludeId = -1)

@@ -50,7 +50,7 @@ public class TCP
         client.BeginConnect(_ip, _port, ConnectCallback, client);
     }
 
-    public void Connect(TcpClient _client, Dictionary<int, PacketHandler> _packetHandlers)
+    public void Connect(TcpClient _client, Dictionary<int, PacketHandler> _packetHandlers, bool isClient = true)
     {
         client = _client;
         client.ReceiveBufferSize = dataBufferSize;
@@ -65,8 +65,8 @@ public class TCP
 
         //Initialize the packet class
         incomingPacket = new Packet();
-
-        ServerPacketSender.WelcomeMessage(id, "This is a welcome message!");
+        if (isClient)
+            ServerPacketSender.WelcomeMessage(id, "This is a welcome message!");
     }
 
     public void SendData(Packet _packet)
@@ -161,7 +161,7 @@ public class TCP
         while (packetLength > 0 && packetLength <= incomingPacket.UnreadLength())
         {
             byte[] bytes = incomingPacket.ReadBytes(packetLength);
-
+            Console.WriteLine("Received TCP packet!");
             ThreadManager.ExecuteOnMainThread(() =>
             {
                 using (Packet _packet = new Packet(bytes))

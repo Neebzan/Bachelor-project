@@ -10,20 +10,14 @@ using System.Threading.Tasks;
 
 namespace ServerManager
 {
-    public enum MessageType
-    {
-        Create,
-        Register,
-        Configure,
-        Ready
-    }
+    
 
     public static class ServerManager
     {
         private readonly static int _clientPort = 27001;
         private readonly static int _gameserverPort = 27002;
 
-        private static string _k8sRessource = "Files/GameServerPod.yaml";
+        private static string _k8sRessource = "Files/GameServerJob.yaml";
 
         private static List<GameserverInstance> LiveGameInstances = new List<GameserverInstance>();
         private static Dictionary<GameserverInstance, Client> ConfiguringGameserverInstances = new Dictionary<GameserverInstance, Client>();

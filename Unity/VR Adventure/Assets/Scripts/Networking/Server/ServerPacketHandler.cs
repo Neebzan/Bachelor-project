@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,7 @@ public class ServerPacketHandler
 
     public static void PlayerMovement(Packet _packet)
     {
+        Console.WriteLine("Player movement received!");
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 
@@ -70,6 +72,20 @@ public class ServerPacketHandler
                 Server.clients[id].player.SetHand(rightHand);
             }
         }
+    }
+
+    internal static void Configure(Packet _packet)
+    {
+        string messageJSON = _packet.ReadString();
+        GameserverInstance configuration = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
+        Server.GameserverInstance = configuration;
+        Console.WriteLine("Server configuration recieved");
+        Console.WriteLine("Configuring server..");
+        Console.WriteLine("Server configured");
+        Console.WriteLine("\n");
+
+        //Send ready state
+        ServerPacketSender.SendReadyState();
     }
 
     public static void PlayerReadyStateUpdated(Packet _packet)

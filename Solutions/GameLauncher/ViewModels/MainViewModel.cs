@@ -265,7 +265,7 @@ namespace GameLauncher.ViewModels {
                     Process p = new Process();
 
                     try {
-                        p.StartInfo = new ProcessStartInfo("WizardBattleClient.exe", $"-rt {Settings.Default.RefreshToken} -at {Settings.Default.AccessToken}");
+                        p.StartInfo = new ProcessStartInfo(SelectedInstall.InstallPath+"/VR Adventure.exe", $"-rt {Settings.Default.RefreshToken} -at {Settings.Default.AccessToken}");
                         if (!p.Start())
                             DisplayErrorMessage("Something went wrong, could not start the game");
                         else

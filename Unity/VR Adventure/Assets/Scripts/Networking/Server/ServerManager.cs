@@ -38,7 +38,9 @@ public class ServerManager : MonoBehaviour
         match = gameObject.AddComponent<Match>();
         REST.GetServerToken();
 
-        Server.Start(10, 27000);
+        //Server.Start(10, 27000);
+        Server.Start(10);
+
     }
 
     private void FixedUpdate()

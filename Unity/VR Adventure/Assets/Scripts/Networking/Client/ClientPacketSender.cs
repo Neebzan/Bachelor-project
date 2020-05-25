@@ -15,6 +15,7 @@ public static class ClientPacketSender
             _packet.Write(Client.instance.Username);
 
             SendTCPData(_packet);
+            Debug.Log("Welcome sent");
         }
     }
 
@@ -60,6 +61,7 @@ public static class ClientPacketSender
 
             //Send
             SendUDPData(_packet);
+            Debug.Log("Player movement sent");
         }
     }
 

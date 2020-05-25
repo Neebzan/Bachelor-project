@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-
 public enum ClientMessageType
 {
     CreateServer,
@@ -16,13 +14,5 @@ public enum GameState
     Configuring,
     Running,
     Ending
-}
-
-public enum MessageType
-{
-    Create,
-    Register,
-    Configure,
-    Ready
 }
 

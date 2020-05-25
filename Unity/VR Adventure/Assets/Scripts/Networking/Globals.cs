@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public delegate void PacketHandler (Packet _packet);
@@ -38,6 +39,14 @@ public enum ClientPackets {
     TimeSync
 }
 
+public enum ServerManagerPackets
+{
+    Create,
+    Register,
+    Configure,
+    Ready
+}
+
 public static class PacketHandlers {
     public static Dictionary<int, PacketHandler> Server = new Dictionary<int, PacketHandler>()
         {
@@ -60,5 +69,10 @@ public static class PacketHandlers {
         {(int)ServerPackets.PlayerScoreUpdated, ClientPacketHandler.PlayerScoreUpdated},
         {(int)ServerPackets.TimeSync, ClientPacketHandler.TimeSync },
         {(int)ServerPackets.PlayerReadyStateUpdated, ClientPacketHandler.PlayerReadyStateUpdated }
+        };
+
+    public static Dictionary<int, PacketHandler> ServerManager = new Dictionary<int, PacketHandler>()
+    {
+        {(int)ServerManagerPackets.Configure, ServerPacketHandler.Configure },        
         };
 }

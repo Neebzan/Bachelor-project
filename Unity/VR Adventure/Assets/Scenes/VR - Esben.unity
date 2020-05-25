@@ -528,7 +528,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh171728
+  m_Name: pb_Mesh70780
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3461,12 +3461,7 @@ PrefabInstance:
     - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: ip
-      value: 212.10.51.254
-      objectReference: {fileID: 0}
-    - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
-        type: 3}
-      propertyPath: Username
-      value: Aberdeen1798Ted
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     - target: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
@@ -3478,11 +3473,6 @@ PrefabInstance:
       propertyPath: localPlayerPrefab
       value: 
       objectReference: {fileID: 155395055}
-    - target: {fileID: 9183492938944515825, guid: b2d50ebca1875fe47b9f836629677ed9,
-        type: 3}
-      propertyPath: ScoreboardUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 9183492938944515825, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
       propertyPath: LobbyUI
@@ -3545,22 +3535,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2d50ebca1875fe47b9f836629677ed9, type: 3}
---- !u!1 &9183492939061648114 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
-    type: 3}
-  m_PrefabInstance: {fileID: 9183492939061648113}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &9183492939061648115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9183492939061648114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 782afad2378a5a4489ac04c78796bbe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Verified: 0
