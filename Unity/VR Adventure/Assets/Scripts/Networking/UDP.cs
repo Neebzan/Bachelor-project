@@ -93,7 +93,7 @@ public class UDP
     private void HandleData(byte[] data)
     {
 
-        Console.WriteLine("Received UDP packet!");
+        //Console.WriteLine("Received UDP packet!");
         using (Packet _packet = new Packet(data))
         {
             int _packetLength = _packet.ReadInt();

@@ -161,7 +161,7 @@ public class TCP
         while (packetLength > 0 && packetLength <= incomingPacket.UnreadLength())
         {
             byte[] bytes = incomingPacket.ReadBytes(packetLength);
-            Console.WriteLine("Received TCP packet!");
+            //Console.WriteLine("Received TCP packet!");
             ThreadManager.ExecuteOnMainThread(() =>
             {
                 using (Packet _packet = new Packet(bytes))

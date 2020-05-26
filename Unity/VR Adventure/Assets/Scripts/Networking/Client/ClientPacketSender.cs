@@ -61,7 +61,7 @@ public static class ClientPacketSender
 
             //Send
             SendUDPData(_packet);
-            Debug.Log("Player movement sent");
+            //Debug.Log("Player movement sent");
         }
     }
 

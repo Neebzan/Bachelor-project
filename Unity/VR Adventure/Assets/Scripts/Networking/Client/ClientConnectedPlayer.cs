@@ -21,7 +21,7 @@ public class ClientConnectedPlayer : MonoBehaviour {
         get { return score; }
         set {
             score = value;
-            PlayerScoreUpdated.Invoke(this, EventArgs.Empty);
+            PlayerScoreUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 

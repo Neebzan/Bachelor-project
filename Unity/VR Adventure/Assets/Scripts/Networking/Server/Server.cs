@@ -14,6 +14,8 @@ public static class Server
 
     private static int playerIndex = 1;
 
+    private static int _port;
+
     public static readonly int _minPort = 27005;
     public static readonly int _maxPort = 27100;
     public static readonly int _serverManagerPort = 30007;
@@ -50,7 +52,9 @@ public static class Server
         tcpListener = StartListenerWithAvailablePort(_minPort, _maxPort);
         tcpListener.BeginAcceptTcpClient(TcpConnectCallback, null);
 
-        udpListener = new UdpClient(Port);
+        _port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+
+        udpListener = new UdpClient(_port);
         udpListener.BeginReceive(UDPReceiveCallback, null);
         RegisterServer();
         Console.WriteLine("Server started!");
