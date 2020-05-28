@@ -6,15 +6,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace GameServerDecoy {
     class Program {
         static void Main (string [ ] args) {
-            EmulatedUserConnection.Init();
-            //TestProcess();
-
-            Console.ReadKey();
+            while (true) {
+                if (Console.ReadKey().Key == ConsoleKey.Enter)
+                    Task.Run(() => EmulatedUserConnection.Init());                
+            }
         }
     }
 }
