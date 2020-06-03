@@ -11,7 +11,8 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Canvas))]
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
     private Canvas _canvas;
 
     public List<GameObject> MenuPanels = new List<GameObject>();
@@ -36,22 +37,27 @@ public class MainMenu : MonoBehaviour {
     private bool _ready = false;
     private bool _creatingGame = false;
 
-    private void Start () {
+    private void Start()
+    {
         _canvas = GetComponent<Canvas>();
-        NavigateTo(MenuPanels [ 0 ]);
+        NavigateTo(MenuPanels[0]);
         Client.instance.ConnectedToServer += ConnectedToServer;
         _readyButtonImage = ReadyButtonGO.GetComponent<Image>();
         _defaultColor = _readyButtonImage.color;
     }
 
-    public void PlayGame () {
-        if (!PlayButtonPressed) {
+    public void PlayGame()
+    {
+        if (!PlayButtonPressed)
+        {
             PlayButtonPressed = true;
-            if (!Client.instance.isConnected) {
+            if (!Client.instance.isConnected)
+            {
                 PlayButtonText.text = "Connecting..";
                 Connect();
             }
-            else {
+            else
+            {
                 PlayButtonText.text = "Disconnecting..";
                 Disconnect();
             }
@@ -60,7 +66,7 @@ public class MainMenu : MonoBehaviour {
 
     public void CreateGame()
     {
-        if(!_creatingGame)
+        if (!_creatingGame)
         {
             _creatingGame = true;
             Client.instance.ConnectToServerManager();
@@ -72,10 +78,19 @@ public class MainMenu : MonoBehaviour {
         }
     }
 
-    private void ConnectedToServer (object sender, ClientConnectionEventArgs e) {
-        switch (e.Type) {
+    public void GetServers()
+    {
+        Client.instance.ConnectToServerManager();
+        ClientPacketSender.RequestServerList();
+    }
+
+    private void ConnectedToServer(object sender, ClientConnectionEventArgs e)
+    {
+        switch (e.Type)
+        {
             case ClientConnectionEvent.Connect:
-                if (e.Success) {
+                if (e.Success)
+                {
                     PlayButtonText.text = "Disconnect";
                     ReadyButtonGO.SetActive(true);
                 }
@@ -83,7 +98,8 @@ public class MainMenu : MonoBehaviour {
                     PlayButtonText.text = "Connect";
                 break;
             case ClientConnectionEvent.Disconnect:
-                if (e.Success){
+                if (e.Success)
+                {
                     PlayButtonText.text = "Connect";
                     ReadyButtonGO.SetActive(false);
                     _ready = false;
@@ -98,22 +114,27 @@ public class MainMenu : MonoBehaviour {
         PlayButtonPressed = false;
     }
 
-    private void Disconnect () {
+    private void Disconnect()
+    {
         Client.instance.Disconnect();
     }
 
-    private void Connect () {
+    private void Connect()
+    {
         Client.instance.ConnectToServer(Client.instance.Username);
     }
 
-    public void Ready () {
+    public void Ready()
+    {
         _ready = !_ready;
         _readyButtonImage.color = _ready ? ReadyColor : _defaultColor;
         Client.instance.ReadyUp(_ready);
     }
 
-    public void NavigateTo (GameObject navigateToPanel) {
-        foreach (GameObject panel in MenuPanels) {
+    public void NavigateTo(GameObject navigateToPanel)
+    {
+        foreach (GameObject panel in MenuPanels)
+        {
             if (navigateToPanel == panel)
                 panel.SetActive(true);
 

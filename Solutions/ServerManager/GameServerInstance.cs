@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
@@ -11,6 +12,8 @@ namespace ServerManager {
     //}
 
     public class GameserverInstance {
+        [JsonIgnore]
+        public Client Client { get; set; }
         public string GameserverID { get; set; }
         public string Creator { get; set; }
         public string ServerName { get; set; }

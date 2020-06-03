@@ -228,6 +228,14 @@ public static class ClientPacketHandler {
         Client.instance.ConnectToServer(configuration);
     }
 
+    internal static void ServerList(Packet _packet)
+    {
+        string messageJSON = _packet.ReadString();
+        List<GameserverInstance> servers = JsonConvert.DeserializeObject<List<GameserverInstance>>(messageJSON);
+
+        //Do something with servers   
+    }
+
     //public static void DespawnProjectile(Packet _packet)
     //{
     //    int id = _packet.ReadInt();

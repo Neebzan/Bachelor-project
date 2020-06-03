@@ -97,6 +97,9 @@ namespace ServerManager
                         GameserverInstance gameserverReady = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
                         ServerManager.RecieveGameserverReady(gameserverReady, this);
                         break;
+                    case MessageType.LiveServers:
+                        ServerManager.SendAvailableServers(this);
+                        break;
                     default:
                         break;
                 }
@@ -123,6 +126,35 @@ namespace ServerManager
             }
 
             return false;
+        }
+
+        public bool Connected()
+        {
+            try
+            {
+                if (TcpClient.Client != null && TcpClient.Client.Connected)
+                {
+                    if (TcpClient.Client.Poll(0, SelectMode.SelectRead))
+                    {
+                        byte[] buff = new byte[1];
+
+                        if (TcpClient.Client.Receive(buff, SocketFlags.Peek) == 0)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

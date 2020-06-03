@@ -23,6 +23,7 @@ public enum MessageType
     Create,
     Register,
     Configure,
-    Ready
+    Ready,
+    LiveServers
 }
 

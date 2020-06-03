@@ -15,6 +15,7 @@ namespace GameServerDecoy {
 
         public static void Init () {
             SendCreateServerRequest();
+            SendServerList();
         }
 
         public static void SendCreateServerRequest () {
@@ -33,6 +34,20 @@ namespace GameServerDecoy {
 
             Packet packet = new Packet((int)MessageType.Create);
             packet.Write(JSON);
+            packet.WriteLength();
+
+            ServerManagerClient.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+            Console.WriteLine("Waiting for server response");
+        }
+
+        public static void SendServerList()
+        {
+            Console.WriteLine($"Sending request to create server");
+
+            ServerManagerClient = new EmulatedPlayerClient(new TcpClient("212.10.51.254", 30006));
+
+            Packet packet = new Packet((int)MessageType.LiveServers);
+
             packet.WriteLength();
 
             ServerManagerClient.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);

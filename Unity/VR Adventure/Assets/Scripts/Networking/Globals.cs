@@ -47,7 +47,8 @@ public enum ServerManagerPackets
     Create,
     Register,
     Configure,
-    Ready
+    Ready,
+    LiveServers
 }
 
 public static class PacketHandlers
@@ -83,5 +84,6 @@ public static class PacketHandlers
     public static Dictionary<int, PacketHandler> ServerManagerClient = new Dictionary<int, PacketHandler>()
     {
         {(int)ServerManagerPackets.Ready, ClientPacketHandler.GameServerCreated },
+        {(int)ServerManagerPackets.LiveServers, ClientPacketHandler.ServerList },
         };
 }

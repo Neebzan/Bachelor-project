@@ -11,6 +11,7 @@ namespace ServerManager {
         public static bool Running { get; private set; } = true;
 
         static void Main (string [ ] args) {
+            Console.WriteLine("With serverlist functionality!");
             ServerManager.Init();
 
 

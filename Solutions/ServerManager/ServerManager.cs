@@ -6,11 +6,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerManager
 {
-    
+
 
     public static class ServerManager
     {
@@ -79,7 +80,7 @@ namespace ServerManager
             }
         }
 
-        public static void RecieveGameserverReady(GameserverInstance gameserverReady, Client client)
+        public static void RecieveGameserverReady(GameserverInstance gameserverReady, Client _client)
         {
             Console.WriteLine($"Gameserver {gameserverReady.GameserverID} ready recieved");
             GameserverInstance instance = null;
@@ -93,6 +94,12 @@ namespace ServerManager
                     {
                         instance = server;
                         instance.GameState = gameserverReady.GameState;
+                        instance.Client = _client;
+                        lock (LiveGameInstances)
+                        {
+                            LiveGameInstances.Add(instance);
+                            Console.WriteLine("Added!");
+                        }
                         break;
                     }
                 }
@@ -117,8 +124,8 @@ namespace ServerManager
             lock (ConfiguringGameserverInstances)
             {
                 Console.WriteLine($"Sending gameserver {instance.GameserverID} information to player");
-                ConfiguringGameserverInstances [instance].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
-                LiveGameInstances.Add(instance);
+                ConfiguringGameserverInstances[instance].TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                //instance.Client = ConfiguringGameserverInstances[instance];
                 ConfiguringGameserverInstances.Remove(instance);
 
             }
@@ -176,5 +183,58 @@ namespace ServerManager
             process.StartInfo = new ProcessStartInfo("kubectl", $"create -f {_k8sRessource}");
             process.Start();
         }
+
+        public static void SendAvailableServers(Client client)
+        {
+            Console.WriteLine("Server list request received!");
+            lock (LiveGameInstances)
+            {
+                Console.WriteLine($"Currently {LiveGameInstances.Count} registered servers");
+                List<GameserverInstance> toBeRemoved = new List<GameserverInstance>();
+                //Check if gameservers are still available
+                foreach (var server in LiveGameInstances)
+                {
+                    if (!server.Client.Connected())
+                        toBeRemoved.Add(server);
+                }
+
+                Console.WriteLine($"{toBeRemoved.Count} is no longer active");
+                //Remove inactive gameservers
+                foreach (var server in toBeRemoved)
+                {
+                    LiveGameInstances.Remove(server);
+                }
+
+                Packet packet = new Packet((int)MessageType.LiveServers);
+                string JSON = JsonConvert.SerializeObject(LiveGameInstances);
+                packet.Write(JSON);
+                packet.WriteLength();
+
+                client.TcpClient.GetStream().BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+            }
+        }
+
+        public static void PingServers()
+        {
+            while (true)
+            {
+                List<GameserverInstance> toBeRemoved = new List<GameserverInstance>();
+                //Check if gameservers are still available
+                foreach (var server in LiveGameInstances)
+                {
+                    if (!server.Client.Connected())
+                        toBeRemoved.Add(server);
+                }
+
+                Console.WriteLine($"{toBeRemoved.Count} is no longer active");
+                //Remove inactive gameservers
+                foreach (var server in toBeRemoved)
+                {
+                    LiveGameInstances.Remove(server);
+                }
+                Thread.Sleep(1000);
+            }
+        }
+
     }
 }

@@ -100,6 +100,14 @@ public static class ClientPacketSender
         }
     }
 
+    public static void RequestServerList()
+    {
+        using (Packet packet = new Packet((int)ServerManagerPackets.LiveServers))
+        {
+            SendTCPDataServerManager(packet);
+        }
+    }
+
     private static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength(); //Add a length to the packet

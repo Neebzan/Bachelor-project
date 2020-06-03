@@ -79,6 +79,14 @@ namespace GameServerDecoy {
                         GameserverInstance gameserverReady = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
                         EmulatedUserConnection.ReceiveServerInfo(gameserverReady);
                         break;
+                    case MessageType.LiveServers:
+                        messageJSON = incomingPacket.ReadString();
+                        List<GameserverInstance> servers = JsonConvert.DeserializeObject<List<GameserverInstance>>(messageJSON);
+                        foreach (var item in servers)
+                        {
+                            Console.WriteLine(item.ServerName);
+                        }
+                        break;
                     default:
                         break;
                 }
