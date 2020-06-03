@@ -409,8 +409,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed6dbceb1c555747a89d3591044d090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  username: 
+  ID: 0
+  Username: 
   emulatedPlayer: {fileID: 2766297617080247981}
   EmulatedPlayerUI: {fileID: 7025943200397356720}
   LastPlayerUpdateTick: 0

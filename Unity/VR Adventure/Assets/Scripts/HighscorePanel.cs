@@ -59,7 +59,7 @@ public class HighscorePanel : MonoBehaviour
                 string json = System.Text.Encoding.UTF8.GetString(webRequest.downloadHandler.data);
                 HighscorePage highscores = JsonConvert.DeserializeObject<HighscorePage>(json);
 
-                for (int i = 0; i < highscores.Entries.Count; i++) {
+                for (int i = 0; i < highscores?.Entries?.Count; i++) {
                     HighscoreElement element = HighscoreElements [ i ].GetComponent<HighscoreElement>();
                     element.Placement.text = highscores.Entries [ i ].Rank.ToString();
                     element.Username.text = highscores.Entries [ i ].Player.PlayerId;

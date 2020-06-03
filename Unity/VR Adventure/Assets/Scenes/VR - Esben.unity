@@ -122,6 +122,75 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &106933277
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4459125067082265348, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_Name
+      value: Emulated_Fireball_Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.13416648
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.594
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.14281082
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4842452147080824650, guid: 1475a772fa4133a41896de23820d9bf1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1475a772fa4133a41896de23820d9bf1, type: 3}
 --- !u!1 &155395055 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1090247720074647265, guid: 5f950623b22c26547aa01a6056debbd9,
@@ -302,7 +371,7 @@ Transform:
   - {fileID: 6552052393314086160}
   - {fileID: 252392681}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &516259598
 GameObject:
@@ -528,7 +597,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh70780
+  m_Name: pb_Mesh16686
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3250,7 +3319,7 @@ PrefabInstance:
     - target: {fileID: 2006356132409578309, guid: 879cc477c97e4a04f831d697bceaba44,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2006356132409578309, guid: 879cc477c97e4a04f831d697bceaba44,
         type: 3}
@@ -3432,7 +3501,7 @@ PrefabInstance:
     - target: {fileID: 1090247720074647267, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1090247720074647267, guid: 5f950623b22c26547aa01a6056debbd9,
         type: 3}
@@ -3467,6 +3536,11 @@ PrefabInstance:
         type: 3}
       propertyPath: port
       value: 27005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9183492938944514318, guid: b2d50ebca1875fe47b9f836629677ed9,
+        type: 3}
+      propertyPath: Username
+      value: Neebz
       objectReference: {fileID: 0}
     - target: {fileID: 9183492938944514319, guid: b2d50ebca1875fe47b9f836629677ed9,
         type: 3}
