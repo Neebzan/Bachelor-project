@@ -34,6 +34,7 @@ public class MainMenu : MonoBehaviour {
     private bool isUpdatingHighscores = false;
     private bool PlayButtonPressed = false;
     private bool _ready = false;
+    private bool _creatingGame = false;
 
     private void Start () {
         _canvas = GetComponent<Canvas>();
@@ -54,6 +55,20 @@ public class MainMenu : MonoBehaviour {
                 PlayButtonText.text = "Disconnecting..";
                 Disconnect();
             }
+        }
+    }
+
+    public void CreateGame()
+    {
+        if(!_creatingGame)
+        {
+            _creatingGame = true;
+            Client.instance.ConnectToServerManager();
+            GameserverInstance testInstance = new GameserverInstance()
+            {
+                ServerName = Client.instance.Username + "-server"
+            };
+            ClientPacketSender.CreateServerRequest(testInstance);
         }
     }
 

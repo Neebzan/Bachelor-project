@@ -90,7 +90,7 @@ public static class Server
     {
         TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
         ServerManagerTCP = new TCP();
-        ServerManagerTCP.Connect(tcpClient, PacketHandlers.ServerManager, false);
+        ServerManagerTCP.Connect(tcpClient, PacketHandlers.ServerManagerServer, false);
 
         Console.WriteLine("Getting game ID..");
 

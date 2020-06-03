@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ public static class ClientPacketSender
 {
     public static void WelcomeReceived()
     {
-        using(Packet _packet = new Packet((int)ClientPackets.WelcomeReceived))
+        using (Packet _packet = new Packet((int)ClientPackets.WelcomeReceived))
         {
             _packet.Write(Client.instance.ID);
             _packet.Write(Client.instance.Username);
@@ -77,12 +78,25 @@ public static class ClientPacketSender
         }
     }
 
-    public static void ReadyStatusUpdate(bool ready) {
-        using (Packet _packet = new Packet((int)ClientPackets.ReadyStateUpdated)) {
+    public static void ReadyStatusUpdate(bool ready)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.ReadyStateUpdated))
+        {
             _packet.Write(Client.instance.ID);
             _packet.Write(ready);
 
             SendTCPData(_packet);
+        }
+    }
+
+    public static void CreateServerRequest(GameserverInstance gameserverInstance)
+    {
+
+        string JSON = JsonConvert.SerializeObject(gameserverInstance);
+        using (Packet packet = new Packet((int)ServerManagerPackets.Create))
+        {
+            packet.Write(JSON);
+            SendTCPDataServerManager(packet);
         }
     }
 
@@ -92,7 +106,11 @@ public static class ClientPacketSender
         Client.instance.tcp.SendData(_packet);
     }
 
-
+    private static void SendTCPDataServerManager(Packet _packet)
+    {
+        _packet.WriteLength(); //Add a length to the packet
+        Client.instance.ServerManagerTCP.SendData(_packet);
+    }
 
     private static void SendUDPData(Packet _packet)
     {

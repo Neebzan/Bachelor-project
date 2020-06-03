@@ -12,7 +12,7 @@ public class Match : MonoBehaviour
     bool _started = false;
     Stopwatch _sW = new Stopwatch();
 
-    TimeSpan _matchDuration = new TimeSpan(0, 0, 10);
+    TimeSpan _matchDuration = new TimeSpan(0, 2, 0);
     DateTime _matchStarted;
     DateTime _matchEnded;
 
@@ -22,6 +22,11 @@ public class Match : MonoBehaviour
     {
         ServerManager.instance.OnPlayerSpawned += OnNewPlayerSpawned;
         ServerManager.instance.OnPlayerDisconnected += OnPlayerDisconnected;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(KeepAlive());
     }
 
     private void OnPlayerDisconnected(object sender, EventArgs e)
@@ -122,6 +127,32 @@ public class Match : MonoBehaviour
     //        yield return null;
     //    }
     //}
+
+    IEnumerator KeepAlive()
+    {
+        bool exit = false;
+        int emptyTime = 0;
+        int emptyLimit = 120;
+        Console.WriteLine("KeepAlive started");
+        while(!exit)
+        {
+            if(Server.clients.Count == 0)
+            {
+                emptyTime += 1;
+                if(emptyTime >= emptyLimit)
+                {
+                    Console.WriteLine("Closing due to no players for 2 minutes!");
+                    Application.Quit(0);
+                }
+            }
+            else
+            {
+                emptyTime = 0;
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+    }
 
     IEnumerator CountdownMatchStart()
     {

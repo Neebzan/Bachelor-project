@@ -48,6 +48,11 @@ public class Client : MonoBehaviour {
     public TCP tcp;
     public UDP udp;
 
+
+    public readonly int _serverManagerPort = 30007;
+    public readonly string _serverManagerIP = "212.10.51.254";
+    public TCP ServerManagerTCP;
+
     public bool isConnected = false;
 
     [HideInInspector]
@@ -115,6 +120,24 @@ public class Client : MonoBehaviour {
         udp = new UDP(PacketHandlers.Client);
         tcp.Connect(ip, port, PacketHandlers.Client);
         GameManager.instance.SpawnPlayerUI(this);
+    }
+
+    public void ConnectToServer(GameserverInstance gameserverInstance)
+    {
+        tcp = new TCP();
+        udp = new UDP(PacketHandlers.Client);
+        ip = gameserverInstance.IP;
+        port = gameserverInstance.Port;
+        tcp.Connect(ip, port, PacketHandlers.Client);
+        GameManager.instance.SpawnPlayerUI(this);
+    }
+
+    public void ConnectToServerManager()
+    {
+        UnityEngine.Debug.Log("Connecting to ServerManager");
+        TcpClient tcpClient = new TcpClient(_serverManagerIP, _serverManagerPort);
+        ServerManagerTCP = new TCP();
+        ServerManagerTCP.Connect(tcpClient, PacketHandlers.ServerManagerClient, false);
     }
 
     private void OnConnectionChanged (ClientConnectionEventArgs e) {

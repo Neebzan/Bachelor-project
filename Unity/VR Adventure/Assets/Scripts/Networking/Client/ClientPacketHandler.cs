@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -184,7 +185,6 @@ public static class ClientPacketHandler {
         }
     }
 
-
     public static void UpdateFireballs (Packet _packet) {
         long packetTick = _packet.ReadLong();
 
@@ -218,6 +218,14 @@ public static class ClientPacketHandler {
         float size = _packet.ReadFloat();
 
         GameManager.instance.SpawnEmulatedFireball(id, position, size);
+    }
+
+    internal static void GameServerCreated(Packet _packet)
+    {
+        string messageJSON = _packet.ReadString();
+        GameserverInstance configuration = JsonConvert.DeserializeObject<GameserverInstance>(messageJSON);
+
+        Client.instance.ConnectToServer(configuration);
     }
 
     //public static void DespawnProjectile(Packet _packet)

@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public delegate void PacketHandler (Packet _packet);
+public delegate void PacketHandler(Packet _packet);
 
-public enum HandState {
+public enum HandState
+{
     Default = 0,
     Fire = 1,
     Force = 2
 }
-public enum ServerPackets {
+public enum ServerPackets
+{
     Welcome,
     UpdTestSent,
     UdpTestReceived,
@@ -29,7 +31,8 @@ public enum ServerPackets {
     PlayerReadyStateUpdated
 }
 
-public enum ClientPackets {
+public enum ClientPackets
+{
     WelcomeReceived,
     PlayerMovement,
     ShootTest,
@@ -47,7 +50,8 @@ public enum ServerManagerPackets
     Ready
 }
 
-public static class PacketHandlers {
+public static class PacketHandlers
+{
     public static Dictionary<int, PacketHandler> Server = new Dictionary<int, PacketHandler>()
         {
         {(int)ClientPackets.WelcomeReceived, ServerPacketHandler.WelcomeReceived },
@@ -71,8 +75,13 @@ public static class PacketHandlers {
         {(int)ServerPackets.PlayerReadyStateUpdated, ClientPacketHandler.PlayerReadyStateUpdated }
         };
 
-    public static Dictionary<int, PacketHandler> ServerManager = new Dictionary<int, PacketHandler>()
+    public static Dictionary<int, PacketHandler> ServerManagerServer = new Dictionary<int, PacketHandler>()
     {
-        {(int)ServerManagerPackets.Configure, ServerPacketHandler.Configure },        
+        {(int)ServerManagerPackets.Configure, ServerPacketHandler.Configure },
+        };
+
+    public static Dictionary<int, PacketHandler> ServerManagerClient = new Dictionary<int, PacketHandler>()
+    {
+        {(int)ServerManagerPackets.Ready, ClientPacketHandler.GameServerCreated },
         };
 }
