@@ -353,13 +353,15 @@ namespace DatabaseLib
 
             intrusiveContext context = null;
 
-            Random rnd = new Random(DateTime.Now.Second);
+            Random rnd = new Random(DateTime.UtcNow.Millisecond);
 
-            int index = 10001;
+            int index = 105000;
 
             try
             {
                 context = new intrusiveContext();
+
+                context.ChangeTracker.AutoDetectChangesEnabled = false;
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -394,7 +396,7 @@ namespace DatabaseLib
                     context.SaveChanges();
 
                     //connection.Query<AccountModel>("select * from accounts");
-                    Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
+                    //Console.WriteLine("{0} inserted succesfully!", tempPlayer.PlayerId);
                     index++;
                 }
 

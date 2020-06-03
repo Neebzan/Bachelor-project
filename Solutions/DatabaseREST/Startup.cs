@@ -13,6 +13,7 @@ using DatabaseREST.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace DatabaseREST
 {
@@ -31,9 +32,13 @@ namespace DatabaseREST
         public void ConfigureServices(IServiceCollection services)
         {
             //Sæt den dbContext der benyttes af DatabaseAPI'en + hent dens connectionstring fra appsettings.json
-            services.AddDbContext<intrusiveContext>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionString"]));
+            //Uden logging
+            //services.AddDbContext<intrusiveContext>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionString"]));
+            //services.AddDbContext<intrusiveContextReadOnly>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionStringReadOnly"]));
 
-            services.AddDbContext<intrusiveContextReadOnly>(option => option.UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionStringReadOnly"]));
+            //Med logging
+            services.AddDbContext<intrusiveContext>(option => option.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())).UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionString"]));
+            services.AddDbContext<intrusiveContextReadOnly>(option => option.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())).UseMySql(Configuration["Data:DatabaseAPIConnection:ConnectionStringReadOnly"]));
 
 
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);

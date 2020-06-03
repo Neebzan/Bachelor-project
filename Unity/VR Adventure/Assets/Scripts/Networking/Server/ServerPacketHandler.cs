@@ -27,7 +27,7 @@ public class ServerPacketHandler
 
     public static void PlayerMovement(Packet _packet)
     {
-        Console.WriteLine("Player movement received!");
+        //Console.WriteLine("Player movement received!");
         long packetTick = _packet.ReadLong();
         int id = _packet.ReadInt();
 

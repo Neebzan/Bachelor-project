@@ -52,8 +52,8 @@ namespace DatabaseREST.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-//                optionsBuilder.UseMySql("server=212.10.51.254;user=root;port=30003;database=intrusive;", x => x.ServerVersion("8.0.19-mysql"));
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=password;database=intrusive", x => x.ServerVersion("8.0.19-mysql"));
             }
         }
 

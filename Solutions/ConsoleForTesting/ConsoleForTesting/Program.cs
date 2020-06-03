@@ -55,7 +55,7 @@ namespace ConsoleForTesting
             //var h = PatchClient.CompleteCheck(new string[0]);
             //h[0].InstallPath = PatchClient.InstallPath;
 
-            DBConnection.Instance().InsertRandomData(100);
+            DBConnection.Instance().InsertRandomData(1000000);
 
             //DBConnection.Instance().EFCORETest();
 
