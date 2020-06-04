@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public static class AvailableServerManager {
     public static event Action<List<GameserverInstance>> ServerListRetrieved;
 
-    private static List<GameserverInstance> gameserverInstances;
+    private static List<GameserverInstance> gameserverInstances = new List<GameserverInstance>();
 
     public static List<GameserverInstance> GameserverInstances {
         get { return gameserverInstances; }
@@ -22,7 +22,7 @@ public static class AvailableServerManager {
     }
 
     private static void GetServers () {
-        if (Client.instance.ServerManagerTCP == null)
+        if (Client.instance?.ServerManagerTCP == null)
             Client.instance.ConnectToServerManager();
 
         ClientPacketSender.RequestServerList();
@@ -45,13 +45,13 @@ public class BrowsePanel : MonoBehaviour {
 
     void Start () {
         AvailableServerManager.ServerListRetrieved += UpdateServerList;
-        Refresh();
     }
 
-    public void Refresh () {
+
+    private void OnEnable () {
         AvailableServerManager.RefreshServerList();
-    }
 
+    }
     void UpdateServerList (List<GameserverInstance> servers) {
         foreach (GameserverInstance server in servers) {
             AddServerInstance(server);
