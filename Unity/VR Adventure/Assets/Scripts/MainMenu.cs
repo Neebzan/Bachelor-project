@@ -128,6 +128,10 @@ public class MainMenu : MonoBehaviour {
         Client.instance.ReadyUp(_ready);
     }
 
+    public void ExitGame () {
+        Application.Quit(0);
+    }
+
     public void NavigateTo (GameObject navigateToPanel) {
         foreach (GameObject panel in MenuPanels) {
             if (navigateToPanel == panel)

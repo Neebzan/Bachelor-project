@@ -9,7 +9,7 @@
   <Identity
     Name="507bce0a-268e-4e70-918e-161f9d963823"
     Publisher="CN=Esben"
-    Version="1.0.3.0" />
+    Version="1.0.5.0" />
 
   <Properties>
     <DisplayName>Wizard Battle</DisplayName>
