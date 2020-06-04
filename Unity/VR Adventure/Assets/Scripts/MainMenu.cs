@@ -10,14 +10,26 @@ using UnityEngine.Assertions.Must;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+
+
+
+public enum MenuState { ConnectingToServer, DisconnectingFromServer, CreatingServer, Main, Highscores, Browse}
+
+
 [RequireComponent(typeof(Canvas))]
-public class MainMenu : MonoBehaviour
-{
+public class MainMenu : MonoBehaviour {
     private Canvas _canvas;
+
+    public static MenuState MenuState { get; set; }
 
     public List<GameObject> MenuPanels = new List<GameObject>();
     public TextMeshProUGUI PlayButtonText;
     public GameObject ReadyButtonGO;
+    public GameObject HighscoresButtonGO;
+    public GameObject BrowseButtonGO;
+    public GameObject DisconnectButtonGO;
+    public GameObject CreateButtonGO;
+
     public Color ReadyColor;
 
     private Color _defaultColor;
@@ -37,76 +49,56 @@ public class MainMenu : MonoBehaviour
     private bool _ready = false;
     private bool _creatingGame = false;
 
-    private void Start()
-    {
+    private void Start () {
         _canvas = GetComponent<Canvas>();
-        NavigateTo(MenuPanels[0]);
+        NavigateTo(MenuPanels [ 0 ]);
         Client.instance.ConnectedToServer += ConnectedToServer;
         _readyButtonImage = ReadyButtonGO.GetComponent<Image>();
         _defaultColor = _readyButtonImage.color;
     }
 
-    public void PlayGame()
-    {
-        if (!PlayButtonPressed)
-        {
+    public void PlayGame () {
+        if (!PlayButtonPressed) {
             PlayButtonPressed = true;
-            if (!Client.instance.isConnected)
-            {
-                PlayButtonText.text = "Connecting..";
+            if (!Client.instance.isConnected) {
+                PlayButtonText.text = "Creating..";
                 Connect();
             }
-            else
-            {
-                PlayButtonText.text = "Disconnecting..";
-                Disconnect();
-            }
+
         }
     }
 
-    public void CreateGame()
-    {
-        if (!_creatingGame)
-        {
+    public void SetState(MenuState state) {
+
+    }
+
+    public void CreateGame () {
+        if (!_creatingGame) {
             _creatingGame = true;
             Client.instance.ConnectToServerManager();
-            GameserverInstance testInstance = new GameserverInstance()
-            {
+            GameserverInstance testInstance = new GameserverInstance() {
                 ServerName = Client.instance.Username + "-server"
             };
             ClientPacketSender.CreateServerRequest(testInstance);
         }
     }
 
-    public void GetServers()
-    {
-        Client.instance.ConnectToServerManager();
-        ClientPacketSender.RequestServerList();
-    }
-
-    private void ConnectedToServer(object sender, ClientConnectionEventArgs e)
-    {
-        switch (e.Type)
-        {
+    private void ConnectedToServer (object sender, ClientConnectionEventArgs e) {
+        _creatingGame = false;
+        switch (e.Type) {
             case ClientConnectionEvent.Connect:
                 if (e.Success)
-                {
-                    PlayButtonText.text = "Disconnect";
-                    ReadyButtonGO.SetActive(true);
-                }
+                    SetButtonState(!e.Success);
                 else
-                    PlayButtonText.text = "Connect";
+                    PlayButtonText.text = "Create";
+
                 break;
             case ClientConnectionEvent.Disconnect:
-                if (e.Success)
-                {
-                    PlayButtonText.text = "Connect";
-                    ReadyButtonGO.SetActive(false);
+                if (e.Success) {
+                    SetButtonState(e.Success);
                     _ready = false;
                     _readyButtonImage.color = _ready ? ReadyColor : _defaultColor;
                 }
-                else
-                    PlayButtonText.text = "Disconnect";
                 break;
             default:
                 break;
@@ -114,27 +106,30 @@ public class MainMenu : MonoBehaviour
         PlayButtonPressed = false;
     }
 
-    private void Disconnect()
-    {
+    void SetButtonState (bool state) {
+        CreateButtonGO.SetActive(state);
+        ReadyButtonGO.SetActive(!state);
+        BrowseButtonGO.SetActive(state);
+        HighscoresButtonGO.SetActive(state);
+        DisconnectButtonGO.SetActive(!state);
+    }
+
+    public void Disconnect () {
         Client.instance.Disconnect();
     }
 
-    private void Connect()
-    {
+    private void Connect () {
         Client.instance.ConnectToServer(Client.instance.Username);
     }
 
-    public void Ready()
-    {
+    public void Ready () {
         _ready = !_ready;
         _readyButtonImage.color = _ready ? ReadyColor : _defaultColor;
         Client.instance.ReadyUp(_ready);
     }
 
-    public void NavigateTo(GameObject navigateToPanel)
-    {
-        foreach (GameObject panel in MenuPanels)
-        {
+    public void NavigateTo (GameObject navigateToPanel) {
+        foreach (GameObject panel in MenuPanels) {
             if (navigateToPanel == panel)
                 panel.SetActive(true);
 

@@ -232,7 +232,7 @@ public static class ClientPacketHandler {
     {
         string messageJSON = _packet.ReadString();
         List<GameserverInstance> servers = JsonConvert.DeserializeObject<List<GameserverInstance>>(messageJSON);
-
+        AvailableServerManager.GameserverInstances = servers;
         //Do something with servers   
     }
 
