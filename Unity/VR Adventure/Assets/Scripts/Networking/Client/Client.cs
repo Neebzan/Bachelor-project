@@ -151,7 +151,11 @@ public class Client : MonoBehaviour {
             isConnected = false;
 
             tcp.Disconnect();
+            tcp = null;
             udp.Disconnect();
+            udp = null;
+            ServerManagerTCP.Disconnect();
+            ServerManagerTCP = null;
 
             UnityEngine.Debug.Log("Disconnected from server.");
 
@@ -171,8 +175,8 @@ public class Client : MonoBehaviour {
     IEnumerator AutoTimeSync () {
         Timer.Start();
         while (isConnected) {
-            yield return new WaitForSeconds(1);
             ClientPacketSender.TimeSync(Timer.ElapsedMilliseconds);
+            yield return new WaitForSeconds(1);
         }
         Timer.Stop();
     }
