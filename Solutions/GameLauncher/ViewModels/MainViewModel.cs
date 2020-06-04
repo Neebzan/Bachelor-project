@@ -260,7 +260,7 @@ namespace GameLauncher.ViewModels {
         }
 
         public void LaunchGame () {
-            if (SelectedInstall.Status == InstallationStatus.Verified) {
+            if (SelectedInstall.Status == InstallationStatus.Verified && !String.IsNullOrEmpty(Settings.Default.RefreshToken) && !String.IsNullOrEmpty(Settings.Default.AccessToken)) {
                 if (!string.IsNullOrEmpty(SelectedInstall.InstallPath)) {
                     Process p = new Process();
 
