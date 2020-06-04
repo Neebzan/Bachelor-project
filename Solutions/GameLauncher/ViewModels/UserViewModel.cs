@@ -39,7 +39,7 @@ namespace GameLauncher.ViewModels {
         }
 
         public async Task ExtractPlayerInfo () {
-            RestClient client = new RestClient("http://212.10.51.254:30830/api");
+            RestClient client = new RestClient("http://212.10.51.254:30005/api");
             RestRequest request = new RestRequest("/players", Method.GET);
 
             request.AddHeader("token", Settings.Default.AccessToken);
